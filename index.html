@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Questionnaire</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #1c1e21; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: 600; color: #4b4b4b; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #3ecf8e; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 25px; transition: background 0.3s; }
+        button:hover { background: #34b27b; }
+        button:disabled { background: #ccc; }
+        #statut { display: none; margin-top: 20px; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Mon Questionnaire 📝</h2>
+        <form id="quizForm">
+            <label for="nom">Ton prénom :</label>
+            <input type="text" id="nom" placeholder="Ex: Jean" required>
+
+            <label for="r1">Ta couleur préférée ?</label>
+            <input type="text" id="r1" placeholder="Ex: Bleu" required>
+
+            <label for="r2">Ton rêve le plus fou ?</label>
+            <input type="text" id="r2" placeholder="Ex: Voyager sur Mars" required>
+
+            <button type="submit" id="btnEnvoyer">Envoyer à mon ami</button>
+        </form>
+        <div id="statut">Merci ! Tes réponses sont envoyées. ✅</div>
+    </div>
+
+    <script>
+        // --- TA CONFIGURATION SUPABASE ---
+        const SUPABASE_URL = 'https://inrcrtyvbgjrrccpzxlk.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK';
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const form = document.getElementById('quizForm');
+        const btn = document.getElementById('btnEnvoyer');
+        const statut = document.getElementById('statut');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // On désactive le bouton pour éviter les doubles clics
+            btn.disabled = true;
+            btn.innerText = "Envoi en cours...";
+
+            // On prépare les données (vérifie que les noms correspondent à tes colonnes Supabase)
+            const { error } = await _supabase.from('reponses').insert([{
+                nom_ami: document.getElementById('nom').value,
+                reponse_1: document.getElementById('r1').value,
+                reponse_2: document.getElementById('r2').value
+            }]);
+
+            if (error) {
+                alert("Erreur lors de l'envoi : " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Réessayer";
+            } else {
+                form.style.display = 'none';
+                statut.style.display = 'block';
+                statut.style.backgroundColor = '#d4edda';
+                statut.style.color = '#155724';
+            }
+        });
+    </script>
+</body>
+</html>
