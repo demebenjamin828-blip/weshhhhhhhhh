@@ -5,73 +5,123 @@
     <title>Quiz Nouveau Testament 📖</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 20px; display: flex; justify-content: center; }
-        .quiz-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h2 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3ecf8e; padding-bottom: 10px; }
-        .question { margin-bottom: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f7; padding: 20px; display: flex; justify-content: center; }
+        .quiz-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        h2 { color: #2c3e50; text-align: center; border-bottom: 3px solid #3ecf8e; padding-bottom: 10px; }
+        .question-block { margin-bottom: 15px; padding: 10px; border-radius: 8px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; }
         input { width: 100%; padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #3ecf8e; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #34b27b; }
-        #success { display: none; text-align: center; color: #27ae60; font-size: 18px; font-weight: bold; }
+        button { width: 100%; padding: 15px; background: #3ecf8e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        
+        /* Styles pour les résultats */
+        #resultats { display: none; margin-top: 20px; }
+        .score-box { text-align: center; font-size: 24px; font-weight: bold; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .correct { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-top: 5px; }
+        .wrong { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="quiz-container">
     <h2>Quiz : Le Nouveau Testament 🕊️</h2>
+    
     <form id="bibleQuiz">
-        <div class="question">
-            <label>Ton nom :</label>
+        <div class="question-block">
+            <label>Ton prénom :</label>
             <input type="text" id="nom" required>
         </div>
 
-        <div class="question"><label>1. Dans quelle ville Jésus est-il né ?</label><input type="text" id="q1" required></div>
-        <div class="question"><label>2. Quel apôtre a renié Jésus trois fois ?</label><input type="text" id="q2" required></div>
-        <div class="question"><label>3. Quel est le dernier livre de la Bible ?</label><input type="text" id="q3" required></div>
-        <div class="question"><label>4. Qui a baptisé Jésus dans le Jourdain ?</label><input type="text" id="q4" required></div>
-        <div class="question"><label>5. Combien y a-t-il d'Évangiles ?</label><input type="text" id="q5" required></div>
-        <div class="question"><label>6. Sur quelle mer Jésus a-t-il marché ?</label><input type="text" id="q6" required></div>
-        <div class="question"><label>7. Qui a écrit la majorité des Épîtres ?</label><input type="text" id="q7" required></div>
-        <div class="question"><label>8. Quel miracle Jésus a-t-il fait aux noces de Cana ?</label><input type="text" id="q8" required></div>
-        <div class="question"><label>9. Quel apôtre était un collecteur d'impôts ?</label><input type="text" id="q9" required></div>
-        <div class="question"><label>10. Qui a trahi Jésus pour 30 pièces d'argent ?</label><input type="text" id="q10" required></div>
+        <div class="question-block"><label>1. Dans quelle ville Jésus est-il né ?</label><input type="text" id="q1" required></div>
+        <div class="question-block"><label>2. Quel apôtre a renié Jésus trois fois ?</label><input type="text" id="q2" required></div>
+        <div class="question-block"><label>3. Quel est le dernier livre de la Bible ?</label><input type="text" id="q3" required></div>
+        <div class="question-block"><label>4. Qui a baptisé Jésus ?</label><input type="text" id="q4" required></div>
+        <div class="question-block"><label>5. Combien y a-t-il d'Évangiles ? (en chiffres)</label><input type="text" id="q5" required></div>
+        <div class="question-block"><label>6. Sur quelle mer Jésus a-t-il marché ?</label><input type="text" id="q6" required></div>
+        <div class="question-block"><label>7. Qui a écrit la majorité des Épîtres ?</label><input type="text" id="q7" required></div>
+        <div class="question-block"><label>8. Quel miracle a eu lieu aux noces de Cana ? (L'eau en...)</label><input type="text" id="q8" required></div>
+        <div class="question-block"><label>9. Quel apôtre était collecteur d'impôts ?</label><input type="text" id="q9" required></div>
+        <div class="question-block"><label>10. Qui a trahi Jésus ?</label><input type="text" id="q10" required></div>
 
-        <button type="submit" id="submitBtn">Envoyer mes réponses</button>
+        <button type="submit" id="submitBtn">Voir mon score</button>
     </form>
-    <div id="success">Amen ! Tes réponses sont enregistrées. ✨</div>
+
+    <div id="resultats">
+        <div id="scoreDisplay" class="score-box"></div>
+        <div id="correctionList"></div>
+        <button onclick="window.location.reload()">Recommencer</button>
+    </div>
 </div>
 
 <script>
     const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 
+    // LA CLÉ DE CORRECTION (On met plusieurs options si besoin)
+    const reponsesCorrectes = {
+        q1: ["bethléem", "bethleem"],
+        q2: ["pierre", "saint pierre"],
+        q3: ["apocalypse"],
+        q4: ["jean le baptiste", "jean baptiste"],
+        q5: ["4"],
+        q6: ["galilée", "galilee", "tibériade", "tiberiade"],
+        q7: ["paul", "saint paul"],
+        q8: ["vin"],
+        q9: ["matthieu"],
+        q10: ["judas", "judas iscariote"]
+    };
+
     document.getElementById('bibleQuiz').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
-        btn.innerText = "Envoi...";
 
-        const { error } = await _supabase.from('reponses').insert([{
-            nom_ami: document.getElementById('nom').value,
-            reponse_1: document.getElementById('q1').value,
-            reponse_2: document.getElementById('q2').value,
-            reponse_3: document.getElementById('q3').value,
-            reponse_4: document.getElementById('q4').value,
-            reponse_5: document.getElementById('q5').value,
-            reponse_6: document.getElementById('q6').value,
-            reponse_7: document.getElementById('q7').value,
-            reponse_8: document.getElementById('q8').value,
-            reponse_9: document.getElementById('q9').value,
-            reponse_10: document.getElementById('q10').value
+        const userAnswers = {
+            nom: document.getElementById('nom').value,
+            q1: document.getElementById('q1').value.toLowerCase().trim(),
+            q2: document.getElementById('q2').value.toLowerCase().trim(),
+            q3: document.getElementById('q3').value.toLowerCase().trim(),
+            q4: document.getElementById('q4').value.toLowerCase().trim(),
+            q5: document.getElementById('q5').value.toLowerCase().trim(),
+            q6: document.getElementById('q6').value.toLowerCase().trim(),
+            q7: document.getElementById('q7').value.toLowerCase().trim(),
+            q8: document.getElementById('q8').value.toLowerCase().trim(),
+            q9: document.getElementById('q9').value.toLowerCase().trim(),
+            q10: document.getElementById('q10').value.toLowerCase().trim()
+        };
+
+        // CALCUL DU SCORE
+        let score = 0;
+        let htmlCorrection = "<h3>Détails :</h3>";
+
+        for (let i = 1; i <= 10; i++) {
+            const field = "q" + i;
+            const isCorrect = reponsesCorrectes[field].includes(userAnswers[field]);
+            
+            if (isCorrect) {
+                score++;
+                htmlCorrection += `<div class="correct">✅ Question ${i} : Bravo !</div>`;
+            } else {
+                htmlCorrection += `<div class="wrong">❌ Question ${i} : La bonne réponse était <b>${reponsesCorrectes[field][0]}</b></div>`;
+            }
+        }
+
+        // ENVOI À SUPABASE (On garde une trace)
+        await _supabase.from('reponses').insert([{
+            nom_ami: userAnswers.nom,
+            reponse_1: userAnswers.q1, reponse_2: userAnswers.q2, reponse_3: userAnswers.q3,
+            reponse_4: userAnswers.q4, reponse_5: userAnswers.q5, reponse_6: userAnswers.q6,
+            reponse_7: userAnswers.q7, reponse_8: userAnswers.q8, reponse_9: userAnswers.q9,
+            reponse_10: userAnswers.q10
         }]);
 
-        if (error) {
-            alert("Erreur : " + error.message);
-            btn.disabled = false;
-        } else {
-            document.getElementById('bibleQuiz').style.display = 'none';
-            document.getElementById('success').style.display = 'block';
-        }
+        // AFFICHAGE FINAL
+        document.getElementById('bibleQuiz').style.display = 'none';
+        document.getElementById('resultats').style.display = 'block';
+        
+        const scoreDiv = document.getElementById('scoreDisplay');
+        scoreDiv.innerHTML = `Ton score : ${score} / 10`;
+        scoreDiv.style.background = score >= 5 ? "#d4edda" : "#f8d7da";
+        
+        document.getElementById('correctionList').innerHTML = htmlCorrection;
     });
 </script>
 
