@@ -1,12 +1,19 @@
 <style>
-    /* 1. On définit l'animation ICI */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInPower {
+        0% {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+        60% {
+            opacity: 1;
+            transform: translateY(-5px) scale(1.02);
+        }
+        100% {
+            transform: translateY(0) scale(1);
+        }
     }
 
-    /* 2. On l'applique au bloc ICI */
     .quiz-card {
-        animation: fadeInUp 0.8s ease-out;
+        animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
 </style>
