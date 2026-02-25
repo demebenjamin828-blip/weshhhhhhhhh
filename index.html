@@ -1,164 +1,275 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Examen Nouveau Testament 📖</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-:root { --success:#27ae60; --error:#e74c3c; --primary:#2c3e50; }
-body { font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;justify-content:center;padding:20px;}
-.quiz-card { background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:600px; animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);}
-@keyframes fadeInPower {
-    0% { opacity: 0; transform: translateY(40px) scale(0.95); }
-    60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
-    100% { transform: translateY(0) scale(1); }
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Nouveau Testament 📖</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-.step { display:none; }
-.step.active { display:block; }
+    <style>
+        :root { --success:#27ae60; --error:#e74c3c; --primary:#2c3e50; }
+        
+        body { 
+            font-family:'Segoe UI', sans-serif; 
+            background:#f0f2f5; 
+            display:flex; 
+            justify-content:center; 
+            padding:20px;
+            margin: 0;
+        }
 
-.q-block{margin-bottom:15px;padding:15px;border-radius:10px;border:1px solid #eee; opacity:0; animation: fadeInStagger 0.6s forwards;}
-@keyframes fadeInStagger { 0% {opacity:0; transform: translateY(20px);} 100% {opacity:1; transform: translateY(0);} }
+        .quiz-card { 
+            background:white; 
+            padding:30px; 
+            border-radius:15px; 
+            box-shadow:0 10px 30px rgba(0,0,0,0.1); 
+            width:100%; 
+            max-width:600px; 
+            animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-.step.active .q-block:nth-child(1){ animation-delay:0.1s; }
-.step.active .q-block:nth-child(2){ animation-delay:0.2s; }
-.step.active .q-block:nth-child(3){ animation-delay:0.3s; }
-.step.active .q-block:nth-child(4){ animation-delay:0.4s; }
+        @keyframes fadeInPower {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
+            100% { transform: translateY(0) scale(1); }
+        }
 
-input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px; transition: all 0.3s ease;}
-input:focus{border-color: var(--primary); box-shadow:0 4px 15px rgba(44,62,80,0.2); outline:none;}
-.btn-nav{width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px; transition: all 0.3s ease;}
-.btn-nav:hover{transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.15);}
-.feedback{display:none;font-size:14px;margin-top:10px;font-weight:bold;}
-.is-correct{border-color:var(--success)!important;background:#f0fff4;}
-.is-wrong{border-color:var(--error)!important;background:#fff5f5;}
+        .step { display:none; }
+        .step.active { display:block; }
 
-#res-summary{display:none;margin-top:20px;}
-#res-summary table{width:100%;border-collapse:collapse;text-align:left;}
-#res-summary th, #res-summary td{padding:8px;border:1px solid #ddd;}
-#res-summary th{background:#f0f0f0;}
-#btnReset{display:none;background:#7f8c8d;}
-</style>
+        .q-block {
+            margin-bottom: 15px; 
+            padding: 15px; 
+            border-radius: 10px; 
+            border: 1px solid #eee; 
+            opacity: 0; 
+            animation: fadeInStagger 0.6s forwards;
+        }
+
+        @keyframes fadeInStagger { 
+            0% { opacity: 0; transform: translateY(20px); } 
+            100% { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* Délai d'apparition des questions pour l'effet fluide */
+        .step.active .q-block:nth-child(1) { animation-delay: 0.1s; }
+        .step.active .q-block:nth-child(2) { animation-delay: 0.2s; }
+
+        input { 
+            width:100%; 
+            padding:12px; 
+            border:2px solid #ddd; 
+            border-radius:8px; 
+            transition: all 0.3s ease; 
+            box-sizing: border-box;
+        }
+
+        input:focus { 
+            border-color: var(--primary); 
+            box-shadow:0 4px 15px rgba(44,62,80,0.2); 
+            outline:none; 
+        }
+
+        .btn-nav { 
+            width:100%; 
+            padding:15px; 
+            background:var(--primary); 
+            color:white; 
+            border:none; 
+            border-radius:8px; 
+            cursor:pointer; 
+            font-weight:bold; 
+            margin-top:10px; 
+            transition: all 0.3s ease; 
+        }
+
+        .btn-nav:hover { 
+            transform:translateY(-2px); 
+            box-shadow:0 6px 15px rgba(0,0,0,0.15); 
+        }
+
+        .feedback { 
+            display:none; 
+            font-size:14px; 
+            margin-top:10px; 
+            font-weight:bold; 
+        }
+
+        .is-correct { border-color:var(--success)!important; background:#f0fff4; }
+        .is-wrong { border-color:var(--error)!important; background:#fff5f5; }
+
+        #res-summary { 
+            display:none; 
+            margin-top:20px; 
+            animation: fadeInPower 0.5s ease;
+        }
+
+        table { 
+            width:100%; 
+            border-collapse:collapse; 
+            margin-top: 15px; 
+            font-size: 14px;
+        }
+
+        th, td { padding:10px; border:1px solid #ddd; text-align: left; }
+        th { background:#f8f9fa; }
+
+        #btnReset { display:none; background:#7f8c8d; margin-top: 20px; }
+    </style>
 </head>
 <body>
 
 <div class="quiz-card">
-<h2 style="text-align:center;">Quiz Biblique 🕊️</h2>
+    <h2 style="text-align:center;">Quiz Biblique 🕊️</h2>
 
-<form id="quizForm">
+    <form id="quizForm">
+        <div class="step active" id="step0">
+            <div class="q-block">
+                <label>Prénom</label><input type="text" id="prenom" required><br><br>
+                <label>Nom</label><input type="text" id="nom" required><br><br>
+                <label>Email</label><input type="email" id="email" required>
+            </div>
+            <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer l'examen</button>
+        </div>
 
-<!-- INFOS -->
-<div class="step active" id="step0">
-<input type="text" id="prenom" placeholder="Prénom" required><br><br>
-<input type="text" id="nom" placeholder="Nom" required><br><br>
-<input type="email" id="email" placeholder="Email (clé unique)" required><br><br>
-<button type="button" class="btn-nav" onclick="nextStep(0)">Commencer</button>
+        <div class="step" id="step1">
+            <div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
+            <div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
+            <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant</button>
+        </div>
+
+        <div class="step" id="step2">
+            <div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
+            <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
+            <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant</button>
+        </div>
+
+        <div class="step" id="step3">
+            <div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
+            <div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
+            <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant</button>
+        </div>
+
+        <div class="step" id="step4">
+            <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
+            <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
+            <button type="button" class="btn-nav" onclick="nextStep(4)">Suivant</button>
+        </div>
+
+        <div class="step" id="step5">
+            <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
+            <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
+            <button type="submit" class="btn-nav" style="background:var(--success);">Valider mes réponses ✅</button>
+        </div>
+    </form>
+
+    <div id="res-summary"></div>
+    <button onclick="location.reload()" id="btnReset" class="btn-nav">Recommencer</button>
 </div>
-
-<!-- QUESTIONS -->
-<div class="step" id="step1">
-<div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
-<div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
-<button type="button" class="btn-nav" onclick="nextStep(1)">Suivant</button>
-</div>
-
-<div class="step" id="step2">
-<div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
-<div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
-<button type="button" class="btn-nav" onclick="nextStep(2)">Suivant</button>
-</div>
-
-<div class="step" id="step3">
-<div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
-<div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
-<button type="button" class="btn-nav" onclick="nextStep(3)">Suivant</button>
-</div>
-
-<div class="step" id="step4">
-<div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
-<div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
-<button type="button" class="btn-nav" onclick="nextStep(4)">Suivant</button>
-</div>
-
-<div class="step" id="step5">
-<div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
-<div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
-<button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
-</div>
-
-</form>
-
-<div id="res-summary"></div>
-<button onclick="location.reload()" id="btnReset" class="btn-nav">Recommencer</button>
 
 <script>
-const _supabase = supabase.createClient(
-  'https://inrcrtyvbgjrrccpzxlk.supabase.co',
-  'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK'
-);
+    // 1. INITIALISATION DES SERVICES
+    const _supabase = supabase.createClient(
+        'https://inrcrtyvbgjrrccpzxlk.supabase.co',
+        'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK'
+    );
 
-const ANSWERS = {
-  q1:["bethléem","bethleem"],
-  q2:["pierre"],
-  q3:["apocalypse"],
-  q4:["jean baptiste"],
-  q5:["4"],
-  q6:["galilée","galilee"],
-  q7:["paul"],
-  q8:["vin","eau en vin"],
-  q9:["matthieu"],
-  q10:["judas"]
-};
+    (function() {
+        emailjs.init("VOTRE_PUBLIC_KEY"); // ⚠️ REMPLACE PAR TA PUBLIC KEY EMAILJS
+    })();
 
-function normalizeText(text){
-  return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
-}
+    const ANSWERS = {
+        q1:["bethléem","bethleem"], q2:["pierre"], q3:["apocalypse"], 
+        q4:["jean baptiste"], q5:["4"], q6:["galilée","galilee"], 
+        q7:["paul"], q8:["vin","eau en vin"], q9:["matthieu"], q10:["judas"]
+    };
 
-function nextStep(n){
-  document.getElementById('step'+n).classList.remove('active');
-  document.getElementById('step'+(n+1)).classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+    // 2. LOGIQUE DE NAVIGATION
+    function normalizeText(text){
+        return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+    }
 
-document.getElementById('quizForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  let score = 0;
-  const recap = [];
+    function nextStep(n){
+        document.getElementById('step'+n).classList.remove('active');
+        document.getElementById('step'+(n+1)).classList.add('active');
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
 
-  for(let i=1;i<=10;i++){
-    const userAns = normalizeText(document.getElementById('q'+i).value);
-    const feedback = document.getElementById('f'+i);
-    feedback.style.display="block";
-    const correctAnswers = ANSWERS['q'+i].map(a => normalizeText(a));
-    let isCorrect = correctAnswers.includes(userAns);
-    if(isCorrect){ score++; document.getElementById('block'+i).classList.add('is-correct'); feedback.innerHTML="✅ Bonne réponse";}
-    else { document.getElementById('block'+i).classList.add('is-wrong'); feedback.innerHTML="❌ Réponse : "+ANSWERS['q'+i][0];}
-    recap.push({question:i,user:userAns,correct:ANSWERS['q'+i][0],status:isCorrect});
-  }
+    // 3. SOUMISSION ET CALCUL
+    document.getElementById('quizForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        let score = 0;
+        let tableauEmailHTML = ""; 
+        const recap = [];
 
-  // Sauvegarde dans Supabase
-  const prenom = document.getElementById('prenom').value.trim();
-  const nom = document.getElementById('nom').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const {data,error} = await _supabase.from('reponses').upsert({email,prenom,nom,score},{onConflict:'email'});
-  if(error) console.log("Erreur Supabase :",error); else console.log("Données enregistrées :",data);
+        // Correction
+        for(let i=1; i<=10; i++){
+            const inputEl = document.getElementById('q'+i);
+            const userRaw = inputEl.value;
+            const userAns = normalizeText(userRaw);
+            const feedback = document.getElementById('f'+i);
+            const correctAnswers = ANSWERS['q'+i].map(a => normalizeText(a));
+            
+            let isCorrect = correctAnswers.includes(userAns);
+            if(isCorrect) score++;
 
-  // Affichage récapitulatif sous forme de tableau
-  let tableHTML = `<h3>Récapitulatif 📋</h3><table><tr><th>Q°</th><th>Réponse utilisateur</th><th>Réponse correcte</th><th>Status</th></tr>`;
-  recap.forEach(r=>{
-    tableHTML+=`<tr>
-      <td>${r.question}</td>
-      <td>${r.user || '-'}</td>
-      <td>${r.correct}</td>
-      <td style="color:${r.status?'var(--success)':'var(--error)'}">${r.status?'✅':'❌'}</td>
-    </tr>`;
-  });
-  tableHTML+=`</table><p style="font-weight:bold;">Score final : ${score}/10</p>`;
-  const resDiv = document.getElementById('res-summary');
-  resDiv.innerHTML = tableHTML;
-  resDiv.style.display="block";
-  document.getElementById('btnReset').style.display="block";
-});
+            // Mise à jour visuelle (feedback)
+            feedback.style.display="block";
+            if(isCorrect){
+                document.getElementById('block'+i).classList.add('is-correct');
+                feedback.innerHTML="✅ Bonne réponse";
+            } else {
+                document.getElementById('block'+i).classList.add('is-wrong');
+                feedback.innerHTML="❌ Réponse : " + ANSWERS['q'+i][0];
+            }
+
+            // Construction du tableau pour l'Email
+            tableauEmailHTML += `
+                <tr>
+                    <td style="padding:8px; border:1px solid #ddd;">Q${i}</td>
+                    <td style="padding:8px; border:1px solid #ddd;">${userRaw || '-'}</td>
+                    <td style="padding:8px; border:1px solid #ddd;">${ANSWERS['q'+i][0]}</td>
+                    <td style="padding:8px; border:1px solid #ddd; text-align:center;">${isCorrect ? '✅' : '❌'}</td>
+                </tr>`;
+
+            recap.push({q:i, user:userRaw, correct:ANSWERS['q'+i][0], status:isCorrect});
+        }
+
+        const prenom = document.getElementById('prenom').value;
+        const nom = document.getElementById('nom').value;
+        const email = document.getElementById('email').value;
+
+        // 4. ENVOI EMAILJS
+        const emailParams = {
+            prenom: prenom,
+            nom: nom,
+            email: email,
+            score: score,
+            tableau_html: tableauEmailHTML
+        };
+
+        emailjs.send('service_raxr77e', 'TON_TEMPLATE_ID', emailParams) // ⚠️ REMPLACE TON_TEMPLATE_ID
+            .then(() => console.log("Email envoyé !"))
+            .catch(err => console.error("Erreur EmailJS :", err));
+
+        // 5. SAUVEGARDE SUPABASE
+        await _supabase.from('reponses').upsert({email, prenom, nom, score}, {onConflict:'email'});
+
+        // 6. AFFICHAGE RÉSULTAT ÉCRAN
+        let tableHTML = `<h3>Récapitulatif 📋</h3><table><tr><th>Q°</th><th>Ta réponse</th><th>Correct</th><th>Status</th></tr>`;
+        recap.forEach(r => {
+            tableHTML += `<tr><td>${r.q}</td><td>${r.user}</td><td>${r.correct}</td><td>${r.status?'✅':'❌'}</td></tr>`;
+        });
+        tableHTML += `</table><p style="font-size:20px; font-weight:bold; text-align:center;">Score final : ${score}/10</p>`;
+        
+        const resDiv = document.getElementById('res-summary');
+        resDiv.innerHTML = tableHTML;
+        resDiv.style.display="block";
+        document.getElementById('btnReset').style.display="block";
+        document.querySelector('button[type="submit"]').style.display="none";
+    });
 </script>
 
 </body>
