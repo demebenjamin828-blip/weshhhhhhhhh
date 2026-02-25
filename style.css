@@ -1,19 +1,64 @@
 <style>
-    @keyframes fadeInPower {
-        0% {
-            opacity: 0;
-            transform: translateY(40px) scale(0.95);
-        }
-        60% {
-            opacity: 1;
-            transform: translateY(-5px) scale(1.02);
-        }
-        100% {
-            transform: translateY(0) scale(1);
-        }
+/* Animation principale pour la carte du quiz */
+@keyframes fadeInPower {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
     }
+    60% {
+        opacity: 1;
+        transform: translateY(-5px) scale(1.02);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
 
-    .quiz-card {
-        animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-    }
+.quiz-card {
+    animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Animation pour chaque bloc de question avec delay */
+@keyframes fadeInStagger {
+    0% {opacity:0; transform: translateY(20px);}
+    100% {opacity:1; transform: translateY(0);}
+}
+
+.step .q-block {
+    opacity: 0;
+    animation: fadeInStagger 0.6s forwards;
+}
+
+.step.active .q-block:nth-child(1) { animation-delay: 0.1s; }
+.step.active .q-block:nth-child(2) { animation-delay: 0.2s; }
+.step.active .q-block:nth-child(3) { animation-delay: 0.3s; }
+.step.active .q-block:nth-child(4) { animation-delay: 0.4s; }
+
+/* Optionnel : hover subtil sur les inputs pour pro touch */
+input {
+    transition: all 0.3s ease;
+}
+input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2);
+    outline: none;
+}
+.btn-nav {
+    transition: all 0.3s ease;
+}
+.btn-nav:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+/* Fade-in pour le résumé */
+#res-summary {
+    opacity:0;
+    transform: translateY(10px);
+    transition: all 0.6s ease;
+}
+#res-summary.show {
+    opacity:1;
+    transform: translateY(0);
+}
 </style>
