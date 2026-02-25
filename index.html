@@ -2,128 +2,117 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Nouveau Testament 📖</title>
+    <title>Quiz Nouveau Testament - Expert 📖</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #eef2f7; padding: 20px; display: flex; justify-content: center; }
-        .quiz-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
-        h2 { color: #2c3e50; text-align: center; border-bottom: 3px solid #3ecf8e; padding-bottom: 10px; }
-        .question-block { margin-bottom: 15px; padding: 10px; border-radius: 8px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; }
-        input { width: 100%; padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #3ecf8e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        :root { --success: #27ae60; --error: #e74c3c; --primary: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; }
+        h2 { text-align: center; color: var(--primary); border-bottom: 3px solid #3ecf8e; padding-bottom: 10px; }
         
-        /* Styles pour les résultats */
-        #resultats { display: none; margin-top: 20px; }
-        .score-box { text-align: center; font-size: 24px; font-weight: bold; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .correct { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-top: 5px; }
-        .wrong { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-top: 5px; }
+        .info-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 10px; }
+        .full-width { grid-column: span 2; }
+        
+        .q-block { margin-bottom: 20px; padding: 15px; border-radius: 10px; transition: 0.3s; border: 1px solid #eee; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--primary); }
+        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        
+        /* Classes de correction */
+        .is-correct { border-color: var(--success) !important; background-color: #f0fff4; }
+        .is-wrong { border-color: var(--error) !important; background-color: #fff5f5; }
+        .feedback { display: none; font-size: 13px; margin-top: 5px; font-weight: bold; }
+
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
+        #res-summary { display: none; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-size: 22px; }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <h2>Quiz : Le Nouveau Testament 🕊️</h2>
+<div class="quiz-card">
+    <h2>Test : Le Nouveau Testament 🕊️</h2>
     
-    <form id="bibleQuiz">
-        <div class="question-block">
-            <label>Ton prénom :</label>
-            <input type="text" id="nom" required>
+    <div id="res-summary"></div>
+
+    <form id="quizForm">
+        <div class="info-section">
+            <input type="text" id="prenom" placeholder="Prénom" required>
+            <input type="text" id="nom" placeholder="Nom" required>
+            <input type="email" id="email" placeholder="Email (ex: nom@mail.com)" class="full-width" required>
         </div>
 
-        <div class="question-block"><label>1. Dans quelle ville Jésus est-il né ?</label><input type="text" id="q1" required></div>
-        <div class="question-block"><label>2. Quel apôtre a renié Jésus trois fois ?</label><input type="text" id="q2" required></div>
-        <div class="question-block"><label>3. Quel est le dernier livre de la Bible ?</label><input type="text" id="q3" required></div>
-        <div class="question-block"><label>4. Qui a baptisé Jésus ?</label><input type="text" id="q4" required></div>
-        <div class="question-block"><label>5. Combien y a-t-il d'Évangiles ? (en chiffres)</label><input type="text" id="q5" required></div>
-        <div class="question-block"><label>6. Sur quelle mer Jésus a-t-il marché ?</label><input type="text" id="q6" required></div>
-        <div class="question-block"><label>7. Qui a écrit la majorité des Épîtres ?</label><input type="text" id="q7" required></div>
-        <div class="question-block"><label>8. Quel miracle a eu lieu aux noces de Cana ? (L'eau en...)</label><input type="text" id="q8" required></div>
-        <div class="question-block"><label>9. Quel apôtre était collecteur d'impôts ?</label><input type="text" id="q9" required></div>
-        <div class="question-block"><label>10. Qui a trahi Jésus ?</label><input type="text" id="q10" required></div>
+        <div class="q-block" id="block1">
+            <label>1. Dans quelle ville Jésus est-il né ?</label>
+            <input type="text" id="q1" required>
+            <div class="feedback" id="f1"></div>
+        </div>
 
-        <button type="submit" id="submitBtn">Voir mon score</button>
+        <div class="q-block" id="block2">
+            <label>2. Quel apôtre a renié Jésus trois fois ?</label>
+            <input type="text" id="q2" required>
+            <div class="feedback" id="f2"></div>
+        </div>
+        
+        <button type="submit" id="btnEnvoyer">Valider et voir mes réponses</button>
     </form>
-
-    <div id="resultats">
-        <div id="scoreDisplay" class="score-box"></div>
-        <div id="correctionList"></div>
-        <button onclick="window.location.reload()">Recommencer</button>
-    </div>
+    
+    <button onclick="location.reload()" id="btnReset" style="display:none; background:#7f8c8d;">Refaire le test</button>
 </div>
 
 <script>
     const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 
-    // LA CLÉ DE CORRECTION (On met plusieurs options si besoin)
-    const reponsesCorrectes = {
+    const CORRECTION = {
         q1: ["bethléem", "bethleem"],
-        q2: ["pierre", "saint pierre"],
-        q3: ["apocalypse"],
-        q4: ["jean le baptiste", "jean baptiste"],
-        q5: ["4"],
-        q6: ["galilée", "galilee", "tibériade", "tiberiade"],
-        q7: ["paul", "saint paul"],
-        q8: ["vin"],
-        q9: ["matthieu"],
-        q10: ["judas", "judas iscariote"]
+        q2: ["pierre", "saint pierre"]
+        // Ajoute la suite ici
     };
 
-    document.getElementById('bibleQuiz').addEventListener('submit', async (e) => {
+    document.getElementById('quizForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
+        const btn = document.getElementById('btnEnvoyer');
         btn.disabled = true;
 
-        const userAnswers = {
-            nom: document.getElementById('nom').value,
-            q1: document.getElementById('q1').value.toLowerCase().trim(),
-            q2: document.getElementById('q2').value.toLowerCase().trim(),
-            q3: document.getElementById('q3').value.toLowerCase().trim(),
-            q4: document.getElementById('q4').value.toLowerCase().trim(),
-            q5: document.getElementById('q5').value.toLowerCase().trim(),
-            q6: document.getElementById('q6').value.toLowerCase().trim(),
-            q7: document.getElementById('q7').value.toLowerCase().trim(),
-            q8: document.getElementById('q8').value.toLowerCase().trim(),
-            q9: document.getElementById('q9').value.toLowerCase().trim(),
-            q10: document.getElementById('q10').value.toLowerCase().trim()
-        };
-
-        // CALCUL DU SCORE
         let score = 0;
-        let htmlCorrection = "<h3>Détails :</h3>";
+        let total = 2; // Change à 10 quand tu auras mis toutes les questions
 
-        for (let i = 1; i <= 10; i++) {
-            const field = "q" + i;
-            const isCorrect = reponsesCorrectes[field].includes(userAnswers[field]);
-            
-            if (isCorrect) {
+        // Traitement des réponses
+        for (let i = 1; i <= total; i++) {
+            const input = document.getElementById('q' + i);
+            const block = document.getElementById('block' + i);
+            const feedback = document.getElementById('f1'); // à adapter pour chaque id
+            const val = input.value.toLowerCase().trim();
+
+            if (CORRECTION['q'+i].includes(val)) {
                 score++;
-                htmlCorrection += `<div class="correct">✅ Question ${i} : Bravo !</div>`;
+                block.classList.add('is-correct');
             } else {
-                htmlCorrection += `<div class="wrong">❌ Question ${i} : La bonne réponse était <b>${reponsesCorrectes[field][0]}</b></div>`;
+                block.classList.add('is-wrong');
+                const f = document.getElementById('f'+i);
+                f.style.display = "block";
+                f.style.color = "var(--error)";
+                f.innerHTML = "❌ Dommage ! La bonne réponse était : " + CORRECTION['q'+i][0];
             }
+            input.disabled = true; // Empêche de tricher après validation
         }
 
-        // ENVOI À SUPABASE (On garde une trace)
+        // Envoi Supabase
         await _supabase.from('reponses').insert([{
-            nom_ami: userAnswers.nom,
-            reponse_1: userAnswers.q1, reponse_2: userAnswers.q2, reponse_3: userAnswers.q3,
-            reponse_4: userAnswers.q4, reponse_5: userAnswers.q5, reponse_6: userAnswers.q6,
-            reponse_7: userAnswers.q7, reponse_8: userAnswers.q8, reponse_9: userAnswers.q9,
-            reponse_10: userAnswers.q10
+            prenom: document.getElementById('prenom').value,
+            nom: document.getElementById('nom').value,
+            email: document.getElementById('email').value,
+            reponse_1: document.getElementById('q1').value,
+            reponse_2: document.getElementById('q2').value
         }]);
 
-        // AFFICHAGE FINAL
-        document.getElementById('bibleQuiz').style.display = 'none';
-        document.getElementById('resultats').style.display = 'block';
+        // Résumé
+        const resDiv = document.getElementById('res-summary');
+        resDiv.style.display = "block";
+        resDiv.innerHTML = `Résultat : ${score} / ${total}`;
+        resDiv.style.background = score === total ? "#d4edda" : "#f8d7da";
         
-        const scoreDiv = document.getElementById('scoreDisplay');
-        scoreDiv.innerHTML = `Ton score : ${score} / 10`;
-        scoreDiv.style.background = score >= 5 ? "#d4edda" : "#f8d7da";
-        
-        document.getElementById('correctionList').innerHTML = htmlCorrection;
+        btn.style.display = "none";
+        document.getElementById('btnReset').style.display = "block";
     });
 </script>
-
 </body>
 </html>
