@@ -5,96 +5,126 @@
     <title>Examen Nouveau Testament 📖</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --success: #27ae60; --error: #e74c3c; --primary: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
-        .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .q-block { margin-bottom: 15px; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
-        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn-nav { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .feedback { display: none; font-size: 14px; margin-top: 10px; font-weight: bold; }
-        .is-correct { border-color: var(--success) !important; background: #f0fff4; }
-        .is-wrong { border-color: var(--error) !important; background: #fff5f5; }
+        :root { --success:#27ae60; --error:#e74c3c; --primary:#2c3e50; }
+        body { font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;justify-content:center;padding:20px;}
+        .quiz-card { background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:600px;}
+        .step { display:none; }
+        .step.active { display:block;animation:fadeIn .5s; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .q-block{margin-bottom:15px;padding:15px;border-radius:10px;border:1px solid #eee;}
+        input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;}
+        .btn-nav{width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px;}
+        .feedback{display:none;font-size:14px;margin-top:10px;font-weight:bold;}
+        .is-correct{border-color:var(--success)!important;background:#f0fff4;}
+        .is-wrong{border-color:var(--error)!important;background:#fff5f5;}
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
-    <h2 style="text-align: center;">Quiz Biblique 🕊️</h2>
-    <div id="res-summary" style="display:none; text-align:center; padding:15px; font-size:20px; font-weight:bold; margin-bottom:10px; border:2px solid;"></div>
+<h2 style="text-align:center;">Quiz Biblique 🕊️</h2>
+<div id="res-summary" style="display:none;text-align:center;padding:15px;font-size:20px;font-weight:bold;margin-bottom:10px;border:2px solid;"></div>
 
-    <form id="quizForm">
-        <div class="step active" id="step0">
-            <input type="text" id="prenom" placeholder="Prénom" required style="margin-bottom:10px;">
-            <input type="text" id="nom" placeholder="Nom" required style="margin-bottom:10px;">
-            <input type="email" id="email" placeholder="Email (Sert de clé unique)" required>
-            <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer</button>
-        </div>
+<form id="quizForm">
 
-        <div class="step" id="step1">
-            <div class="q-block" id="block1"><label>1. Dans quelle ville Jésus est-il né ?</label><input type="text" id="q1" required><div class="feedback" id="f1"></div></div>
-            <div class="q-block" id="block2"><label>2. Quel apôtre a renié Jésus trois fois ?</label><input type="text" id="q2" required><div class="feedback" id="f2"></div></div>
-            <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant</button>
-        </div>
+<!-- INFOS -->
+<div class="step active" id="step0">
+<input type="text" id="prenom" placeholder="Prénom" required><br><br>
+<input type="text" id="nom" placeholder="Nom" required><br><br>
+<input type="email" id="email" placeholder="Email (clé unique)" required>
+<button type="button" class="btn-nav" onclick="nextStep(0)">Commencer</button>
+</div>
 
-        <div class="step" id="step2">
-            <button type="submit" class="btn-nav" style="background:var(--success);">Valider et Sauvegarder ✅</button>
-        </div>
-    </form>
-    <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d;">Recommencer</button>
+<!-- QUESTIONS -->
+<div class="step" id="step1">
+<div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
+<div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
+<button type="button" class="btn-nav" onclick="nextStep(1)">Suivant</button>
+</div>
+
+<div class="step" id="step2">
+<div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
+<div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
+<button type="button" class="btn-nav" onclick="nextStep(2)">Suivant</button>
+</div>
+
+<div class="step" id="step3">
+<div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
+<div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
+<button type="button" class="btn-nav" onclick="nextStep(3)">Suivant</button>
+</div>
+
+<div class="step" id="step4">
+<div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
+<div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
+<button type="button" class="btn-nav" onclick="nextStep(4)">Suivant</button>
+</div>
+
+<div class="step" id="step5">
+<div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
+<div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
+<button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
+</div>
+
+</form>
+<button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none;background:#7f8c8d;">Recommencer</button>
 </div>
 
 <script>
-    const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
+const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co','sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 
-    const ANSWERS = {
-        q1: { texte: ["bethléem", "bethleem"], ref: "Matthieu 2:1" },
-        q2: { texte: ["pierre", "saint pierre"], ref: "Luc 22:61" }
-    };
+const ANSWERS = {
+q1:["bethléem","bethleem"],
+q2:["pierre"],
+q3:["apocalypse"],
+q4:["jean baptiste"],
+q5:["4"],
+q6:["galilée","galilee"],
+q7:["paul"],
+q8:["vin","eau en vin"],
+q9:["matthieu"],
+q10:["judas"]
+};
 
-    function nextStep(n) {
-        document.getElementById('step'+n).classList.remove('active');
-        document.getElementById('step'+(n+1)).classList.add('active');
-    }
+function nextStep(n){
+document.getElementById('step'+n).classList.remove('active');
+document.getElementById('step'+(n+1)).classList.add('active');
+window.scrollTo({top:0,behavior:'smooth'});
+}
 
-    document.getElementById('quizForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        let score = 0;
-        
-        // Correction
-        for(let i=1; i<=2; i++) {
-            const val = document.getElementById('q'+i).value.toLowerCase().trim();
-            const feedback = document.getElementById('f'+i);
-            feedback.style.display = "block";
-            if(ANSWERS['q'+i].texte.includes(val)) {
-                score++;
-                document.getElementById('block'+i).classList.add('is-correct');
-                feedback.innerHTML = "✅ Correct ! (" + ANSWERS['q'+i].ref + ")";
-            } else {
-                document.getElementById('block'+i).classList.add('is-wrong');
-                feedback.innerHTML = "❌ La réponse était " + ANSWERS['q'+i].texte[0] + " (" + ANSWERS['q'+i].ref + ")";
-            }
-        }
+document.getElementById('quizForm').addEventListener('submit',async e=>{
+e.preventDefault();
 
-        // ENVOI SANS DOUBLONS (UPSERT)
-        const { error } = await _supabase.from('reponses').upsert({
-            email: document.getElementById('email').value,
-            prenom: document.getElementById('prenom').value,
-            nom: document.getElementById('nom').value,
-            reponse_1: document.getElementById('q1').value,
-            reponse_2: document.getElementById('q2').value
-        }, { onConflict: 'email' });
+let score=0;
 
-        if(error) alert("Erreur : " + error.message);
+// ✅ correction sur 10 questions
+for(let i=1;i<=10;i++){
+const val=document.getElementById('q'+i).value.toLowerCase().trim();
+const feedback=document.getElementById('f'+i);
+feedback.style.display="block";
 
-        document.querySelectorAll('.step').forEach(s => s.classList.add('active'));
-        document.querySelector('button[type="submit"]').style.display = "none";
-        document.getElementById('btnReset').style.display = "block";
-        document.getElementById('res-summary').style.display = "block";
-        document.getElementById('res-summary').innerHTML = "SCORE : " + score + " / 2";
-    });
+if(ANSWERS['q'+i].includes(val)){
+score++;
+document.getElementById('block'+i).classList.add('is-correct');
+feedback.innerHTML="✅ Bonne réponse";
+}else{
+document.getElementById('block'+i).classList.add('is-wrong');
+feedback.innerHTML="❌ Réponse : "+ANSWERS['q'+i][0];
+}
+}
+
+// ✅ sauvegarde complète
+await _supabase.from('reponses').upsert({
+email:email.value,
+prenom:prenom.value,
+nom:nom.value,
+score:score
+},{onConflict:'email'});
+
+document.getElementById('res-summary').style.display="block";
+document.getElementById('res-summary').innerHTML="SCORE : "+score+" / 10";
+document.getElementById('btnReset').style.display="block";
+});
 </script>
 </body>
 </html>
