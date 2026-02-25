@@ -1,32 +1,58 @@
-<style>
-/* Animation principale pour la carte du quiz */
-@keyframes fadeInPower {
-    0% {
-        opacity: 0;
-        transform: translateY(40px) scale(0.95);
-    }
-    60% {
-        opacity: 1;
-        transform: translateY(-5px) scale(1.02);
-    }
-    100% {
-        transform: translateY(0) scale(1);
-    }
+/* style.css */
+
+/* Variables de couleur */
+:root {
+    --success: #27ae60;
+    --error: #e74c3c;
+    --primary: #2c3e50;
 }
 
+/* Corps de page */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Carte quiz principale */
 .quiz-card {
-    animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+    animation: fadeInPower 0.9s cubic-bezier(0.22,1,0.36,1);
 }
 
-/* Animation pour chaque bloc de question avec delay */
-@keyframes fadeInStagger {
-    0% {opacity:0; transform: translateY(20px);}
-    100% {opacity:1; transform: translateY(0);}
+/* Animation principale */
+@keyframes fadeInPower {
+    0% { opacity: 0; transform: translateY(40px) scale(0.95);}
+    60% { opacity: 1; transform: translateY(-5px) scale(1.02);}
+    100% { opacity: 1; transform: translateY(0) scale(1);}
 }
 
-.step .q-block {
+/* Étapes du quiz */
+.step { display: none; }
+.step.active { display: block; }
+
+/* Bloc question individuel */
+.q-block {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
     opacity: 0;
     animation: fadeInStagger 0.6s forwards;
+}
+
+/* Animation fade-in pour chaque bloc avec delay */
+@keyframes fadeInStagger {
+    0% { opacity: 0; transform: translateY(20px);}
+    100% { opacity: 1; transform: translateY(0);}
 }
 
 .step.active .q-block:nth-child(1) { animation-delay: 0.1s; }
@@ -34,31 +60,87 @@
 .step.active .q-block:nth-child(3) { animation-delay: 0.3s; }
 .step.active .q-block:nth-child(4) { animation-delay: 0.4s; }
 
-/* Optionnel : hover subtil sur les inputs pour pro touch */
+/* Inputs stylés */
 input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
+
+/* Focus sur input */
 input:focus {
     border-color: var(--primary);
-    box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2);
+    box-shadow: 0 4px 15px rgba(44,62,80,0.2);
     outline: none;
 }
+
+/* Boutons */
 .btn-nav {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
     transition: all 0.3s ease;
 }
+
 .btn-nav:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-/* Fade-in pour le résumé */
+/* Feedback correct / incorrect */
+.is-correct { border-color: var(--success)!important; background: #f0fff4; }
+.is-wrong { border-color: var(--error)!important; background: #fff5f5; }
+
+.feedback { 
+    display: none;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Résumé final */
 #res-summary {
-    opacity:0;
+    opacity: 0;
     transform: translateY(10px);
     transition: all 0.6s ease;
 }
+
 #res-summary.show {
-    opacity:1;
+    opacity: 1;
     transform: translateY(0);
 }
-</style>
+
+/* Table recap pour la page */
+#res-summary table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+#res-summary th, #res-summary td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#res-summary th {
+    background: #f8f9fa;
+}
+
+/* Reset button */
+#btnReset {
+    display: none;
+    background: #7f8c8d;
+    margin-top: 20px;
+    color: white;
+}
