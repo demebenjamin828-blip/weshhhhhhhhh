@@ -2,152 +2,175 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Examen : Nouveau Testament 📖</title>
+    <title>Examen Nouveau Testament 📖</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --success: #27ae60; --error: #e74c3c; --primary: #2c3e50; --gold: #d4af37; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; }
-        h2 { text-align: center; color: var(--primary); border-bottom: 3px solid var(--gold); padding-bottom: 10px; }
-        
-        .info-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; background: #f8f9fa; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
-        .full-width { grid-column: span 2; }
-        
-        .q-block { margin-bottom: 15px; padding: 15px; border-radius: 10px; border: 1px solid #eee; background: #fff; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--primary); }
-        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        
-        /* Etats de correction */
-        .is-correct { border-color: var(--success) !important; background-color: #f0fff4; }
-        .is-wrong { border-color: var(--error) !important; background-color: #fff5f5; }
-        .feedback { display: none; font-size: 14px; margin-top: 8px; font-weight: bold; }
+        :root { 
+            --success: #27ae60; --error: #e74c3c; --primary: #2c3e50; 
+            --gold: #d4af37; --light: #f8f9fa; 
+        }
 
-        .btn-main { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
-        .btn-main:disabled { background: #ccc; cursor: not-allowed; }
-        
-        #res-summary { display: none; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-size: 24px; font-weight: bold; border: 2px solid; }
-        .instructions { font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; }
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Animation d'erreur (tremblement) */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            display: flex; justify-content: center; padding: 20px; min-height: 100vh;
+        }
+
+        .quiz-card { 
+            background: white; padding: 40px; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 700px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        h2 { text-align: center; color: var(--primary); font-size: 28px; margin-bottom: 10px; }
+        .divider { height: 4px; width: 60px; background: var(--gold); margin: 0 auto 30px; border-radius: 2px; }
+
+        .info-section { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
+            margin-bottom: 30px; padding: 20px; background: var(--light); 
+            border-radius: 12px; border-left: 5px solid var(--primary);
+        }
+
+        .q-block { 
+            margin-bottom: 20px; padding: 20px; border-radius: 12px; 
+            border: 1px solid #eee; transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .q-block:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: var(--gold); }
+
+        label { display: block; font-weight: 600; margin-bottom: 12px; color: var(--primary); }
+
+        input { 
+            width: 100%; padding: 12px 15px; border: 2px solid #ddd; 
+            border-radius: 8px; transition: all 0.3s ease; outline: none;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(44, 62, 80, 0.2); }
+
+        /* Correction */
+        .is-correct { border-color: var(--success) !important; background: #f0fff4; }
+        .is-wrong { border-color: var(--error) !important; background: #fff5f5; animation: shake 0.4s; }
+
+        .feedback { display: none; font-size: 14px; margin-top: 10px; font-weight: bold; color: var(--error); }
+
+        .btn-main { 
+            width: 100%; padding: 18px; background: var(--primary); color: white; 
+            border: none; border-radius: 10px; cursor: pointer; font-size: 18px; 
+            font-weight: bold; transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-main:hover { background: #1a252f; transform: translateY(-2px); }
+        .btn-main:active { transform: translateY(0); }
+
+        #res-summary { 
+            display: none; text-align: center; padding: 25px; border-radius: 15px; 
+            margin-bottom: 30px; font-size: 26px; font-weight: bold;
+            animation: fadeInUp 0.5s both;
+        }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
-    <h2>Examen du Nouveau Testament 🕊️</h2>
-    <p class="instructions">Répondez à toutes les questions pour valider l'examen.</p>
+    <h2>Examen du Nouveau Testament</h2>
+    <div class="divider"></div>
     
     <div id="res-summary"></div>
 
     <form id="quizForm">
         <div class="info-section">
-            <input type="text" id="prenom" placeholder="Votre Prénom" required>
-            <input type="text" id="nom" placeholder="Votre Nom" required>
-            <input type="email" id="email" placeholder="Votre Email" class="full-width" required>
+            <input type="text" id="prenom" placeholder="Prénom" required>
+            <input type="text" id="nom" placeholder="Nom" required>
+            <input type="email" id="email" placeholder="Email" style="grid-column: span 2;" required>
         </div>
 
-        <div class="q-block" id="block1"><label>1. Dans quelle ville Jésus est-il né ?</label><input type="text" id="q1" required><div class="feedback" id="f1"></div></div>
-        <div class="q-block" id="block2"><label>2. Quel apôtre a renié Jésus trois fois ?</label><input type="text" id="q2" required><div class="feedback" id="f2"></div></div>
-        <div class="q-block" id="block3"><label>3. Quel est le dernier livre de la Bible ?</label><input type="text" id="q3" required><div class="feedback" id="f3"></div></div>
-        <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus dans le Jourdain ?</label><input type="text" id="q4" required><div class="feedback" id="f4"></div></div>
-        <div class="q-block" id="block5"><label>5. Combien y a-t-il d'Évangiles ? (en chiffre)</label><input type="text" id="q5" required><div class="feedback" id="f5"></div></div>
-        <div class="q-block" id="block6"><label>6. Sur quelle mer Jésus a-t-il marché ?</label><input type="text" id="q6" required><div class="feedback" id="f6"></div></div>
-        <div class="q-block" id="block7"><label>7. Quel pharisien est venu voir Jésus de nuit ?</label><input type="text" id="q7" required><div class="feedback" id="f7"></div></div>
-        <div class="q-block" id="block8"><label>8. Quel miracle a eu lieu aux noces de Cana ? (L'eau en...)</label><input type="text" id="q8" required><div class="feedback" id="f8"></div></div>
-        <div class="q-block" id="block9"><label>9. Quel apôtre était un collecteur d'impôts ?</label><input type="text" id="q9" required><div class="feedback" id="f9"></div></div>
-        <div class="q-block" id="block10"><label>10. Qui a trahi Jésus pour 30 pièces d'argent ?</label><input type="text" id="q10" required><div class="feedback" id="f10"></div></div>
+        <div class="q-block" id="block1">
+            <label>1. Dans quelle ville Jésus est-il né ?</label>
+            <input type="text" id="q1" required>
+            <div class="feedback" id="f1"></div>
+        </div>
 
-        <button type="submit" id="btnEnvoyer" class="btn-main">Terminer et envoyer l'examen</button>
+        <div class="q-block" id="block2">
+            <label>2. Quel apôtre a renié Jésus trois fois ?</label>
+            <input type="text" id="q2" required>
+            <div class="feedback" id="f2"></div>
+        </div>
+
+        <button type="submit" id="btnEnvoyer" class="btn-main">Soumettre l'Examen</button>
     </form>
     
-    <button onclick="location.reload()" id="btnReset" class="btn-main" style="display:none; background:#7f8c8d;">Refaire un nouvel examen</button>
+    <button onclick="location.reload()" id="btnReset" class="btn-main" style="display:none; background:#7f8c8d; margin-top:10px;">Refaire un essai</button>
 </div>
 
 <script>
-    // Configuration Supabase
     const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 
-    // Réponses attendues (minuscules)
-    const CORRECTION = {
+    const ANSWERS = {
         q1: ["bethléem", "bethleem"],
-        q2: ["pierre", "saint pierre", "simon pierre"],
-        q3: ["apocalypse"],
-        q4: ["jean le baptiste", "jean baptiste"],
-        q5: ["4", "quatre"],
-        q6: ["galilée", "galilee", "tibériade", "tiberiade"],
-        q7: ["nicodème", "nicodeme"],
-        q8: ["vin"],
-        q9: ["matthieu"],
-        q10: ["judas", "judas iscariote"]
+        q2: ["pierre", "saint pierre"]
     };
 
     document.getElementById('quizForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if(!confirm("Êtes-vous sûr de vouloir valider ? Vous ne pourrez plus modifier vos réponses.")) return;
-
         const btn = document.getElementById('btnEnvoyer');
         btn.disabled = true;
-        btn.innerText = "Traitement en cours...";
+        btn.innerText = "Analyse des réponses...";
 
         let score = 0;
-        const total = 10;
+        const total = 2; // Mets 10 ici quand tu auras ajouté toutes les questions
 
-        // Analyse et Correction
         for (let i = 1; i <= total; i++) {
             const input = document.getElementById('q' + i);
             const block = document.getElementById('block' + i);
             const feedback = document.getElementById('f' + i);
-            const userVal = input.value.toLowerCase().trim();
+            const val = input.value.toLowerCase().trim();
 
-            if (CORRECTION['q'+i].includes(userVal)) {
+            if (ANSWERS['q'+i].includes(val)) {
                 score++;
                 block.classList.add('is-correct');
             } else {
                 block.classList.add('is-wrong');
                 feedback.style.display = "block";
-                feedback.style.color = "var(--error)";
-                feedback.innerHTML = "❌ Erreur. La réponse était : " + CORRECTION['q'+i][0].toUpperCase();
+                feedback.innerHTML = "💡 La réponse était : " + ANSWERS['q'+i][0].toUpperCase();
             }
-            input.disabled = true; 
+            input.disabled = true;
         }
 
-        // Sauvegarde dans Supabase
-        const { error } = await _supabase.from('reponses').insert([{
+        // Envoi Supabase
+        await _supabase.from('reponses').insert([{
             prenom: document.getElementById('prenom').value,
             nom: document.getElementById('nom').value,
             email: document.getElementById('email').value,
-            reponse_1: document.getElementById('q1').value, reponse_2: document.getElementById('q2').value,
-            reponse_3: document.getElementById('q3').value, reponse_4: document.getElementById('q4').value,
-            reponse_5: document.getElementById('q5').value, reponse_6: document.getElementById('q6').value,
-            reponse_7: document.getElementById('q7').value, reponse_8: document.getElementById('q8').value,
-            reponse_9: document.getElementById('q9').value, reponse_10: document.getElementById('q10').value
+            reponse_1: document.getElementById('q1').value,
+            reponse_2: document.getElementById('q2').value
         }]);
 
-        if(error) alert("Erreur de sauvegarde : " + error.message);
-
-        // Affichage du résultat final
+        // Résultat final animé
         const resDiv = document.getElementById('res-summary');
         resDiv.style.display = "block";
-        resDiv.innerHTML = `VOTRE SCORE FINAL : ${score} / ${total}`;
+        resDiv.innerHTML = `SCORE FINAL : ${score} / ${total}`;
+        resDiv.style.background = score >= (total/2) ? "#d4edda" : "#f8d7da";
+        resDiv.style.color = score >= (total/2) ? "#155724" : "#721c24";
         
-        if(score >= 7) {
-            resDiv.style.borderColor = "var(--success)";
-            resDiv.style.color = "var(--success)";
-            resDiv.innerHTML += "<br>✨ Félicitations, Expert !";
-        } else {
-            resDiv.style.borderColor = "var(--error)";
-            resDiv.style.color = "var(--error)";
-            resDiv.innerHTML += "<br>📖 Continuez vos lectures !";
-        }
-
-        // Cacher le bouton d'envoi et montrer le bouton de reset
         btn.style.display = "none";
         document.getElementById('btnReset').style.display = "block";
-        
-        // Bloquer aussi les infos perso
-        document.getElementById('prenom').disabled = true;
-        document.getElementById('nom').disabled = true;
-        document.getElementById('email').disabled = true;
     });
 </script>
+
 </body>
 </html>
