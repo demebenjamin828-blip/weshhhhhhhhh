@@ -33,7 +33,7 @@
         @keyframes fadeInPower {
             0% { opacity: 0; transform: translateY(40px) scale(0.95); }
             60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
-            100% { transform: translateY(0) scale(1); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .step { display:none; }
@@ -53,7 +53,6 @@
             100% { opacity: 1; transform: translateY(0); } 
         }
 
-        /* Délai d'apparition des questions pour l'effet fluide */
         .step.active .q-block:nth-child(1) { animation-delay: 0.1s; }
         .step.active .q-block:nth-child(2) { animation-delay: 0.2s; }
 
@@ -161,7 +160,7 @@
         <div class="step" id="step5">
             <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
             <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
-            <button type="submit" class="btn-nav" style="background:var(--success);">Valider mes réponses ✅</button>
+            <button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
         </div>
     </form>
 
@@ -170,14 +169,14 @@
 </div>
 
 <script>
-    // 1. INITIALISATION DES SERVICES
+    // 1. CONFIGURATION DES SERVICES
     const _supabase = supabase.createClient(
         'https://inrcrtyvbgjrrccpzxlk.supabase.co',
         'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK'
     );
 
     (function() {
-        emailjs.init("VOTRE_PUBLIC_KEY"); // ⚠️ REMPLACE PAR TA PUBLIC KEY EMAILJS
+        emailjs.init("VOTRE_PUBLIC_KEY"); // ⚠️ À REMPLACER PAR TA PUBLIC KEY (Onglet Account)
     })();
 
     const ANSWERS = {
@@ -186,7 +185,7 @@
         q7:["paul"], q8:["vin","eau en vin"], q9:["matthieu"], q10:["judas"]
     };
 
-    // 2. LOGIQUE DE NAVIGATION
+    // 2. UTILITAIRES
     function normalizeText(text){
         return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
     }
@@ -197,14 +196,13 @@
         window.scrollTo({top:0,behavior:'smooth'});
     }
 
-    // 3. SOUMISSION ET CALCUL
+    // 3. SOUMISSION ET CORRECTION
     document.getElementById('quizForm').addEventListener('submit', async e => {
         e.preventDefault();
         let score = 0;
         let tableauEmailHTML = ""; 
         const recap = [];
 
-        // Correction
         for(let i=1; i<=10; i++){
             const inputEl = document.getElementById('q'+i);
             const userRaw = inputEl.value;
@@ -215,7 +213,6 @@
             let isCorrect = correctAnswers.includes(userAns);
             if(isCorrect) score++;
 
-            // Mise à jour visuelle (feedback)
             feedback.style.display="block";
             if(isCorrect){
                 document.getElementById('block'+i).classList.add('is-correct');
@@ -225,7 +222,7 @@
                 feedback.innerHTML="❌ Réponse : " + ANSWERS['q'+i][0];
             }
 
-            // Construction du tableau pour l'Email
+            // Lignes du tableau pour EmailJS
             tableauEmailHTML += `
                 <tr>
                     <td style="padding:8px; border:1px solid #ddd;">Q${i}</td>
@@ -251,18 +248,18 @@
         };
 
         emailjs.send('service_raxr77e', 'TON_TEMPLATE_ID', emailParams) // ⚠️ REMPLACE TON_TEMPLATE_ID
-            .then(() => console.log("Email envoyé !"))
+            .then(() => alert("Résultats envoyés par mail !"))
             .catch(err => console.error("Erreur EmailJS :", err));
 
         // 5. SAUVEGARDE SUPABASE
         await _supabase.from('reponses').upsert({email, prenom, nom, score}, {onConflict:'email'});
 
-        // 6. AFFICHAGE RÉSULTAT ÉCRAN
+        // 6. AFFICHAGE FINAL
         let tableHTML = `<h3>Récapitulatif 📋</h3><table><tr><th>Q°</th><th>Ta réponse</th><th>Correct</th><th>Status</th></tr>`;
         recap.forEach(r => {
             tableHTML += `<tr><td>${r.q}</td><td>${r.user}</td><td>${r.correct}</td><td>${r.status?'✅':'❌'}</td></tr>`;
         });
-        tableHTML += `</table><p style="font-size:20px; font-weight:bold; text-align:center;">Score final : ${score}/10</p>`;
+        tableHTML += `</table><p style="font-size:20px; font-weight:bold; text-align:center;">Score : ${score}/10</p>`;
         
         const resDiv = document.getElementById('res-summary');
         resDiv.innerHTML = tableHTML;
