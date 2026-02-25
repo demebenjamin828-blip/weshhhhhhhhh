@@ -38,7 +38,7 @@
             <div class="q-block">
                 <input type="text" id="prenom" placeholder="Prénom" required style="margin-bottom:10px;">
                 <input type="text" id="nom" placeholder="Nom" required style="margin-bottom:10px;">
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="email" placeholder="Email" required title="L'email sert d'identifiant unique pour vos essais.">
             </div>
             <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer l'examen</button>
         </div>
@@ -127,7 +127,8 @@
             input.disabled = true;
         }
 
-        await _supabase.from('reponses').insert([{
+        // --- MODIFICATION ICI : UPSERT (Mise à jour si l'email existe déjà) ---
+        await _supabase.from('reponses').upsert([{
             prenom: document.getElementById('prenom').value,
             nom: document.getElementById('nom').value,
             email: document.getElementById('email').value,
@@ -136,7 +137,7 @@
             reponse_5: document.getElementById('q5').value, reponse_6: document.getElementById('q6').value,
             reponse_7: document.getElementById('q7').value, reponse_8: document.getElementById('q8').value,
             reponse_9: document.getElementById('q9').value, reponse_10: document.getElementById('q10').value
-        }]);
+        }], { onConflict: 'email' }); // Indispensable pour éviter les doublons
 
         document.querySelectorAll('.step').forEach(s => s.classList.add('active'));
         btn.style.display = "none";
