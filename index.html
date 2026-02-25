@@ -7,23 +7,43 @@
 <style>
 :root { --success:#27ae60; --error:#e74c3c; --primary:#2c3e50; }
 body { font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;justify-content:center;padding:20px;}
-.quiz-card { background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:600px;}
+.quiz-card { background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:600px; animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1);}
+@keyframes fadeInPower {
+    0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+    60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+}
+
 .step { display:none; }
-.step.active { display:block;animation:fadeIn .5s; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-.q-block{margin-bottom:15px;padding:15px;border-radius:10px;border:1px solid #eee;}
-input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;}
-.btn-nav{width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px;}
+.step.active { display:block; }
+
+.q-block{margin-bottom:15px;padding:15px;border-radius:10px;border:1px solid #eee; opacity:0; animation: fadeInStagger 0.6s forwards;}
+@keyframes fadeInStagger { 0% {opacity:0; transform: translateY(20px);} 100% {opacity:1; transform: translateY(0);} }
+
+.step.active .q-block:nth-child(1){ animation-delay:0.1s; }
+.step.active .q-block:nth-child(2){ animation-delay:0.2s; }
+.step.active .q-block:nth-child(3){ animation-delay:0.3s; }
+.step.active .q-block:nth-child(4){ animation-delay:0.4s; }
+
+input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px; transition: all 0.3s ease;}
+input:focus{border-color: var(--primary); box-shadow:0 4px 15px rgba(44,62,80,0.2); outline:none;}
+.btn-nav{width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px; transition: all 0.3s ease;}
+.btn-nav:hover{transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.15);}
 .feedback{display:none;font-size:14px;margin-top:10px;font-weight:bold;}
 .is-correct{border-color:var(--success)!important;background:#f0fff4;}
 .is-wrong{border-color:var(--error)!important;background:#fff5f5;}
+
+#res-summary{display:none;margin-top:20px;}
+#res-summary table{width:100%;border-collapse:collapse;text-align:left;}
+#res-summary th, #res-summary td{padding:8px;border:1px solid #ddd;}
+#res-summary th{background:#f0f0f0;}
+#btnReset{display:none;background:#7f8c8d;}
 </style>
 </head>
 <body>
 
 <div class="quiz-card">
 <h2 style="text-align:center;">Quiz Biblique 🕊️</h2>
-<div id="res-summary" style="display:none;text-align:center;padding:15px;font-size:20px;font-weight:bold;margin-bottom:10px;border:2px solid;"></div>
 
 <form id="quizForm">
 
@@ -31,7 +51,7 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;}
 <div class="step active" id="step0">
 <input type="text" id="prenom" placeholder="Prénom" required><br><br>
 <input type="text" id="nom" placeholder="Nom" required><br><br>
-<input type="email" id="email" placeholder="Email (clé unique)" required>
+<input type="email" id="email" placeholder="Email (clé unique)" required><br><br>
 <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer</button>
 </div>
 
@@ -67,8 +87,9 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;}
 </div>
 
 </form>
-<button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none;background:#7f8c8d;">Recommencer</button>
-</div>
+
+<div id="res-summary"></div>
+<button onclick="location.reload()" id="btnReset" class="btn-nav">Recommencer</button>
 
 <script>
 const _supabase = supabase.createClient(
@@ -89,13 +110,8 @@ const ANSWERS = {
   q10:["judas"]
 };
 
-// Fonction pour normaliser et comparer toléramment
 function normalizeText(text){
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")  // retire les accents
-    .trim();
+  return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
 }
 
 function nextStep(n){
@@ -107,48 +123,41 @@ function nextStep(n){
 document.getElementById('quizForm').addEventListener('submit', async e => {
   e.preventDefault();
   let score = 0;
+  const recap = [];
 
-  // ✅ correction sur 10 questions
   for(let i=1;i<=10;i++){
-    const val = normalizeText(document.getElementById('q'+i).value);
+    const userAns = normalizeText(document.getElementById('q'+i).value);
     const feedback = document.getElementById('f'+i);
-    feedback.style.display = "block";
-
-    // Vérification tolérante aux accents
+    feedback.style.display="block";
     const correctAnswers = ANSWERS['q'+i].map(a => normalizeText(a));
-    if(correctAnswers.includes(val)){
-      score++;
-      document.getElementById('block'+i).classList.add('is-correct');
-      feedback.innerHTML = "✅ Bonne réponse";
-    } else {
-      document.getElementById('block'+i).classList.add('is-wrong');
-      feedback.innerHTML = "❌ Réponse : "+ANSWERS['q'+i][0];
-    }
+    let isCorrect = correctAnswers.includes(userAns);
+    if(isCorrect){ score++; document.getElementById('block'+i).classList.add('is-correct'); feedback.innerHTML="✅ Bonne réponse";}
+    else { document.getElementById('block'+i).classList.add('is-wrong'); feedback.innerHTML="❌ Réponse : "+ANSWERS['q'+i][0];}
+    recap.push({question:i,user:userAns,correct:ANSWERS['q'+i][0],status:isCorrect});
   }
 
-  // ✅ récupération des infos utilisateur
+  // Sauvegarde dans Supabase
   const prenom = document.getElementById('prenom').value.trim();
   const nom = document.getElementById('nom').value.trim();
   const email = document.getElementById('email').value.trim();
+  const {data,error} = await _supabase.from('reponses').upsert({email,prenom,nom,score},{onConflict:'email'});
+  if(error) console.log("Erreur Supabase :",error); else console.log("Données enregistrées :",data);
 
-  // ✅ sauvegarde dans Supabase
-  const { data, error } = await _supabase.from('reponses').upsert({
-    email: email,
-    prenom: prenom,
-    nom: nom,
-    score: score
-  }, { onConflict: 'email' });
-
-  if(error){
-    console.log("Erreur Supabase :", error);
-    alert("Erreur lors de l'enregistrement, regarde la console.");
-  } else {
-    console.log("Données enregistrées :", data);
-  }
-
-  document.getElementById('res-summary').style.display = "block";
-  document.getElementById('res-summary').innerHTML = "SCORE : "+score+" / 10";
-  document.getElementById('btnReset').style.display = "block";
+  // Affichage récapitulatif sous forme de tableau
+  let tableHTML = `<h3>Récapitulatif 📋</h3><table><tr><th>Q°</th><th>Réponse utilisateur</th><th>Réponse correcte</th><th>Status</th></tr>`;
+  recap.forEach(r=>{
+    tableHTML+=`<tr>
+      <td>${r.question}</td>
+      <td>${r.user || '-'}</td>
+      <td>${r.correct}</td>
+      <td style="color:${r.status?'var(--success)':'var(--error)'}">${r.status?'✅':'❌'}</td>
+    </tr>`;
+  });
+  tableHTML+=`</table><p style="font-weight:bold;">Score final : ${score}/10</p>`;
+  const resDiv = document.getElementById('res-summary');
+  resDiv.innerHTML = tableHTML;
+  resDiv.style.display="block";
+  document.getElementById('btnReset').style.display="block";
 });
 </script>
 
