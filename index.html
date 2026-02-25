@@ -176,7 +176,8 @@
     );
 
     (function() {
-        emailjs.init("VOTRE_PUBLIC_KEY"); // ⚠️ À REMPLACER PAR TA PUBLIC KEY (Onglet Account)
+        // Ta clé publique EmailJS
+        emailjs.init("ulU_NSZFdTj6ZZV8T"); 
     })();
 
     const ANSWERS = {
@@ -185,7 +186,6 @@
         q7:["paul"], q8:["vin","eau en vin"], q9:["matthieu"], q10:["judas"]
     };
 
-    // 2. UTILITAIRES
     function normalizeText(text){
         return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
     }
@@ -222,7 +222,7 @@
                 feedback.innerHTML="❌ Réponse : " + ANSWERS['q'+i][0];
             }
 
-            // Lignes du tableau pour EmailJS
+            // Construction du tableau HTML pour le mail
             tableauEmailHTML += `
                 <tr>
                     <td style="padding:8px; border:1px solid #ddd;">Q${i}</td>
@@ -238,7 +238,7 @@
         const nom = document.getElementById('nom').value;
         const email = document.getElementById('email').value;
 
-        // 4. ENVOI EMAILJS
+        // 4. ENVOI EMAILJS (ID Service et Template intégrés)
         const emailParams = {
             prenom: prenom,
             nom: nom,
@@ -247,25 +247,26 @@
             tableau_html: tableauEmailHTML
         };
 
-        emailjs.send('service_raxr77e', 'TON_TEMPLATE_ID', emailParams) // ⚠️ REMPLACE TON_TEMPLATE_ID
-            .then(() => alert("Résultats envoyés par mail !"))
+        emailjs.send('service_raxr77e', 'template_iw4149f', emailParams)
+            .then(() => alert("Résultats envoyés à demebenjamin828@gmail.com !"))
             .catch(err => console.error("Erreur EmailJS :", err));
 
         // 5. SAUVEGARDE SUPABASE
         await _supabase.from('reponses').upsert({email, prenom, nom, score}, {onConflict:'email'});
 
-        // 6. AFFICHAGE FINAL
-        let tableHTML = `<h3>Récapitulatif 📋</h3><table><tr><th>Q°</th><th>Ta réponse</th><th>Correct</th><th>Status</th></tr>`;
+        // 6. AFFICHAGE RÉCAPITULATIF FINAL
+        let tableHTML = `<h3>Récapitulatif 📋</h3><table><tr><th>Q°</th><th>Réponse</th><th>Correct</th><th>Status</th></tr>`;
         recap.forEach(r => {
             tableHTML += `<tr><td>${r.q}</td><td>${r.user}</td><td>${r.correct}</td><td>${r.status?'✅':'❌'}</td></tr>`;
         });
-        tableHTML += `</table><p style="font-size:20px; font-weight:bold; text-align:center;">Score : ${score}/10</p>`;
+        tableHTML += `</table><p style="font-size:20px; font-weight:bold; text-align:center;">Score final : ${score}/10</p>`;
         
         const resDiv = document.getElementById('res-summary');
         resDiv.innerHTML = tableHTML;
         resDiv.style.display="block";
         document.getElementById('btnReset').style.display="block";
         document.querySelector('button[type="submit"]').style.display="none";
+        window.scrollTo({top:0,behavior:'smooth'});
     });
 </script>
 
