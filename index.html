@@ -2,28 +2,28 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Examen Nouveau Testament - 10 Questions 📖</title>
+    <title>Examen Biblique : Nouveau Testament 📖</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --success: #27ae60; --error: #e74c3c; --primary: #2c3e50; --gold: #d4af37; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
         .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; }
         
         .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .step.active { display: block; animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
 
-        .q-block { margin-bottom: 15px; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+        .q-block { margin-bottom: 15px; padding: 15px; border-radius: 10px; border: 1px solid #eee; background: #fff; transition: 0.3s; }
         label { font-weight: bold; display: block; margin-bottom: 8px; color: var(--primary); }
-        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; }
         
-        .btn-nav { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
-        .btn-nav:hover { background: #34495e; }
+        .btn-nav { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 15px; }
         
         #res-summary { display: none; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-size: 24px; font-weight: bold; border: 3px solid; }
-        .feedback { display: none; font-size: 14px; margin-top: 8px; font-weight: bold; }
+        .feedback { display: none; font-size: 14px; margin-top: 10px; padding: 8px; border-radius: 5px; }
         .is-correct { border-color: var(--success) !important; background: #f0fff4; }
         .is-wrong { border-color: var(--error) !important; background: #fff5f5; }
+        .verset-info { display: block; font-style: italic; margin-top: 5px; color: #555; }
     </style>
 </head>
 <body>
@@ -33,7 +33,6 @@
     <div id="res-summary"></div>
 
     <form id="quizForm">
-        <!-- Infos utilisateur -->
         <div class="step active" id="step0">
             <h3>Vos Informations</h3>
             <div class="q-block">
@@ -41,37 +40,36 @@
                 <input type="text" id="nom" placeholder="Nom" required style="margin-bottom:10px;">
                 <input type="email" id="email" placeholder="Email" required>
             </div>
-            <button type="button" class="btn-nav" id="btnNext0">Commencer l'examen</button>
+            <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer l'examen</button>
         </div>
 
-        <!-- Étapes questions -->
         <div class="step" id="step1">
             <div class="q-block" id="block1"><label>1. Dans quelle ville Jésus est-il né ?</label><input type="text" id="q1" required><div class="feedback" id="f1"></div></div>
             <div class="q-block" id="block2"><label>2. Quel apôtre a renié Jésus trois fois ?</label><input type="text" id="q2" required><div class="feedback" id="f2"></div></div>
-            <button type="button" class="btn-nav" id="btnNext1">Suivant ➡️</button>
+            <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant ➡️</button>
         </div>
 
         <div class="step" id="step2">
             <div class="q-block" id="block3"><label>3. Quel est le dernier livre de la Bible ?</label><input type="text" id="q3" required><div class="feedback" id="f3"></div></div>
             <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input type="text" id="q4" required><div class="feedback" id="f4"></div></div>
-            <button type="button" class="btn-nav" id="btnNext2">Suivant ➡️</button>
+            <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant ➡️</button>
         </div>
 
         <div class="step" id="step3">
             <div class="q-block" id="block5"><label>5. Combien y a-t-il d'Évangiles ? (chiffre)</label><input type="text" id="q5" required><div class="feedback" id="f5"></div></div>
             <div class="q-block" id="block6"><label>6. Sur quelle mer Jésus a-t-il marché ?</label><input type="text" id="q6" required><div class="feedback" id="f6"></div></div>
-            <button type="button" class="btn-nav" id="btnNext3">Suivant ➡️</button>
+            <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant ➡️</button>
         </div>
 
         <div class="step" id="step4">
             <div class="q-block" id="block7"><label>7. Qui a écrit la majorité des Épîtres ?</label><input type="text" id="q7" required><div class="feedback" id="f7"></div></div>
-            <div class="q-block" id="block8"><label>8. Quel miracle a eu lieu aux noces de Cana ?</label><input type="text" id="q8" required><div class="feedback" id="f8"></div></div>
-            <button type="button" class="btn-nav" id="btnNext4">Suivant ➡️</button>
+            <div class="q-block" id="block8"><label>8. Quel miracle a eu lieu aux noces de Cana ? (L'eau en...)</label><input type="text" id="q8" required><div class="feedback" id="f8"></div></div>
+            <button type="button" class="btn-nav" onclick="nextStep(4)">Suivant ➡️</button>
         </div>
 
         <div class="step" id="step5">
             <div class="q-block" id="block9"><label>9. Quel apôtre était collecteur d'impôts ?</label><input type="text" id="q9" required><div class="feedback" id="f9"></div></div>
-            <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input type="text" id="q10" required><div class="feedback" id="f10"></div></div>
+            <div class="q-block" id="block10"><label>10. Qui a trahi Jésus pour 30 pièces d'argent ?</label><input type="text" id="q10" required><div class="feedback" id="f10"></div></div>
             <button type="submit" class="btn-nav" style="background:var(--success);">Terminer et Envoyer ✅</button>
         </div>
     </form>
@@ -80,92 +78,76 @@
 </div>
 
 <script>
-const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
+    const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 
-const ANSWERS = {
-    q1: ["bethléem","bethleem"], q2: ["pierre","saint pierre"],
-    q3: ["apocalypse"], q4: ["jean baptiste","jean le baptiste"],
-    q5: ["4"], q6: ["galilée","galilee"],
-    q7: ["paul","saint paul"], q8: ["vin","eau en vin"],
-    q9: ["matthieu"], q10: ["judas","judas iscariote"]
-};
+    const ANSWERS = {
+        q1: { texte: ["bethléem", "bethleem"], ref: "Matthieu 2:1" },
+        q2: { texte: ["pierre", "saint pierre"], ref: "Luc 22:61" },
+        q3: { texte: ["apocalypse"], ref: "Apocalypse 22" },
+        q4: { texte: ["jean baptiste", "jean le baptiste"], ref: "Matthieu 3:13" },
+        q5: { texte: ["4"], ref: "Matthieu, Marc, Luc, Jean" },
+        q6: { texte: ["galilée", "galilee", "tibériade"], ref: "Jean 6:19" },
+        q7: { texte: ["paul", "saint paul"], ref: "Actes des Apôtres" },
+        q8: { texte: ["vin", "eau en vin"], ref: "Jean 2:1-11" },
+        q9: { texte: ["matthieu"], ref: "Matthieu 9:9" },
+        q10: { texte: ["judas", "judas iscariote"], ref: "Matthieu 26:15" }
+    };
 
-// Fonction pour passer à l'étape suivante
-function goNext(currentStep) {
-    const step = document.getElementById('step'+currentStep);
-    const inputs = step.querySelectorAll('input');
-    for(let inp of inputs){ if(!inp.value){ alert("Remplissez tous les champs !"); return; } }
-    step.classList.remove('active');
-    const next = document.getElementById('step'+(currentStep+1));
-    next.classList.add('active');
-    next.scrollIntoView({behavior:"smooth"});
-}
-
-// Lier boutons next
-document.getElementById('btnNext0').onclick = ()=>goNext(0);
-document.getElementById('btnNext1').onclick = ()=>goNext(1);
-document.getElementById('btnNext2').onclick = ()=>goNext(2);
-document.getElementById('btnNext3').onclick = ()=>goNext(3);
-document.getElementById('btnNext4').onclick = ()=>goNext(4);
-
-// Soumission du quiz
-document.getElementById('quizForm').addEventListener('submit', async e=>{
-    e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.disabled = true;
-
-    let score = 0;
-    for(let i=1;i<=10;i++){
-        const input = document.getElementById('q'+i);
-        const val = input.value.toLowerCase().trim();
-        const block = document.getElementById('block'+i);
-        const feedback = document.getElementById('f'+i);
-        if(ANSWERS['q'+i].includes(val)){
-            score++;
-            block.classList.add('is-correct');
-            feedback.style.display="block";
-            feedback.style.color="var(--success)";
-            feedback.innerHTML="✅ Correct !";
-        } else {
-            block.classList.add('is-wrong');
-            feedback.style.display="block";
-            feedback.style.color="var(--error)";
-            feedback.innerHTML=`❌ Réponse : ${ANSWERS['q'+i][0].toUpperCase()}`;
-        }
-        input.disabled = true;
+    function nextStep(current) {
+        const stepDiv = document.getElementById('step' + current);
+        const inputs = stepDiv.querySelectorAll('input');
+        let ok = true;
+        inputs.forEach(i => { if(!i.value) ok = false; });
+        if(!ok) { alert("Veuillez répondre avant de continuer !"); return; }
+        stepDiv.classList.remove('active');
+        document.getElementById('step' + (current + 1)).classList.add('active');
     }
 
-    // Envoyer sur Supabase
-    await _supabase.from('reponses').insert([{
-        prenom: document.getElementById('prenom').value,
-        nom: document.getElementById('nom').value,
-        email: document.getElementById('email').value,
-        reponse_1: document.getElementById('q1').value,
-        reponse_2: document.getElementById('q2').value,
-        reponse_3: document.getElementById('q3').value,
-        reponse_4: document.getElementById('q4').value,
-        reponse_5: document.getElementById('q5').value,
-        reponse_6: document.getElementById('q6').value,
-        reponse_7: document.getElementById('q7').value,
-        reponse_8: document.getElementById('q8').value,
-        reponse_9: document.getElementById('q9').value,
-        reponse_10: document.getElementById('q10').value,
-        score: score
-    }]);
+    document.getElementById('quizForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
 
-    // Affichage du score final
-    document.querySelectorAll('.step').forEach(s=>s.classList.add('active'));
-    btn.style.display="none";
-    document.getElementById('btnReset').style.display="block";
+        let score = 0;
+        for (let i = 1; i <= 10; i++) {
+            const input = document.getElementById('q' + i);
+            const block = document.getElementById('block' + i);
+            const feedback = document.getElementById('f' + i);
+            const val = input.value.toLowerCase().trim();
 
-    const res = document.getElementById('res-summary');
-    const percent = (score/10)*100;
-    let msg = percent === 100 ? "🎉 Excellent !" : percent>=50 ? "🙂 Bien joué !" : "💪 Peux mieux faire !";
-    res.style.display="block";
-    res.innerHTML=`VOTRE NOTE : ${score}/10 (${percent}%)<br>${msg}`;
-    res.style.borderColor = score>=5 ? "var(--success)" : "var(--error)";
-    res.scrollIntoView({behavior:"smooth"});
-});
+            feedback.style.display = "block";
+            if (ANSWERS['q'+i].texte.includes(val)) {
+                score++;
+                block.classList.add('is-correct');
+                feedback.innerHTML = `<span style="color:var(--success)">✅ Correct !</span> <span class="verset-info">📖 ${ANSWERS['q'+i].ref}</span>`;
+            } else {
+                block.classList.add('is-wrong');
+                feedback.innerHTML = `<span style="color:var(--error)">❌ La réponse était : ${ANSWERS['q'+i].texte[0].toUpperCase()}</span> <span class="verset-info">📖 ${ANSWERS['q'+i].ref}</span>`;
+            }
+            input.disabled = true;
+        }
+
+        await _supabase.from('reponses').insert([{
+            prenom: document.getElementById('prenom').value,
+            nom: document.getElementById('nom').value,
+            email: document.getElementById('email').value,
+            reponse_1: document.getElementById('q1').value, reponse_2: document.getElementById('q2').value,
+            reponse_3: document.getElementById('q3').value, reponse_4: document.getElementById('q4').value,
+            reponse_5: document.getElementById('q5').value, reponse_6: document.getElementById('q6').value,
+            reponse_7: document.getElementById('q7').value, reponse_8: document.getElementById('q8').value,
+            reponse_9: document.getElementById('q9').value, reponse_10: document.getElementById('q10').value
+        }]);
+
+        document.querySelectorAll('.step').forEach(s => s.classList.add('active'));
+        btn.style.display = "none";
+        document.getElementById('btnReset').style.display = "block";
+        
+        const res = document.getElementById('res-summary');
+        res.style.display = "block";
+        res.innerHTML = `NOTE FINALE : ${score} / 10`;
+        res.style.borderColor = score >= 5 ? "var(--success)" : "var(--error)";
+        window.scrollTo(0, 0);
+    });
 </script>
 </body>
 </html>
