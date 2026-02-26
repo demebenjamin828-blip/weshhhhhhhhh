@@ -52,8 +52,6 @@ body {
 
 .step.active .q-block:nth-child(1){animation-delay:0.1s;}
 .step.active .q-block:nth-child(2){animation-delay:0.2s;}
-.step.active .q-block:nth-child(3){animation-delay:0.3s;}
-.step.active .q-block:nth-child(4){animation-delay:0.4s;}
 
 input {
     width:100%;
@@ -164,7 +162,7 @@ const _supabase = supabase.createClient(
     'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK'
 );
 
-emailjs.init("ulU_NSZFdTj6ZZV8T"); // ta clé publique EmailJS
+emailjs.init("ulU_NSZFdTj6ZZV8T"); 
 
 const ANSWERS = {
 q1:["bethléem","bethleem"], q2:["pierre"], q3:["apocalypse"], 
@@ -189,7 +187,8 @@ document.getElementById('quizForm').addEventListener('submit', async e => {
     const recap = [];
 
     for(let i=1;i<=10;i++){
-        const userRaw = document.getElementById('q'+i).value || '-';
+        const inputVal = document.getElementById('q'+i).value;
+        const userRaw = inputVal ? inputVal.trim() : '-';
         const correct = ANSWERS['q'+i][0];
         const isCorrect = ANSWERS['q'+i].map(a=>normalizeText(a)).includes(normalizeText(userRaw));
 
@@ -204,14 +203,8 @@ document.getElementById('quizForm').addEventListener('submit', async e => {
             feedback.innerHTML="❌ Réponse : "+correct;
         }
 
-        tableauEmailHTML += `
-            <tr>
-                <td style="padding:5px;border:1px solid #ddd;">Q${i}</td>
-                <td style="padding:5px;border:1px solid #ddd;">${userRaw}</td>
-                <td style="padding:5px;border:1px solid #ddd;">${correct}</td>
-                <td style="padding:5px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td>
-            </tr>
-        `;
+        // IMPORTANT : Pas d'espaces inutiles entre les balises pour EmailJS
+        tableauEmailHTML += `<tr><td style="padding:5px;border:1px solid #ddd;">Q${i}</td><td style="padding:5px;border:1px solid #ddd;">${userRaw}</td><td style="padding:5px;border:1px solid #ddd;">${correct}</td><td style="padding:5px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
 
         recap.push({q:i, user:userRaw, correct:correct, status:isCorrect});
     }
@@ -220,9 +213,13 @@ document.getElementById('quizForm').addEventListener('submit', async e => {
     const nom = document.getElementById('nom').value;
     const email = document.getElementById('email').value;
 
-    // 1️⃣ Envoi EmailJS
-    emailjs.send('service_raxr77e','template_iw4149f',{
-        prenom, nom, email, score, tableau_html: tableauEmailHTML
+    // 1️⃣ Envoi EmailJS avec ton NOUVEL ID template_244yyoi
+    emailjs.send('service_raxr77e','template_244yyoi',{
+        prenom: prenom,
+        nom: nom,
+        email: email,
+        score: score,
+        tableau_html: tableauEmailHTML 
     }).then(()=>alert("Résultats envoyés !"))
     .catch(err=>console.error("Erreur EmailJS :", err));
 
