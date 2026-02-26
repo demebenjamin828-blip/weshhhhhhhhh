@@ -9,156 +9,24 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-:root {
-  --success:#2ecc71;
-  --error:#e74c3c;
-  --primary:#27ae60;
-  --accent:#2ecc71;
-  --soft:#eafaf1;
-  --gold: #f1c40f;
-}
-
-body {
-  font-family:'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#f3fbf6,#d4efdf);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  margin:0;
-  overflow-x: hidden;
-}
-
-.quiz-card {
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.15);
-  width:90%;
-  max-width:600px;
-  animation:slideIn 0.8s ease;
-  position:relative;
-  z-index: 10;
-}
-
-@keyframes slideIn {
-  0% {opacity:0; transform:translateY(30px);}
-  100% {opacity:1; transform:translateY(0);}
-}
-
+:root { --success:#2ecc71; --error:#e74c3c; --primary:#27ae60; --soft:#eafaf1; --gold:#f1c40f; }
+body { font-family:'Segoe UI', sans-serif; background: linear-gradient(135deg,#f3fbf6,#d4efdf); display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; }
+.quiz-card { background:white; padding:30px; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,0.15); width:90%; max-width:600px; position:relative; }
 .step { display:none; }
-.step.active { display:block; animation:fadeInRight 0.5s ease; }
-@keyframes fadeInRight {0% {opacity:0; transform:translateX(20px);} 100% {opacity:1; transform:translateX(0);} }
-
-.q-block {
-  margin-bottom:20px;
-  padding:20px;
-  border-radius:12px;
-  border:1px solid #d4efdf;
-  background:#ffffff;
-  transition:0.3s;
-}
-.q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
-
-input {
-  width:100%;
-  padding:14px;
-  border:2px solid #e2e8f0;
-  border-radius:10px;
-  box-sizing:border-box;
-  font-size:16px;
-}
-input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
-
-.btn-nav {
-  width:100%;
-  padding:16px;
-  background:var(--primary);
-  color:white;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:bold;
-  transition:0.3s;
-}
-.btn-nav:hover { background:#1e8449; transform:scale(1.02); }
-
-#timer {
-  font-weight: bold;
-  font-size: 18px;
-  text-align: center;
-  margin-top: 10px;
-  color: var(--primary);
-  background: var(--soft);
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
-}
-
-.timer-danger {
-  color: var(--error) !important;
-  animation: shake 0.5s infinite;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-}
-
-.feedback { display:none; font-size:14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease; }
-@keyframes popIn { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
-
-.is-correct { border-color:var(--success)!important; background:#f0fff4; }
-.is-wrong { border-color:var(--error)!important; background:#fff5f5; }
-
-/* Nouveau style pour le Grade */
-.grade-badge {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: var(--gold);
-  color: #fff;
-  font-weight: bold;
-  border-radius: 50px;
-  font-size: 18px;
-  box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
-}
-
-.score-anim { font-size: 60px; color: var(--success); text-align: center; font-weight: bold; animation: bounce 1s infinite alternate; }
-@keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
-
-.progress-container {
-  width:100%;
-  background:#d4efdf;
-  border-radius:12px;
-  overflow:hidden;
-  height:12px;
-  margin-bottom:10px;
-}
-.progress-bar {
-  height:100%;
-  width:0%;
-  background:var(--primary);
-  transition: width 0.5s ease;
-  border-radius:12px;
-}
-
-.tableau-result {
-  width:100%;
-  border-collapse: collapse;
-  margin-top:25px;
-}
-.tableau-result th, .tableau-result td {
-  border:1px solid #ddd;
-  padding:12px;
-  text-align:left;
-}
-.tableau-result th { background:var(--primary); color:white; }
-
-.commentaires { margin-top:25px; padding:18px; background:#f9fbfd; border-left:4px solid var(--primary); border-radius:8px; line-height:1.6; }
-
-.verse { margin-top:30px; text-align:center; font-style:italic; color:#555; background:#f7f7f7; padding:15px; border-radius:10px; }
+.step.active { display:block; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.q-block { margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid #d4efdf; background:#fff; }
+input { width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; box-sizing:border-box; font-size:16px; margin-top:5px; }
+.btn-nav { width:100%; padding:16px; background:var(--primary); color:white; border:none; border-radius:12px; cursor:pointer; font-weight:bold; margin-top:10px; }
+#timer { font-weight: bold; font-size: 18px; text-align: center; margin: 10px 0; color: var(--primary); background: var(--soft); padding: 10px; border-radius: 8px; display: none; }
+.timer-danger { color: var(--error) !important; }
+.progress-container { width:100%; background:#d4efdf; border-radius:12px; height:10px; margin-bottom:10px; }
+.progress-bar { height:100%; width:0%; background:var(--primary); border-radius:12px; transition: 0.5s; }
+.score-anim { font-size: 50px; color: var(--success); text-align: center; font-weight: bold; }
+.grade-badge { display: inline-block; padding: 8px 15px; background: var(--gold); color: white; border-radius: 20px; margin-top: 10px; }
+.tableau-result { width:100%; border-collapse: collapse; margin-top:20px; }
+.tableau-result th, .tableau-result td { border:1px solid #ddd; padding:10px; text-align:left; }
+.commentaires { margin-top:20px; padding:15px; background:#f9fbfd; border-left:4px solid var(--primary); border-radius:8px; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -167,222 +35,164 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 <audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
 
 <div class="quiz-card">
-  <h2 style="text-align:center; color:var(--primary);">Quiz Biblique🕊️</h2>
-
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
-  
-  <div id="timer">⏱️ Temps restant : 02:00</div>
+  <h2 style="text-align:center; color:var(--primary);">Examen Biblique 🕊️</h2>
+  <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+  <div id="timer">⏱️ Temps : 02:00</div>
 
   <form id="quizForm">
     <div class="step active" id="step0">
       <div class="q-block">
-        <label>Prénom</label><input type="text" id="prenom" required><br><br>
-        <label>Nom</label><input type="text" id="nom" required><br><br>
+        <label>Prénom</label><input type="text" id="prenom" required>
+        <label>Nom</label><input type="text" id="nom" required>
         <label>Email</label><input type="email" id="email" required>
       </div>
-      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer l'Examen 🚀</button>
+      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
     </div>
 
     <div class="step" id="step1">
-      <div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
-      <div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
+      <div class="q-block"><label>1. Ville de naissance de Jésus ?</label><input id="q1"></div>
+      <div class="q-block"><label>2. Qui a renié Jésus ?</label><input id="q2"></div>
       <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant →</button>
     </div>
 
     <div class="step" id="step2">
-      <div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
-      <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
+      <div class="q-block"><label>3. Dernier livre de la Bible ?</label><input id="q3"></div>
+      <div class="q-block"><label>4. Qui a baptisé Jésus ?</label><input id="q4"></div>
       <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant →</button>
     </div>
 
     <div class="step" id="step3">
-      <div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
-      <div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
+      <div class="q-block"><label>5. Nombre d'Évangiles ?</label><input id="q5"></div>
+      <div class="q-block"><label>6. Mer où Jésus a marché ?</label><input id="q6"></div>
       <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant →</button>
     </div>
 
     <div class="step" id="step4">
-      <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
-      <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
+      <div class="q-block"><label>7. Auteur principal des Épîtres ?</label><input id="q7"></div>
+      <div class="q-block"><label>8. Miracle de Cana ?</label><input id="q8"></div>
       <button type="button" class="btn-nav" onclick="nextStep(4)">Dernière étape →</button>
     </div>
 
     <div class="step" id="step5">
-      <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
-      <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
+      <div class="q-block"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"></div>
+      <div class="q-block"><label>10. Qui a trahi Jésus ?</label><input id="q10"></div>
       <button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
     </div>
   </form>
 
-  <div id="res-summary"></div>
-  <div id="recap-table" style="display:none;"></div>
-  <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
+  <div id="finalSection" style="display:none; text-align:center;">
+    <div id="res-summary"></div>
+    <div id="recap-table"></div>
+    <button onclick="location.reload()" class="btn-nav" style="background:#7f8c8d;">Recommencer</button>
+  </div>
 </div>
 
 <script>
-// Initialisation Supabase et EmailJS (Inchangé)
+// CONFIGURATION SUPABASE AVEC TES INFOS
 const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlucmNydHl2YmdqcnJjY3B6eGxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NjkxOTIsImV4cCI6MjA4NzU0NTE5Mn0.9Fg6ixbWUS4twFBVZmeSKYYMB9JJHIQb8LoMYe0g9js');
+emailjs.init("ulU_NSZFdTj6ZZV8T");
 
-// Réponses et explications (Inchangé)
 const ANSWERS = {
-q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée."},
-q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois."},
-q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"Dernier livre de la Bible."},
-q4:{opt:["jean baptiste","jean-baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus."},
-q5:{opt:["4","quatre"], ref:"Matthieu, Marc, Luc, Jean", desc:"Il y a quatre évangiles."},
-q6:{opt:["galilée","galilee"], ref:"Jean 6:19", desc:"Jésus a marché sur la mer de Galilée."},
-q7:{opt:["paul"], ref:"Actes et Épîtres", desc:"Paul a écrit la majorité des épîtres."},
-q8:{opt:["vin","eau en vin"], ref:"Jean 2:1-11", desc:"Le premier miracle fut Cana."},
-q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était collecteur d'impôts."},
-q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent."}
+  q1:{opt:["bethleem","bethleem"], desc:"Jésus est né à Bethléem."},
+  q2:{opt:["pierre"], desc:"Pierre a renié Jésus."},
+  q3:{opt:["apocalypse"], desc:"Dernier livre de la Bible."},
+  q4:{opt:["jean baptiste","jean-baptiste"], desc:"Jean-Baptiste a baptisé Jésus."},
+  q5:{opt:["4","quatre"], desc:"Il y a quatre évangiles."},
+  q6:{opt:["galilee","galilee"], desc:"Mer de Galilée."},
+  q7:{opt:["paul"], desc:"Paul a écrit les épîtres."},
+  q8:{opt:["vin","eau en vin"], desc:"Changement de l'eau en vin."},
+  q9:{opt:["matthieu"], desc:"Matthieu était publicain."},
+  q10:{opt:["judas"], desc:"Judas a trahi Jésus."}
 };
 
-let timeLeft = 120; // 2 minutes par étape
+let timeLeft = 120;
 let timerInterval;
 let currentStep = 0;
 
 function startQuiz() {
-  const p = document.getElementById('prenom').value;
-  if(!p) return alert("Veuillez remplir vos informations !");
+  if(!document.getElementById('prenom').value) return alert("Remplis tes infos !");
   document.getElementById('timer').style.display = 'block';
   nextStep(0);
 }
 
-// Gestionnaire de chrono (Inchangé)
 function resetTimer() {
   clearInterval(timerInterval);
   timeLeft = 120;
-  updateTimerDisplay();
-  
+  updateTimerUI();
   timerInterval = setInterval(() => {
     timeLeft--;
-    updateTimerDisplay();
-
-    if (timeLeft <= 10 && timeLeft > 0) {
-      document.getElementById('beepSound').play().catch(()=>{});
-    }
-
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      document.getElementById('finishSound').play().catch(()=>{});
-      if(currentStep < 5) {
-        alert("Temps écoulé pour ces questions !");
-        nextStep(currentStep);
-      } else {
-        alert("Temps final écoulé ! Validation automatique.");
-        document.getElementById('quizForm').requestSubmit();
-      }
+    updateTimerUI();
+    if(timeLeft <= 10 && timeLeft > 0) document.getElementById('beepSound').play().catch(()=>{});
+    if(timeLeft <= 0) {
+      if(currentStep < 5) nextStep(currentStep);
+      else document.getElementById('quizForm').requestSubmit();
     }
   }, 1000);
 }
 
-function updateTimerDisplay() {
-  const min = Math.floor(timeLeft / 60);
-  const sec = timeLeft % 60;
-  const timerElem = document.getElementById('timer');
-  timerElem.innerText = `⏱️ Temps étape : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-  
-  if(timeLeft <= 10) timerElem.classList.add('timer-danger');
-  else timerElem.classList.remove('timer-danger');
+function updateTimerUI() {
+  const m = Math.floor(timeLeft/60); const s = timeLeft%60;
+  const d = document.getElementById('timer');
+  d.innerText = `⏱️ Temps étape : ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  if(timeLeft <= 10) d.classList.add('timer-danger'); else d.classList.remove('timer-danger');
 }
 
-function normalizeText(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
-
-function nextStep(n){
+function nextStep(n) {
   currentStep = n + 1;
-  document.getElementById('step'+n).classList.remove('active');
-  document.getElementById('step'+currentStep).classList.add('active');
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + currentStep).classList.add('active');
   document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
-  if(currentStep <= 5) {
-    resetTimer();
+  if(currentStep <= 5) resetTimer();
+}
+
+function normalize(t){ return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); }
+
+document.getElementById('quizForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearInterval(timerInterval);
+  
+  let score = 0;
+  let tableauHTML = "";
+  let commentairesHTML = "<hr><h3>Explications</h3>";
+
+  for(let i=1; i<=10; i++) {
+    const val = document.getElementById('q'+i).value.trim();
+    const config = ANSWERS['q'+i];
+    const isCorrect = config.opt.map(a => normalize(a)).includes(normalize(val));
+    if(isCorrect) score++;
+    
+    tableauHTML += `<tr><td>Q${i}</td><td>${val || "-"}</td><td>${isCorrect?'✅':'❌'}</td></tr>`;
+    commentairesHTML += `<div style="margin-bottom:10px; text-align:left;"><b>Q${i}:</b> ${config.desc}</div>`;
   }
-}
 
-// Fonction Magnifique : Confettis ! 🎉
-function launchConfetti() {
-  confetti({
-    particleCount: 150,
-    spread: 70,
-    origin: { y: 0.6 },
-    colors: ['#2ecc71', '#3498db', '#f1c40f', '#fff']
-  });
-}
+  const p = document.getElementById('prenom').value;
+  const n = document.getElementById('nom').value;
+  const em = document.getElementById('email').value;
 
-// Fonction Magnifique : Grades Bibliques 📜
-function getBiblicalGrade(score) {
-  if (score === 10) return "😇 Archange du Savoir";
-  if (score >= 8) return "📖 Disciple Fidèle";
-  if (score >= 6) return "🌿 Graine de Foi";
-  if (score >= 4) return "🕊️ Chercheur de Vérité";
-  return "🌱 Jeune Pousse";
-}
+  // ENVOI SUPABASE
+  try {
+    await _supabase.from('reponses').upsert({ email: em, prenom: p, nom: n, score: score });
+  } catch (err) { console.error(err); }
 
-// Soumission du Quiz (Modifiée pour le Magnifique)
-document.getElementById('quizForm').addEventListener('submit', async e=>{
-e.preventDefault();
-clearInterval(timerInterval);
-document.getElementById('timer').style.display = 'none';
+  // ENVOI EMAILJS
+  emailjs.send('service_raxr77e','template_244yyoi',{ prenom:p, score:score, tableau_html:tableauHTML });
 
-let score=0, tableauHTML="", commentairesHTML="<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
+  // AFFICHAGE FINAL
+  document.getElementById('quizForm').style.display = 'none';
+  document.getElementById('timer').style.display = 'none';
+  document.getElementById('finalSection').style.display = 'block';
+  
+  if(score >= 7) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-// Calcul score et feedback (Inchangé)
-for(let i=1;i<=10;i++){
-    const val=document.getElementById('q'+i).value.trim()||"-";
-    const config=ANSWERS['q'+i];
-    const isCorrect=config.opt.map(a=>normalizeText(a)).includes(normalizeText(val));
-    const feedback=document.getElementById('f'+i);
-    feedback.style.display="block";
-    if(isCorrect){
-        score++;
-        document.getElementById('block'+i).classList.add('is-correct');
-        feedback.innerHTML=`✅ ${config.ref}`;
-        feedback.style.color="var(--success)";
-    } else {
-        document.getElementById('block'+i).classList.add('is-wrong');
-        feedback.innerHTML=`❌ ${config.ref}`;
-        feedback.style.color="var(--error)";
-    }
-    tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
-    commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
-    <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
-    <p style="margin:5px 0 0 0;font-style:italic;color:#555;">📖 Référence : ${config.ref}</p>
-    </div>`;
-}
-
-// --- AJOUT MAGNIFIQUE ---
-if (score >= 7) {
-  launchConfetti(); // Pluie de confettis !
-  const applause = new Audio('https://assets.mixkit.co/active_storage/sfx/2870/2870-preview.mp3');
-  applause.play().catch(()=>{}); // Applaudissements si >= 7/10
-}
-const grade = getBiblicalGrade(score);
-// ------------------------
-
-const p=document.getElementById('prenom').value;
-const n=document.getElementById('nom').value;
-const em=document.getElementById('email').value;
-
-// Envois (Inchangé)
-emailjs.send('service_raxr77e','template_244yyoi',{ prenom:p, nom:n, email:em, score:score, tableau_html:tableauHTML, commentaires_html:commentairesHTML });
-await _supabase.from('reponses').upsert({email:em, prenom:p, nom:n, score:score},{onConflict:'email'});
-
-// Affichage final (Modifié pour le Magnifique)
-document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
-
-document.getElementById('res-summary').innerHTML=`
-<div style="text-align:center;">
-  <div class="score-anim">${score}/10</div>
-  <div class="grade-badge">${grade}</div> <p>Bravo ${p} ! Un récapitulatif détaillé est envoyé à ${em}.</p>
-</div>`;
-
-document.getElementById('recap-table').style.display = "block";
-document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
-<table class="tableau-result"><thead><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
-<div class="commentaires">${commentairesHTML}</div>
-<div class="verse">"Ta parole est une lampe à mes pieds..." - Psaume 119:105</div>`;
-document.getElementById('btnReset').style.display="block";
+  document.getElementById('res-summary').innerHTML = `
+    <div class="score-anim">${score}/10</div>
+    <div class="grade-badge">${score >= 8 ? "📖 Disciple Fidèle" : "🌱 Jeune Pousse"}</div>
+    <p>Bravo ${p} ! Tes résultats sont enregistrés.</p>
+  `;
+  document.getElementById('recap-table').innerHTML = `
+    <table class="tableau-result"><thead><tr><th>Q°</th><th>Réponse</th><th>Etat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
+    <div class="commentaires">${commentairesHTML}</div>
+  `;
 });
 </script>
 </body>
