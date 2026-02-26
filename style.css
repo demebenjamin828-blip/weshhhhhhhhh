@@ -251,3 +251,35 @@ input:focus {
     padding:18px;
     border-radius:12px;
 }
+
+/* ===== CHRONOMETRE ===== */
+
+.timer-container {
+  width: 100%;
+  text-align: center;
+  margin: 15px 0 25px 0;
+}
+
+#timer {
+  display: inline-block;
+  padding: 10px 25px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  animation: pulse 1.5s infinite;
+}
+
+/* Animation respiration */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Quand le temps est presque fini */
+.timer-danger {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+}
