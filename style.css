@@ -1,22 +1,25 @@
-<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
+<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin:auto; border-radius:15px; padding:25px; background:#ffffff; box-shadow:0 15px 40px rgba(0,0,0,0.08); animation:fadeIn 0.8s ease;">
   
-  <h2 style="color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 15px;">
+  <h2 style="color:#2c3e50; text-align:center; border-bottom:3px solid #3498db; padding-bottom:15px; animation:fadeInDown 0.6s ease;">
     Résultats du Quiz Biblique 🕊️
   </h2>
-  
-  <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-    <p style="margin: 5px 0;"><strong>Candidat :</strong> {{prenom}} {{nom}}</p>
-    <p style="margin: 5px 0;"><strong>Email :</strong> {{email}}</p>
-    <p style="margin: 5px 0; font-size: 18px;"><strong>Score Final :</strong> <span style="color: #27ae60;">{{score}} / 10</span></p>
+
+  <div style="background:#f0f4f8; padding:20px; border-radius:10px; margin:20px 0; animation:fadeIn 1s ease;">
+    <p style="margin:5px 0;"><strong>Candidat :</strong> {{prenom}} {{nom}}</p>
+    <p style="margin:5px 0;"><strong>Email :</strong> {{email}}</p>
+    <p style="margin:5px 0; font-size:18px;"><strong>Score Final :</strong> <span style="color:#27ae60; font-weight:bold;">{{score}} / 10</span></p>
+    <div style="height:12px; background:#e0e0e0; border-radius:8px; overflow:hidden; margin-top:10px;">
+      <div style="width:{{score}}0%; height:100%; background:#27ae60; transition: width 1.5s ease;"></div>
+    </div>
   </div>
 
-  <h3 style="color: #2c3e50; font-size: 16px;">Résumé des réponses :</h3>
-  <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+  <h3 style="color:#2c3e50; font-size:16px; margin-bottom:10px;">Résumé des réponses :</h3>
+  <table style="width:100%; border-collapse:collapse; margin-bottom:30px; animation:fadeIn 1s ease;">
     <thead>
-      <tr style="background-color: #2c3e50; color: white;">
-        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Q°</th>
-        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ta réponse</th>
-        <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Résultat</th>
+      <tr style="background:#2c3e50; color:white;">
+        <th style="padding:12px; border:1px solid #ddd; text-align:left;">Q°</th>
+        <th style="padding:12px; border:1px solid #ddd; text-align:left;">Ta réponse</th>
+        <th style="padding:12px; border:1px solid #ddd; text-align:center;">Résultat</th>
       </tr>
     </thead>
     <tbody>
@@ -24,11 +27,18 @@
     </tbody>
   </table>
 
-  <div style="line-height: 1.6;">
+  <div style="line-height:1.6; animation:fadeInUp 1s ease;">
     {{{commentaires_html}}}
   </div>
 
-  <div style="margin-top: 30px; text-align: center; border-top: 1px solid #eee; padding-top: 15px; color: #7f8c8d; font-size: 12px;">
+  <div style="margin-top:30px; text-align:center; border-top:1px solid #eee; padding-top:15px; color:#7f8c8d; font-size:14px; font-style:italic; animation:fadeInUp 1.2s ease;">
     <p>"Ta parole est une lampe à mes pieds, et une lumière sur mon sentier." - Psaume 119:105</p>
   </div>
+
 </div>
+
+<style>
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes fadeInDown { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
+@keyframes fadeInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+</style>
