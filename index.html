@@ -7,26 +7,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        :root { --success:#27ae60; --error:#e74c3c; --primary:#2c3e50; }
-        body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; display:flex; justify-content:center; padding:20px; margin:0; }
-        .quiz-card { background:white; padding:30px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); width:100%; max-width:600px; animation: fadeInPower 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
-        @keyframes fadeInPower { 0% {opacity:0; transform:translateY(40px);} 100% {opacity:1; transform:translateY(0);} }
+        :root { --success:#2ecc71; --error:#e74c3c; --primary:#34495e; --accent:#3498db; }
+        body { font-family:'Segoe UI', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display:flex; justify-content:center; align-items: center; min-height: 100vh; margin:0; }
+        .quiz-card { background:white; padding:40px; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,0.15); width:90%; max-width:550px; animation: slideIn 0.8s ease; }
+        @keyframes slideIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         .step { display:none; }
-        .step.active { display:block; }
-        .q-block { margin-bottom:15px; padding:15px; border-radius:10px; border:1px solid #eee; }
-        input { width:100%; padding:12px; border:2px solid #ddd; border-radius:8px; box-sizing:border-box; }
-        .btn-nav { width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; }
-        .feedback { display:none; font-size:14px; margin-top:10px; font-weight:bold; }
+        .step.active { display:block; animation: fadeInRight 0.5s ease; }
+        @keyframes fadeInRight { 0% { opacity: 0; transform: translateX(20px); } 100% { opacity: 1; transform: translateX(0); } }
+        .q-block { margin-bottom:20px; padding:20px; border-radius:12px; border:1px solid #edf2f7; background: #fff; transition: 0.3s; }
+        input { width:100%; padding:14px; border:2px solid #e2e8f0; border-radius:10px; box-sizing:border-box; font-size: 16px; }
+        .btn-nav { width:100%; padding:16px; background:var(--primary); color:white; border:none; border-radius:12px; cursor:pointer; font-weight:bold; transition: 0.3s; }
+        .btn-nav:hover { background: var(--accent); transform: scale(1.02); }
+        .feedback { display:none; font-size:14px; margin-top:12px; font-weight:600; animation: popIn 0.4s ease; }
+        @keyframes popIn { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
         .is-correct { border-color:var(--success)!important; background:#f0fff4; }
         .is-wrong { border-color:var(--error)!important; background:#fff5f5; }
-        table { width:100%; border-collapse:collapse; margin-top:15px; font-size:14px; }
-        th, td { padding:10px; border:1px solid #ddd; text-align:left; }
+        .score-anim { font-size: 48px; color: var(--success); text-align: center; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
-    <h2 style="text-align:center;">Quiz Biblique 🕊️</h2>
+    <h2 style="text-align:center; color:var(--primary);">Quiz Biblique 🕊️</h2>
     <form id="quizForm">
         <div class="step active" id="step0">
             <div class="q-block">
@@ -34,37 +37,41 @@
                 <label>Nom</label><input type="text" id="nom" required><br><br>
                 <label>Email</label><input type="email" id="email" required>
             </div>
-            <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer l'examen</button>
+            <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer 🚀</button>
         </div>
 
         <div class="step" id="step1">
             <div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
             <div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
-            <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant</button>
+            <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant →</button>
         </div>
+
         <div class="step" id="step2">
             <div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
             <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
-            <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant</button>
+            <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant →</button>
         </div>
+
         <div class="step" id="step3">
             <div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
             <div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
-            <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant</button>
+            <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant →</button>
         </div>
+
         <div class="step" id="step4">
             <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
             <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
-            <button type="button" class="btn-nav" onclick="nextStep(4)">Suivant</button>
+            <button type="button" class="btn-nav" onclick="nextStep(4)">Dernière étape →</button>
         </div>
+
         <div class="step" id="step5">
             <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
             <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
-            <button type="submit" class="btn-nav" style="background:var(--success);">Valider l'examen ✅</button>
+            <button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
         </div>
     </form>
     <div id="res-summary"></div>
-    <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d;">Recommencer</button>
+    <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
 </div>
 
 <script>
@@ -85,13 +92,13 @@
     };
 
     function normalizeText(t){ return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); }
-    function nextStep(n){ document.getElementById('step'+n).classList.remove('active'); document.getElementById('step'+(n+1)).classList.add('active'); window.scrollTo(0,0); }
+    function nextStep(n){ document.getElementById('step'+n).classList.remove('active'); document.getElementById('step'+(n+1)).classList.add('active'); }
 
     document.getElementById('quizForm').addEventListener('submit', async e => {
         e.preventDefault();
         let score = 0;
         let tableauEmailHTML = "";
-        let commentairesHTML = "<hr><h3 style='color:#2c3e50;'>Détails et Explications Bibliques :</h3>";
+        let commentairesHTML = "<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
         
         for(let i=1; i<=10; i++){
             const val = document.getElementById('q'+i).value.trim() || "-";
@@ -104,19 +111,19 @@
                 score++;
                 document.getElementById('block'+i).classList.add('is-correct');
                 feedback.innerHTML = `✅ ${config.ref}`;
+                feedback.style.color = "var(--success)";
             } else {
                 document.getElementById('block'+i).classList.add('is-wrong');
-                feedback.innerHTML = `❌ Rép: ${config.opt[0]} (${config.ref})`;
+                feedback.innerHTML = `❌ ${config.ref}`;
+                feedback.style.color = "var(--error)";
             }
 
-            // Ligne pour le tableau résumé
             tableauEmailHTML += `<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
-
-            // Bloc pour les commentaires explicatifs
+            
             commentairesHTML += `
-                <div style="margin-bottom:15px; padding:10px; border-left:4px solid ${isCorrect?'#27ae60':'#e74c3c'}; background:#f9f9f9;">
+                <div style="margin-bottom:15px; padding:10px; background:#f9f9f9; border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
                     <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
-                    <p style="margin:5px 0 0 0; color:#555; font-style:italic;">📖 Verset : ${config.ref}</p>
+                    <p style="margin:5px 0 0 0; font-style:italic; color:#555;">📖 Référence : ${config.ref}</p>
                 </div>`;
         }
 
@@ -124,16 +131,15 @@
         const n = document.getElementById('nom').value;
         const em = document.getElementById('email').value;
 
-        // Envoi EmailJS avec template_244yyoi
         emailjs.send('service_raxr77e', 'template_244yyoi', {
             prenom: p, nom: n, email: em, score: score, 
             tableau_html: tableauEmailHTML,
-            commentaires_html: commentairesHTML
-        }).then(() => alert("Email de résultats envoyé !"));
+            commentaires_html: commentairesHTML // Transmission des commentaires
+        });
 
         await _supabase.from('reponses').upsert({email:em, prenom:p, nom:n, score:score}, {onConflict:'email'});
-        
-        document.getElementById('res-summary').innerHTML = `<h3 style="text-align:center;">Score Final : ${score}/10</h3><p style="text-align:center;">Les explications bibliques ont été envoyées sur votre mail.</p>`;
+        document.getElementById('quizForm').style.display = "none";
+        document.getElementById('res-summary').innerHTML = `<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Vérifie tes mails pour les explications.</p></div>`;
         document.getElementById('btnReset').style.display = "block";
     });
 </script>
