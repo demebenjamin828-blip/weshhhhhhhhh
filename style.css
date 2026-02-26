@@ -1,12 +1,12 @@
 :root {
-    /* Couleurs du thème */
-    --success: #2ecc71; /* vert validation */
-    --error: #e74c3c;   /* rouge erreur */
-    --primary: #27ae60; /* vert principal du quiz */
-    --accent: #2ecc71;  /* vert clair pour hover et accents */
-    --soft: #eafaf1;    /* vert très clair pour background */
+    --success: #2ecc71;
+    --error: #e74c3c;
+    --primary: #27ae60;
+    --accent: #2ecc71;
+    --soft: #eafaf1;
 }
 
+/* ===== Fond général ===== */
 body {
     font-family:'Segoe UI', sans-serif;
     background: linear-gradient(135deg,#f3fbf6,#d4efdf);
@@ -17,132 +17,237 @@ body {
     margin:0;
 }
 
+/* ===== Carte principale ===== */
 .quiz-card {
     background:white;
     padding:40px;
     border-radius:20px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.15);
+    box-shadow:0 25px 60px rgba(0,0,0,0.15);
     width:90%;
-    max-width:600px;
-    animation:slideIn 0.8s ease;
-    position:relative;
+    max-width:650px;
+    animation:cardEnter .7s ease;
 }
 
-@keyframes slideIn {
-    0% {opacity:0; transform:translateY(30px);}
-    100% {opacity:1; transform:translateY(0);}
+@keyframes cardEnter {
+    0% {opacity:0; transform:translateY(40px) scale(.97);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
 }
 
+/* ===== Étapes ===== */
 .step { display:none; }
-.step.active { display:block; animation:fadeInRight 0.5s ease; }
 
-@keyframes fadeInRight {
-    0% {opacity:0; transform:translateX(20px);}
+.step.active {
+    display:block;
+    animation:stepEnter .45s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes stepEnter {
+    0% {opacity:0; transform:translateX(40px);}
     100% {opacity:1; transform:translateX(0);}
 }
 
+/* ===== Bloc question ===== */
 .q-block {
     margin-bottom:20px;
-    padding:20px;
-    border-radius:12px;
+    padding:22px;
+    border-radius:14px;
     border:1px solid #d4efdf;
     background:#ffffff;
-    transition:0.3s;
+    transition:all .25s ease;
 }
 
 .q-block:hover {
     border-color: var(--primary);
     background: var(--soft);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
 }
 
+/* ===== Inputs ===== */
 input {
     width:100%;
     padding:14px;
     border:2px solid #e2e8f0;
     border-radius:10px;
-    box-sizing:border-box;
     font-size:16px;
+    transition:all .25s ease;
+}
+
+input:hover {
+    border-color: var(--primary);
 }
 
 input:focus {
     outline:none;
     border-color: var(--primary);
-    box-shadow:0 0 0 3px rgba(39,174,96,0.2);
+    transform:scale(1.02);
+    box-shadow:0 0 0 4px rgba(39,174,96,0.15);
 }
 
+/* ===== Boutons ===== */
 .btn-nav {
     width:100%;
     padding:16px;
-    background:var(--primary);
+    background:linear-gradient(135deg,#27ae60,#2ecc71);
     color:white;
     border:none;
     border-radius:12px;
     cursor:pointer;
     font-weight:bold;
-    transition:0.3s;
+    letter-spacing:.4px;
+    transition:.25s;
 }
 
 .btn-nav:hover {
-    background:#1e8449;
-    transform:scale(1.02);
+    transform:scale(1.03);
+    box-shadow:0 10px 25px rgba(39,174,96,.4);
 }
 
+.btn-nav:active {
+    transform:scale(.97);
+}
+
+/* ===== Feedback ===== */
 .feedback {
     display:none;
     font-size:14px;
     margin-top:12px;
     font-weight:600;
-    animation:popIn 0.4s ease;
+    animation:pop .35s ease;
 }
 
-@keyframes popIn { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
+@keyframes pop {
+    0% {transform:scale(.8); opacity:0;}
+    100% {transform:scale(1); opacity:1;}
+}
 
-.is-correct { border-color:var(--success)!important; background:#f0fff4; }
-.is-wrong { border-color:var(--error)!important; background:#fff5f5; }
+.is-correct {
+    border-color:var(--success)!important;
+    background:#f0fff4;
+    animation:good .4s ease;
+}
 
+.is-wrong {
+    border-color:var(--error)!important;
+    background:#fff5f5;
+    animation:bad .4s ease;
+}
+
+@keyframes good {
+    0% {transform:scale(.95);}
+    60% {transform:scale(1.03);}
+    100% {transform:scale(1);}
+}
+
+@keyframes bad {
+    0% {transform:translateX(-4px);}
+    25% {transform:translateX(4px);}
+    50% {transform:translateX(-3px);}
+    75% {transform:translateX(3px);}
+    100% {transform:translateX(0);}
+}
+
+/* ===== Score final ===== */
 .score-anim {
-    font-size: 48px;
-    color: var(--success);
-    text-align: center;
-    animation: bounce 1s infinite alternate;
+    font-size:54px;
+    font-weight:bold;
+    text-align:center;
+    background:linear-gradient(135deg,#27ae60,#2ecc71);
+    -webkit-background-clip:text;
+    color:transparent;
+    animation:scorePop .6s ease;
 }
 
-@keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
-
-.tableau-result {
-    width:100%;
-    border-collapse: collapse;
-    margin-top:25px;
+@keyframes scorePop {
+    0% {transform:scale(.7); opacity:0;}
+    100% {transform:scale(1); opacity:1;}
 }
-.tableau-result th, .tableau-result td {
-    border:1px solid #ddd;
-    padding:12px;
-    text-align:left;
-}
-.tableau-result th { background:#27ae60; color:white; }
-.commentaires { margin-top:25px; padding:18px; background:#f9fbfd; border-left:4px solid var(--primary); border-radius:8px; line-height:1.6; }
-.verse { margin-top:30px; text-align:center; font-style:italic; color:#555; background:#f7f7f7; padding:15px; border-radius:10px; }
 
-/* Barre de progression */
+/* ===== Barre de progression ===== */
 .progress-container {
     width:100%;
     background:#d4efdf;
     border-radius:12px;
     overflow:hidden;
-    height:12px;
-    margin-bottom:20px;
+    height:14px;
+    margin-bottom:25px;
 }
 
 .progress-bar {
     height:100%;
     width:0%;
-    background:var(--primary);
-    transition: width 0.5s ease;
-    border-radius:12px;
+    background:linear-gradient(90deg,#27ae60,#2ecc71,#58d68d);
+    background-size:200% 100%;
+    animation:progressGlow 3s linear infinite;
+    transition:width .4s ease;
 }
 
-/* Animations générales */
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-@keyframes fadeInDown { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
-@keyframes fadeInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+@keyframes progressGlow {
+    0% {background-position:0%;}
+    100% {background-position:200%;}
+}
+
+/* ===== Tableau résultats ===== */
+.tableau-result {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+    overflow:hidden;
+    border-radius:14px;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.tableau-result th {
+    background:linear-gradient(135deg,#27ae60,#2ecc71);
+    color:white;
+    padding:14px;
+    font-size:13px;
+    text-transform:uppercase;
+}
+
+.tableau-result td {
+    padding:14px;
+    border-bottom:1px solid #eee;
+}
+
+.tableau-result tr:nth-child(even) {
+    background:#fbfdfb;
+}
+
+.tableau-result tr:hover {
+    background:#eafaf1;
+    transform:scale(1.01);
+    transition:.2s;
+}
+
+/* ===== Cartes explications ===== */
+.commentaires {
+    margin-top:25px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.commentaires div {
+    background:white;
+    padding:18px;
+    border-radius:10px;
+    border-left:5px solid var(--primary);
+    box-shadow:0 6px 18px rgba(0,0,0,.06);
+    transition:.25s;
+}
+
+.commentaires div:hover {
+    transform:translateY(-3px);
+}
+
+/* ===== Verset final ===== */
+.verse {
+    margin-top:30px;
+    text-align:center;
+    font-style:italic;
+    color:#555;
+    background:#f7f7f7;
+    padding:18px;
+    border-radius:12px;
+}
