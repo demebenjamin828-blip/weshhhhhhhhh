@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Examen Nouveau Testament 📖</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -27,123 +27,84 @@ body {
 
 .quiz-card {
   background:white;
-  padding:40px;
+  padding:30px;
   border-radius:20px;
   box-shadow:0 20px 50px rgba(0,0,0,0.15);
-  width:90%;
+  width:95%;
   max-width:600px;
   animation:slideIn 0.8s ease;
-  position:relative;
 }
 
-@keyframes slideIn {
-  0% {opacity:0; transform:translateY(30px);}
-  100% {opacity:1; transform:translateY(0);}
+#timer {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  margin: 15px 0;
+  color: var(--primary);
+  background: var(--soft);
+  padding: 10px;
+  border-radius: 10px;
+  display: none;
+}
+
+.timer-danger {
+  color: var(--error) !important;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  50% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
 }
 
 .step { display:none; }
-.step.active { display:block; animation:fadeInRight 0.5s ease; }
-@keyframes fadeInRight {0% {opacity:0; transform:translateX(20px);} 100% {opacity:1; transform:translateX(0);} }
+.step.active { display:block; animation:fadeIn 0.5s ease; }
 
-.q-block {
-  margin-bottom:20px;
-  padding:20px;
-  border-radius:12px;
-  border:1px solid #d4efdf;
-  background:#ffffff;
-  transition:0.3s;
-}
-.q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-input {
-  width:100%;
-  padding:14px;
-  border:2px solid #e2e8f0;
-  border-radius:10px;
-  box-sizing:border-box;
-  font-size:16px;
-}
-input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
+.q-block { margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid #d4efdf; }
 
-.btn-nav {
-  width:100%;
-  padding:16px;
-  background:var(--primary);
-  color:white;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:bold;
-  transition:0.3s;
-}
-.btn-nav:hover { background:#1e8449; transform:scale(1.02); }
+input { width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:16px; margin-top:5px;}
 
-.feedback { display:none; font-size:14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease; }
-@keyframes popIn { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
+.btn-nav { width:100%; padding:16px; background:var(--primary); color:white; border:none; border-radius:12px; cursor:pointer; font-weight:bold; margin-top:10px;}
 
-.is-correct { border-color:var(--success)!important; background:#f0fff4; }
-.is-wrong { border-color:var(--error)!important; background:#fff5f5; }
+.progress-container { width:100%; background:#d4efdf; border-radius:12px; height:10px; margin-bottom:10px; }
+.progress-bar { height:100%; width:0%; background:var(--primary); border-radius:12px; transition: 0.3s; }
 
-.score-anim { font-size: 48px; color: var(--success); text-align: center; animation: bounce 1s infinite alternate; }
-@keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
+.feedback { display:none; font-size:14px; margin-top:8px; font-weight:bold; }
+.is-correct { border-color:var(--success); background:#f0fff4; }
+.is-wrong { border-color:var(--error); background:#fff5f5; }
 
-.progress-container {
-  width:100%;
-  background:#d4efdf;
-  border-radius:12px;
-  overflow:hidden;
-  height:12px;
-  margin-bottom:20px;
-}
-.progress-bar {
-  height:100%;
-  width:0%;
-  background:var(--primary);
-  transition: width 0.5s ease;
-  border-radius:12px;
-}
-
-.tableau-result {
-  width:100%;
-  border-collapse: collapse;
-  margin-top:25px;
-  font-family:'Segoe UI', sans-serif;
-}
-.tableau-result th, .tableau-result td {
-  border:1px solid #ddd;
-  padding:12px;
-  text-align:left;
-}
+.tableau-result { width:100%; border-collapse: collapse; margin-top:20px; }
+.tableau-result th, .tableau-result td { border:1px solid #ddd; padding:10px; text-align:left; }
 .tableau-result th { background:var(--primary); color:white; }
-
-.commentaires { margin-top:25px; padding:18px; background:#f9fbfd; border-left:4px solid var(--primary); border-radius:8px; line-height:1.6; }
-
-.verse { margin-top:30px; text-align:center; font-style:italic; color:#555; background:#f7f7f7; padding:15px; border-radius:10px; }
-
 </style>
 </head>
 <body>
 
+<audio id="beepSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+<audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
+
 <div class="quiz-card">
   <h2 style="text-align:center; color:var(--primary);">Quiz Biblique 🕊️</h2>
 
-  <!-- Barre de progression -->
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
-    <div class="timer-container">
-  <div id="timer">⏱️ Temps restant : 01:00</div>
-</div>
   </div>
+  
+  <div id="timer">⏱️ Temps restant : 02:00</div>
 
   <form id="quizForm">
-    <!-- Étapes du quiz ici (comme avant) -->
     <div class="step active" id="step0">
       <div class="q-block">
-        <label>Prénom</label><input type="text" id="prenom" required><br><br>
-        <label>Nom</label><input type="text" id="nom" required><br><br>
+        <label>Prénom</label><input type="text" id="prenom" required>
+        <label>Nom</label><input type="text" id="nom" required>
         <label>Email</label><input type="email" id="email" required>
       </div>
-      <button type="button" class="btn-nav" onclick="nextStep(0)">Commencer 🚀</button>
+      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
     </div>
 
     <div class="step" id="step1">
@@ -167,7 +128,7 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
     <div class="step" id="step4">
       <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
       <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
-      <button type="button" class="btn-nav" onclick="nextStep(4)">Dernière étape →</button>
+      <button type="button" class="btn-nav" onclick="nextStep(4)">Suivant →</button>
     </div>
 
     <div class="step" id="step5">
@@ -178,8 +139,8 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
   </form>
 
   <div id="res-summary"></div>
-  <div id="recap-table" style="display:block;"></div>
-  <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
+  <div id="recap-table"></div>
+  <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d;">Recommencer</button>
 </div>
 
 <script>
@@ -187,86 +148,91 @@ const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.c
 emailjs.init("ulU_NSZFdTj6ZZV8T");
 
 const ANSWERS = {
-q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée, accomplissant la prophétie de Michée."},
-q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois avant que le coq ne chante."},
-q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"C'est le dernier livre de la Bible, écrit par l'apôtre Jean."},
-q4:{opt:["jean baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus dans les eaux du Jourdain."},
-q5:{opt:["4"], ref:"Matthieu, Marc, Luc, Jean", desc:"Il y a quatre évangiles qui racontent la vie de Jésus."},
-q6:{opt:["galilée","galilee"], ref:"Jean 6:19", desc:"Jésus a marché sur les eaux de la mer de Galilée."},
-q7:{opt:["paul"], ref:"Actes et Épîtres", desc:"Paul a écrit la majorité des épîtres du Nouveau Testament."},
-q8:{opt:["vin","eau en vin"], ref:"Jean 2:1-11", desc:"Le premier miracle fut le changement de l'eau en vin à Cana."},
-q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu travaillait au bureau des impôts quand Jésus l'a appelé."},
-q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a livré Jésus par un baiser pour de l'argent."}
+  q1:{opt:["bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem."},
+  q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois."},
+  q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"Le dernier livre."},
+  q4:{opt:["jean baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus."},
+  q5:{opt:["4"], ref:"Matthieu, Marc, Luc, Jean", desc:"Quatre évangiles."},
+  q6:{opt:["galilee"], ref:"Jean 6:19", desc:"Mer de Galilée."},
+  q7:{opt:["paul"], ref:"Actes", desc:"Paul a écrit les épîtres."},
+  q8:{opt:["vin"], ref:"Jean 2:1-11", desc:"L'eau en vin à Cana."},
+  q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était publicain."},
+  q10:{opt:["judas"], ref:"Luc 22:47", desc:"Judas a trahi Jésus."}
 };
 
+let timeLeft = 120; 
+let timerInterval;
+
+function startQuiz() {
+  const p = document.getElementById('prenom').value;
+  if(!p) return alert("Remplis tes infos !");
+  nextStep(0);
+  document.getElementById('timer').style.display = 'block';
+  startTimer();
+}
+
+function startTimer() {
+  const beep = document.getElementById('beepSound');
+  const finish = document.getElementById('finishSound');
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+
+    if (timeLeft <= 10 && timeLeft > 0) {
+      beep.currentTime = 0;
+      beep.play().catch(()=>{}); 
+    }
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finish.play().catch(()=>{});
+      alert("TEMPS ÉCOULÉ !");
+      document.getElementById('quizForm').dispatchEvent(new Event('submit'));
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const min = Math.floor(timeLeft / 60);
+  const sec = timeLeft % 60;
+  const display = document.getElementById('timer');
+  display.innerText = `⏱️ Temps restant : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+  if (timeLeft <= 10) display.classList.add('timer-danger');
+}
+
 function normalizeText(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
+
 function nextStep(n){
-document.getElementById('step'+n).classList.remove('active');
-document.getElementById('step'+(n+1)).classList.add('active');
-document.getElementById('progressBar').style.width = ((n+1)/5*100) + "%";
+  document.getElementById('step'+n).classList.remove('active');
+  document.getElementById('step'+(n+1)).classList.add('active');
+  document.getElementById('progressBar').style.width = ((n+1)/5*100) + "%";
 }
 
 document.getElementById('quizForm').addEventListener('submit', async e=>{
-e.preventDefault();
-let score=0, tableauHTML="", commentairesHTML="<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
+  e.preventDefault();
+  clearInterval(timerInterval);
+  document.getElementById('timer').style.display = 'none';
 
-for(let i=1;i<=10;i++){
-    const val=document.getElementById('q'+i).value.trim()||"-";
+  let score=0, tableauHTML="";
+  for(let i=1;i<=10;i++){
+    const val=document.getElementById('q'+i).value.trim();
     const config=ANSWERS['q'+i];
     const isCorrect=config.opt.map(a=>normalizeText(a)).includes(normalizeText(val));
-    const feedback=document.getElementById('f'+i);
-    feedback.style.display="block";
-    if(isCorrect){
-        score++;
-        document.getElementById('block'+i).classList.add('is-correct');
-        feedback.innerHTML=`✅ ${config.ref}`;
-        feedback.style.color="var(--success)";
-    } else {
-        document.getElementById('block'+i).classList.add('is-wrong');
-        feedback.innerHTML=`❌ ${config.ref}`;
-        feedback.style.color="var(--error)";
-    }
+    if(isCorrect) score++;
+    tableauHTML+=`<tr><td>Q${i}</td><td>${val || "-"}</td><td>${isCorrect?'✅':'❌'}</td></tr>`;
+  }
 
-    tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
+  const p=document.getElementById('prenom').value;
+  const em=document.getElementById('email').value;
 
-    commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
-    <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
-    <p style="margin:5px 0 0 0;font-style:italic;color:#555;">📖 Référence : ${config.ref}</p>
-    </div>`;
-}
+  emailjs.send('service_raxr77e','template_244yyoi',{ prenom:p, score:score, tableau_html:tableauHTML });
+  await _supabase.from('reponses').upsert({email:em, prenom:p, score:score});
 
-const p=document.getElementById('prenom').value;
-const n=document.getElementById('nom').value;
-const em=document.getElementById('email').value;
-
-emailjs.send('service_raxr77e','template_244yyoi',{
-    prenom:p, nom:n, email:em, score:score,
-    tableau_html:tableauHTML,
-    commentaires_html:commentairesHTML
-});
-
-await _supabase.from('reponses').upsert({email:em, prenom:p, nom:n, score:score},{onConflict:'email'});
-
-// Désactiver inputs mais garder le tableau visible
-document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
-
-document.getElementById('res-summary').innerHTML=`<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Vérifie tes mails pour les explications.</p></div>`;
-
-document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
-<table class="tableau-result">
-<thead>
-<tr>
-<th>Q°</th>
-<th>Ta réponse</th>
-<th>Résultat</th>
-</tr>
-</thead>
-<tbody>${tableauHTML}</tbody>
-</table>
-<div class="commentaires">${commentairesHTML}</div>
-<div class="verse">"Ta parole est une lampe à mes pieds, et une lumière sur mon sentier." - Psaume 119:105</div>`;
-
-document.getElementById('btnReset').style.display="block";
+  document.getElementById('quizForm').style.display = 'none';
+  document.getElementById('res-summary').innerHTML = `<h1 style="text-align:center;">Score : ${score}/10</h1>`;
+  document.getElementById('recap-table').innerHTML = `<table class="tableau-result"><thead><tr><th>Q°</th><th>Rép</th><th>Etat</th></tr></thead><tbody>${tableauHTML}</tbody></table>`;
+  document.getElementById('btnReset').style.display = "block";
 });
 </script>
 </body>
