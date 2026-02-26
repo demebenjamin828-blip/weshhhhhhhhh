@@ -176,7 +176,7 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
     <div id="res-summary"></div>
 
     <!-- Tableau récapitulatif -->
-    <div id="recap-table" style="margin-top:20px;"></div>
+    <div id="recap-table" style="margin-top:20px; display:block;"></div>
 
     <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
 </div>
@@ -250,14 +250,16 @@ document.getElementById('quizForm').addEventListener('submit', async e=>{
 
     await _supabase.from('reponses').upsert({email:em, prenom:p, nom:n, score:score},{onConflict:'email'});
 
-    document.getElementById('quizForm').style.display="none";
+    // Désactive le formulaire mais ne le cache pas
+    document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
+
     document.getElementById('res-summary').innerHTML=`
         <div style="text-align:center;">
             <div class="score-anim">${score}/10</div>
             <p>Bravo ${p} ! Vérifie tes mails pour les explications.</p>
         </div>
     `;
-    // Tableau récapitulatif visible
+
     document.getElementById('recap-table').innerHTML=`
         <h3 style="color:var(--primary); text-align:center;">Résumé des réponses</h3>
         <table style="width:100%; border-collapse: collapse; font-family: 'Segoe UI', sans-serif; margin-top:10px;">
