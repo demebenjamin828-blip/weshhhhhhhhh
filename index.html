@@ -6,6 +6,8 @@
 <title>Examen Nouveau Testament 📖</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
 :root {
   --success:#2ecc71;
@@ -13,6 +15,7 @@
   --primary:#27ae60;
   --accent:#2ecc71;
   --soft:#eafaf1;
+  --gold: #f1c40f;
 }
 
 body {
@@ -23,6 +26,7 @@ body {
   align-items:center;
   min-height:100vh;
   margin:0;
+  overflow-x: hidden;
 }
 
 .quiz-card {
@@ -34,6 +38,7 @@ body {
   max-width:600px;
   animation:slideIn 0.8s ease;
   position:relative;
+  z-index: 10;
 }
 
 @keyframes slideIn {
@@ -107,7 +112,20 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 .is-correct { border-color:var(--success)!important; background:#f0fff4; }
 .is-wrong { border-color:var(--error)!important; background:#fff5f5; }
 
-.score-anim { font-size: 48px; color: var(--success); text-align: center; animation: bounce 1s infinite alternate; }
+/* Nouveau style pour le Grade */
+.grade-badge {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: var(--gold);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50px;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
+}
+
+.score-anim { font-size: 60px; color: var(--success); text-align: center; font-weight: bold; animation: bounce 1s infinite alternate; }
 @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
 
 .progress-container {
@@ -149,7 +167,7 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 <audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
 
 <div class="quiz-card">
-  <h2 style="text-align:center; color:var(--primary);">Quiz Biblique 🕊️</h2>
+  <h2 style="text-align:center; color:var(--primary);">Quiz Biblique🕊️</h2>
 
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
@@ -164,7 +182,7 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
         <label>Nom</label><input type="text" id="nom" required><br><br>
         <label>Email</label><input type="email" id="email" required>
       </div>
-      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
+      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer l'Examen 🚀</button>
     </div>
 
     <div class="step" id="step1">
@@ -204,9 +222,11 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 </div>
 
 <script>
+// Initialisation Supabase et EmailJS (Inchangé)
 const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co','sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 emailjs.init("ulU_NSZFdTj6ZZV8T");
 
+// Réponses et explications (Inchangé)
 const ANSWERS = {
 q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée."},
 q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois."},
@@ -220,21 +240,21 @@ q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était collecteur d'imp
 q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent."}
 };
 
-let timeLeft = 120;
+let timeLeft = 120; // 2 minutes par étape
 let timerInterval;
 let currentStep = 0;
 
 function startQuiz() {
   const p = document.getElementById('prenom').value;
   if(!p) return alert("Veuillez remplir vos informations !");
-  
   document.getElementById('timer').style.display = 'block';
   nextStep(0);
 }
 
+// Gestionnaire de chrono (Inchangé)
 function resetTimer() {
   clearInterval(timerInterval);
-  timeLeft = 120; // 2 minutes par étape
+  timeLeft = 120;
   updateTimerDisplay();
   
   timerInterval = setInterval(() => {
@@ -276,12 +296,31 @@ function nextStep(n){
   document.getElementById('step'+n).classList.remove('active');
   document.getElementById('step'+currentStep).classList.add('active');
   document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
-  
   if(currentStep <= 5) {
     resetTimer();
   }
 }
 
+// Fonction Magnifique : Confettis ! 🎉
+function launchConfetti() {
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 },
+    colors: ['#2ecc71', '#3498db', '#f1c40f', '#fff']
+  });
+}
+
+// Fonction Magnifique : Grades Bibliques 📜
+function getBiblicalGrade(score) {
+  if (score === 10) return "😇 Archange du Savoir";
+  if (score >= 8) return "📖 Disciple Fidèle";
+  if (score >= 6) return "🌿 Graine de Foi";
+  if (score >= 4) return "🕊️ Chercheur de Vérité";
+  return "🌱 Jeune Pousse";
+}
+
+// Soumission du Quiz (Modifiée pour le Magnifique)
 document.getElementById('quizForm').addEventListener('submit', async e=>{
 e.preventDefault();
 clearInterval(timerInterval);
@@ -289,6 +328,7 @@ document.getElementById('timer').style.display = 'none';
 
 let score=0, tableauHTML="", commentairesHTML="<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
 
+// Calcul score et feedback (Inchangé)
 for(let i=1;i<=10;i++){
     const val=document.getElementById('q'+i).value.trim()||"-";
     const config=ANSWERS['q'+i];
@@ -305,7 +345,6 @@ for(let i=1;i<=10;i++){
         feedback.innerHTML=`❌ ${config.ref}`;
         feedback.style.color="var(--error)";
     }
-
     tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
     commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
     <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
@@ -313,20 +352,32 @@ for(let i=1;i<=10;i++){
     </div>`;
 }
 
+// --- AJOUT MAGNIFIQUE ---
+if (score >= 7) {
+  launchConfetti(); // Pluie de confettis !
+  const applause = new Audio('https://assets.mixkit.co/active_storage/sfx/2870/2870-preview.mp3');
+  applause.play().catch(()=>{}); // Applaudissements si >= 7/10
+}
+const grade = getBiblicalGrade(score);
+// ------------------------
+
 const p=document.getElementById('prenom').value;
 const n=document.getElementById('nom').value;
 const em=document.getElementById('email').value;
 
-emailjs.send('service_raxr77e','template_244yyoi',{
-    prenom:p, nom:n, email:em, score:score,
-    tableau_html:tableauHTML,
-    commentaires_html:commentairesHTML
-});
-
+// Envois (Inchangé)
+emailjs.send('service_raxr77e','template_244yyoi',{ prenom:p, nom:n, email:em, score:score, tableau_html:tableauHTML, commentaires_html:commentairesHTML });
 await _supabase.from('reponses').upsert({email:em, prenom:p, nom:n, score:score},{onConflict:'email'});
 
+// Affichage final (Modifié pour le Magnifique)
 document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
-document.getElementById('res-summary').innerHTML=`<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Résultat envoyé par mail.</p></div>`;
+
+document.getElementById('res-summary').innerHTML=`
+<div style="text-align:center;">
+  <div class="score-anim">${score}/10</div>
+  <div class="grade-badge">${grade}</div> <p>Bravo ${p} ! Un récapitulatif détaillé est envoyé à ${em}.</p>
+</div>`;
+
 document.getElementById('recap-table').style.display = "block";
 document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
 <table class="tableau-result"><thead><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
