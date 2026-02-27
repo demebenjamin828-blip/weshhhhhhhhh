@@ -1,241 +1,270 @@
 /* =========================
    THEME GENERAL (PRO DESIGN)
 ========================= */
-:root{
-  --primary:#27ae60;
-  --primary-dark:#1e8449;
-  --success:#2ecc71;
-  --error:#e74c3c;
-  --soft:#eafaf1;
-  --bg:#f3fbf6;
-  --text:#2c3e50;
+:root {
+  --primary: #27ae60;
+  --primary-dark: #1e8449;
+  --success: #2ecc71;
+  --error: #e74c3c;
+  --soft: #eafaf1;
+  --bg: #f3fbf6;
+  --text: #2c3e50;
 }
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#f3fbf6,#d4efdf);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  color:var(--text);
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f3fbf6, #d4efdf);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--text);
+  padding: 10px;
 }
 
 /* =========================
    CARTE PRINCIPALE
 ========================= */
-.quiz-card{
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  box-shadow:0 25px 60px rgba(0,0,0,0.12);
-  width:90%;
-  max-width:700px;
-  animation:fadeIn .8s ease;
-  position:relative;
+.quiz-card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+  width: 95%;
+  max-width: 700px;
+  animation: fadeIn 0.8s ease;
+  position: relative;
 }
 
-/* Animation entrée */
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(25px);}
-  to{opacity:1; transform:translateY(0);}
+@keyframes fadeIn {
+  from { opacity:0; transform: translateY(25px);}
+  to { opacity:1; transform: translateY(0);}
 }
 
-h2{
-  text-align:center;
-  color:var(--primary);
-  margin-bottom:25px;
+h2 {
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 25px;
 }
 
 /* =========================
    ETAPES DU QUIZ
 ========================= */
-.step{display:none;}
-.step.active{
-  display:block;
-  animation:slide .5s ease;
+.step { display: none; }
+.step.active {
+  display: block;
+  animation: slide 0.5s ease;
 }
-
-@keyframes slide{
-  from{opacity:0; transform:translateX(30px);}
-  to{opacity:1; transform:translateX(0);}
+@keyframes slide {
+  from {opacity:0; transform:translateX(30px);}
+  to {opacity:1; transform:translateX(0);}
 }
 
 /* =========================
    BLOCS QUESTIONS
 ========================= */
-.q-block{
-  margin-bottom:18px;
-  padding:20px;
-  border-radius:14px;
-  border:1px solid #d4efdf;
-  background:#fff;
-  transition:.3s;
+.q-block {
+  margin-bottom: 18px;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #d4efdf;
+  background: #fff;
+  transition: 0.3s;
 }
-
-.q-block:hover{
-  background:var(--soft);
-  border-color:var(--primary);
-  transform:translateY(-2px);
+.q-block:hover {
+  background: var(--soft);
+  border-color: var(--primary);
+  transform: translateY(-2px);
 }
 
 /* =========================
    INPUTS ET SELECT
 ========================= */
-input, select{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:2px solid #e2e8f0;
-  font-size:15px;
-  transition:.3s;
+input, select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  font-size: 15px;
+  transition: 0.3s;
   background-color: white;
 }
-
-input:focus, select:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 0 3px rgba(39,174,96,0.2);
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(39,174,96,0.2);
 }
 
 /* =========================
-   BOUTONS (NAVI & QCM)
+   BOUTONS NAVIGATION ET QCM
 ========================= */
-.btn-nav, .option-btn{
-  width:100%;
-  padding:15px;
-  border-radius:12px;
-  font-weight:bold;
-  font-size:15px;
-  cursor:pointer;
-  transition:.3s;
-  border:none;
+.btn-nav, .option-btn, .level-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
 }
 
-.btn-nav{
-  background:var(--primary);
-  color:white;
+.btn-nav {
+  background: var(--primary);
+  color: white;
+  margin-top: 10px;
+}
+.btn-nav:hover {
+  background: var(--primary-dark);
+  transform: scale(1.03);
 }
 
-.btn-nav:hover{
-  background:var(--primary-dark);
-  transform:scale(1.03);
-}
-
-/* Styles spécifiques boutons QCM */
-.option-btn{
-  background:#f8f9fa;
-  border:2px solid #e2e8f0;
-  text-align:left;
+/* Boutons QCM */
+.option-btn {
+  background: #f8f9fa;
+  border: 2px solid #e2e8f0;
+  text-align: left;
   color: var(--text);
-  margin-top:10px;
+  margin-top: 10px;
+}
+.option-btn:hover {
+  background: var(--soft);
+  border-color: var(--primary);
+}
+.option-btn.selected {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary-dark);
 }
 
-.option-btn:hover{
-  background:var(--soft);
-  border-color:var(--primary);
+/* Boutons niveau */
+.level-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
 }
-
-.option-btn.selected{
-  background:var(--primary);
-  color:white;
-  border-color:var(--primary-dark);
+.level-btn {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+  background: #f8f9fa;
+  border: 2px solid #e2e8f0;
+}
+.level-btn:hover {
+  background: var(--soft);
+  border-color: var(--primary);
+}
+.level-btn.selected {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary-dark);
 }
 
 /* =========================
    BARRE DE PROGRESSION
 ========================= */
-.progress-container{
-  width:100%;
-  height:14px;
-  background:#d4efdf;
-  border-radius:20px;
-  overflow:hidden;
-  margin-bottom:20px;
+.progress-container {
+  width: 100%;
+  height: 14px;
+  background: #d4efdf;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px;
 }
-
-.progress-bar{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#27ae60,#2ecc71);
-  transition:width .4s ease;
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#27ae60,#2ecc71);
+  transition: width 0.4s ease;
 }
 
 /* =========================
    CHRONOMETRE
 ========================= */
-#timer{
-  text-align:center;
-  font-weight:bold;
-  color:#555;
-  margin-bottom:20px;
-  background:#f7f7f7;
-  padding:10px;
-  border-radius:10px;
+#timer {
+  text-align: center;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 20px;
+  background: #f7f7f7;
+  padding: 10px;
+  border-radius: 10px;
 }
+.timer-danger {
+  color: var(--error) !important;
+  animation: shake 0.5s infinite;
+}
+@keyframes shake {
+  0%,100%{ transform: translateX(0);}
+  25%{ transform: translateX(5px);}
+  75%{ transform: translateX(-5px);}
+}
+
+/* =========================
+   FEEDBACK ET SCORE
+========================= */
+.is-correct { border-color: var(--success) !important; background:#f0fff4;}
+.is-wrong { border-color: var(--error) !important; background:#fff5f5;}
+.feedback { display:none; font-size: 14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease;}
+@keyframes popIn {0%{transform:scale(0.9);} 100%{transform:scale(1);}}
+.score-anim { font-size:48px; color:var(--success); text-align:center; animation:bounce 1s infinite alternate;}
+@keyframes bounce {from{transform:scale(1);} to{transform:scale(1.1);}}
 
 /* =========================
    TABLEAU RESULTATS
 ========================= */
-.tableau-result{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:30px;
-  overflow:hidden;
-  border-radius:12px;
+.tableau-result {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
 }
-
-.tableau-result th{
-  background:var(--primary);
-  color:white;
-  padding:12px;
-  text-align:left;
+.tableau-result th {
+  background: var(--primary);
+  color: white;
+  padding: 12px;
+  text-align: left;
 }
-
-.tableau-result td{
-  border:1px solid #eee;
-  padding:12px;
+.tableau-result td {
+  border: 1px solid #eee;
+  padding: 12px;
 }
-
-.tableau-result tr:nth-child(even){
-  background:#fafafa;
-}
+.tableau-result tr:nth-child(even) { background: #fafafa; }
 
 /* =========================
    COMMENTAIRES BIBLIQUES
 ========================= */
-.commentaires{
-  margin-top:25px;
-  padding:18px;
-  background:#f9fbfd;
-  border-left:5px solid var(--primary);
-  border-radius:8px;
-  line-height:1.6;
+.commentaires {
+  margin-top: 25px;
+  padding: 18px;
+  background: #f9fbfd;
+  border-left: 5px solid var(--primary);
+  border-radius: 8px;
+  line-height: 1.6;
 }
 
 /* =========================
    VERSET FINAL
 ========================= */
-.verse{
-  margin-top:25px;
-  text-align:center;
-  font-style:italic;
-  color:#666;
-  background:#f4f6f7;
-  padding:15px;
-  border-radius:10px;
+.verse {
+  margin-top: 25px;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  background: #f4f6f7;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 /* =========================
    RESPONSIVE (TELEPHONE)
 ========================= */
 @media(max-width:600px){
-  .quiz-card{
-    padding:25px;
-  }
+  .quiz-card { padding: 25px; }
+  .level-container { flex-direction: column; gap:5px; }
+  .option-btn, .level-btn, .btn-nav { font-size:14px; padding:12px; }
 }
