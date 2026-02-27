@@ -149,7 +149,7 @@ document.getElementById('quizForm').addEventListener('submit', async e=>{
   const em = document.getElementById('email').value;
 
   // ENVOI EMAIL ADMIN
-  emailjs.send('service_raxr77e','template_244yyoi',{
+  emailjs.send('service_raxr77e','template_ue97zdi',{
     prenom:p, nom:n, email:em, score:score,
     tableau_html:tableauHTML, commentaires_html:commentairesHTML,
     niveau:selectedNiveau
