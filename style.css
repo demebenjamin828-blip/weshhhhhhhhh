@@ -103,7 +103,7 @@ input:focus, select:focus {
 /* =========================
    BOUTONS NAVIGATION ET QCM
 ========================= */
-.btn-nav, .option-btn, .level-btn {
+.btn-nav, .btn-back, .option-btn, .level-btn {
   width: 100%;
   padding: 15px;
   border-radius: 12px;
@@ -112,6 +112,7 @@ input:focus, select:focus {
   cursor: pointer;
   transition: 0.3s;
   border: none;
+  box-sizing: border-box;
 }
 
 .btn-nav {
@@ -121,6 +122,17 @@ input:focus, select:focus {
 }
 .btn-nav:hover {
   background: var(--primary-dark);
+  transform: scale(1.03);
+}
+
+/* STYLE BOUTON RETOUR */
+.btn-back {
+  background: #7f8c8d;
+  color: white;
+  margin-top: 10px;
+}
+.btn-back:hover {
+  background: #95a5a6;
   transform: scale(1.03);
 }
 
@@ -194,6 +206,7 @@ input:focus, select:focus {
   background: #f7f7f7;
   padding: 10px;
   border-radius: 10px;
+  display: none;
 }
 .timer-danger {
   color: var(--error) !important;
@@ -266,5 +279,5 @@ input:focus, select:focus {
 @media(max-width:600px){
   .quiz-card { padding: 25px; }
   .level-container { flex-direction: column; gap:5px; }
-  .option-btn, .level-btn, .btn-nav { font-size:14px; padding:12px; }
+  .option-btn, .level-btn, .btn-nav, .btn-back { font-size:14px; padding:12px; }
 }
