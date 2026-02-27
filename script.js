@@ -1,8 +1,278 @@
-// CONFIGURATION SUPABASE (Ton script original)
-const SUPABASE_URL = "https://inrcrtyvbgjrrccpzxlk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlucmNydHl2YmdqcnJjY3B6eGxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NjkxOTIsImV4cCI6MjA4NzU0NTE5Mn0.9Fg6ixbWUS4twFBVZmeSKYYMB9JJHIQb8LoMYe0g9js";
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen Nouveau Testament 📖</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<style>
+:root {
+  --success:#2ecc71;
+  --error:#e74c3c;
+  --primary:#27ae60;
+  --primary-dark:#1e8449;
+  --accent:#2ecc71;
+  --soft:#eafaf1;
+  --text:#2c3e50;
+}
 
+body {
+  font-family:'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#f3fbf6,#d4efdf);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
+  color: var(--text);
+  padding: 10px;
+}
+
+.quiz-card {
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.15);
+  width:95%;
+  max-width:600px;
+  animation:slideIn 0.8s ease;
+  position:relative;
+}
+
+@keyframes slideIn {
+  0% {opacity:0; transform:translateY(30px);}
+  100% {opacity:1; transform:translateY(0);}
+}
+
+.step { display:none; }
+.step.active { display:block; animation:fadeInRight 0.5s ease; }
+@keyframes fadeInRight {0% {opacity:0; transform:translateX(20px);} 100% {opacity:1; transform:translateX(0);} }
+
+.q-block {
+  margin-bottom:20px;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #d4efdf;
+  background:#ffffff;
+  transition:0.3s;
+}
+.q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
+
+input {
+  width:100%;
+  padding:14px;
+  border:2px solid #e2e8f0;
+  border-radius:10px;
+  box-sizing:border-box;
+  font-size:16px;
+  background-color: white;
+  margin-top: 5px;
+}
+input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
+
+.btn-nav {
+  width:100%;
+  padding:16px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
+  margin-top: 10px;
+  font-size: 16px;
+}
+.btn-nav:hover { background:var(--primary-dark); transform:scale(1.02); }
+
+/* --- STYLES QCM ET NIVEAUX --- */
+.option-btn, .level-btn { 
+  display:block; 
+  width:100%; 
+  padding:15px; 
+  margin:8px 0; 
+  background:#f8f9fa; 
+  border:2px solid #e2e8f0; 
+  border-radius:10px; 
+  text-align:left; 
+  cursor:pointer; 
+  transition:0.3s; 
+  font-size:15px;
+  color: var(--text);
+  box-sizing: border-box;
+}
+.option-btn:hover, .level-btn:hover { background:var(--soft); border-color:var(--primary); }
+.option-btn.selected, .level-btn.selected { background:var(--primary); color:white; border-color:var(--primary-dark); }
+
+.level-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+.level-btn {
+    text-align: center;
+    font-weight: bold;
+    flex: 1;
+}
+/* --------------------------------- */
+
+#timer {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+  color: var(--primary);
+  background: var(--soft);
+  padding: 10px;
+  border-radius: 8px;
+  display: none;
+}
+
+.timer-danger {
+  color: var(--error) !important;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.feedback { display:none; font-size:14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease; }
+@keyframes popIn { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
+
+.is-correct { border-color:var(--success)!important; background:#f0fff4; }
+.is-wrong { border-color:var(--error)!important; background:#fff5f5; }
+
+.score-anim { font-size: 48px; color: var(--success); text-align: center; animation: bounce 1s infinite alternate; }
+@keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+.progress-container {
+  width:100%;
+  background:#d4efdf;
+  border-radius:12px;
+  overflow:hidden;
+  height:12px;
+  margin-bottom:10px;
+}
+.progress-bar {
+  height:100%;
+  width:0%;
+  background:var(--primary);
+  transition: width 0.5s ease;
+  border-radius:12px;
+}
+
+.tableau-result {
+  width:100%;
+  border-collapse: collapse;
+  margin-top:25px;
+  font-size: 14px;
+}
+.tableau-result th, .tableau-result td {
+  border:1px solid #ddd;
+  padding: 8px;
+  text-align:left;
+}
+.tableau-result th { background:var(--primary); color:white; }
+
+.commentaires { margin-top:25px; padding:18px; background:#f9fbfd; border-left:4px solid var(--primary); border-radius:8px; line-height:1.6; }
+
+.verse { margin-top:30px; text-align:center; font-style:italic; color:#555; background:#f7f7f7; padding:15px; border-radius:10px; }
+
+/* --- ADAPTATION RESPONSIVE --- */
+@media (max-width: 500px) {
+    .quiz-card {
+        padding: 20px;
+    }
+    
+    h2 {
+        font-size: 22px;
+    }
+    
+    .level-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .option-btn, .level-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+<body>
+
+<audio id="beepSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+<audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
+
+<div class="quiz-card">
+  <h2 style="text-align:center; color:var(--primary);">Quiz Biblique 🕊️</h2>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  
+  <div id="timer">⏱️ Temps restant : 02:00</div>
+
+  <form id="quizForm">
+    <div class="step active" id="step0">
+      <div class="q-block">
+        <label>Prénom</label><input type="text" id="prenom" required><br><br>
+        <label>Nom</label><input type="text" id="nom" required><br><br>
+        <label>Email</label><input type="email" id="email" required><br><br>
+        
+        <label>Choisissez votre niveau :</label>
+        <div class="level-container">
+            <button type="button" class="level-btn" onclick="setLevel('Intermédiaire', this)">Intermédiaire<br>🟢 QCM</button>
+            <button type="button" class="level-btn" onclick="setLevel('Difficile', this)">Difficile<br>🔴 Texte</button>
+        </div>
+      </div>
+      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
+    </div>
+
+    <div class="step" id="step1">
+      <div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
+      <div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant →</button>
+    </div>
+
+    <div class="step" id="step2">
+      <div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
+      <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant →</button>
+    </div>
+
+    <div class="step" id="step3">
+      <div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
+      <div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant →</button>
+    </div>
+
+    <div class="step" id="step4">
+      <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
+      <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(4)">Dernière étape →</button>
+    </div>
+
+    <div class="step" id="step5">
+      <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
+      <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
+      <button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
+    </div>
+  </form>
+
+  <div id="res-summary"></div>
+  <div id="recap-table" style="display:none;"></div>
+  <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
+</div>
+
+<script>
+// CONFIGURATION SUPABASE
+const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co','sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 emailjs.init("ulU_NSZFdTj6ZZV8T");
 
 // BASE DE QUESTIONS AVEC OPTIONS QCM
@@ -24,7 +294,7 @@ let timerInterval;
 let currentStep = 0;
 let selectedNiveau = "";
 
-// FONCTION POUR GÉRER LA SÉLECTION DU NIVEAU (Design boutons)
+// FONCTION POUR GÉRER LA SÉLECTION DU NIVEAU
 function setLevel(niveau, btn) {
     selectedNiveau = niveau;
     document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
@@ -147,10 +417,21 @@ const p=document.getElementById('prenom').value;
 const n=document.getElementById('nom').value;
 const em=document.getElementById('email').value;
 
+// 1. Envoi à TOI (le récapitulatif complet)
 emailjs.send('service_raxr77e','template_244yyoi',{
     prenom:p, nom:n, email:em, score:score,
     tableau_html:tableauHTML,
-    commentaires_html:commentairesHTML
+    commentaires_html:commentairesHTML,
+    niveau: selectedNiveau
+});
+
+// 2. ENVOI À L'UTILISATEUR (le résultat simple)
+emailjs.send('service_raxr77e','TON_TEMPLATE_ID_POUR_UTILISATEUR',{
+    prenom:p, 
+    email:em, // EmailJS utilisera ça pour envoyer à l'utilisateur
+    score:score,
+    tableau_html:tableauHTML,
+    niveau: selectedNiveau
 });
 
 // ENVOI VERS SUPABASE AVEC LE NIVEAU
@@ -171,3 +452,6 @@ document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary
 <div class="verse">"Ta parole est une lampe à mes pieds..." - Psaume 119:105</div>`;
 document.getElementById('btnReset').style.display="block";
 });
+</script>
+</body>
+</html>
