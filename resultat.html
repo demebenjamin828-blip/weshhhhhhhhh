@@ -1,85 +1,100 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Biblique - Nouveau Testament</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        .container {
-            max-width: 700px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        p {
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 30px;
-        }
-        .info-box {
-            background-color: #eafaf1;
-            border: 1px solid #27ae60;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            display: inline-block;
-            text-align: left;
-        }
-        .btn-start {
-            background-color: #27ae60;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: background-color 0.3s;
-            display: inline-block;
-        }
-        .btn-start:hover {
-            background-color: #219150;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Bienvenue - Quiz Biblique</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  color:white;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* Animation douce */
+body::before{
+  content:"";
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle,rgba(255,255,255,0.08),transparent);
+  animation:move 15s linear infinite;
+}
+@keyframes move{
+  from{transform:translate(0,0);}
+  to{transform:translate(-50%,-50%);}
+}
+
+.container{
+  max-width:700px;
+  padding:40px;
+  background:rgba(255,255,255,0.05);
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 40px rgba(0,0,0,0.4);
+  animation:fadeIn 1.5s ease;
+}
+
+h1{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.verse{
+  font-style:italic;
+  margin:25px 0;
+  font-size:18px;
+  opacity:0.9;
+}
+
+.start-btn{
+  display:inline-block;
+  padding:15px 35px;
+  background:#ffd700;
+  color:#333;
+  font-weight:bold;
+  text-decoration:none;
+  border-radius:50px;
+  font-size:20px;
+  transition:0.3s;
+}
+.start-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 20px #ffd700;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+</style>
 </head>
+
 <body>
 
-    <div class="container">
-        <div class="icon">📖</div>
-        <h1>Quiz Biblique</h1>
-        <h2>Nouveau Testament</h2>
-        
-        <p>
-            Bienvenue ! Testez vos connaissances sur les évangiles, les actes des apôtres et les épîtres. 
-            Découvrez si vous êtes un expert de la foi chrétienne.
-        </p>
+<div class="container">
+  <h1>📖 Bienvenue</h1>
 
-        <div class="info-box">
-            <strong>⏱ Temps estimé :</strong> 5 minutes<br>
-            <strong>❓ Nombre de questions :</strong> 10<br>
-            <strong>🏆 Objectif :</strong> Obtenir le meilleur score !
-        </div>
+  <div class="verse">
+  « Ta parole est une lampe à mes pieds,<br>
+  Et une lumière sur mon sentier. »<br>
+  <strong>Psaume 119:105</strong>
+  </div>
 
-        <br>
-        <a href="https://demebenjamin828-blip.github.io/weshhhhhhhhh/" class="btn-start">Commencer le Quiz 🚀</a>
-    </div>
+  <div class="verse">
+  « Heureux l’homme qui trouve la sagesse. »<br>
+  <strong>Proverbes 3:13</strong>
+  </div>
+
+  <a href="index.html" class="start-btn">Commencer le Quiz</a>
+</div>
 
 </body>
 </html>
