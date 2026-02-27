@@ -180,7 +180,7 @@ document.getElementById('quizForm').addEventListener('submit', async e=>{
   // ==========================
   
   // 1. ENVOI EMAIL ADMIN (Récapitulatif complet)
-  emailjs.send('service_raxr77e','template_ue97zdi',{
+  emailjs.send('service_raxr77e','template_uh8xoa6',{
     prenom:p, nom:n, email:em, score:score,
     tableau_html:tableauHTML, commentaires_html:commentairesHTML,
     niveau:selectedNiveau
@@ -188,7 +188,7 @@ document.getElementById('quizForm').addEventListener('submit', async e=>{
 
   // 2. ENVOI EMAIL PARTICIPANT (Résultat simple)
   // Assurez-vous d'avoir créé template_utilisateur dans EmailJS
-  emailjs.send('service_raxr77e','template_utilisateur',{
+  emailjs.send('service_raxr77e','template_632ld9j',{
     prenom:p,
     email:em, // Variable {{email}} dans le template pour l'envoi
     score:score,
