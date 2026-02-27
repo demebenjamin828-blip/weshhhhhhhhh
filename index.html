@@ -11,10 +11,10 @@
   --success:#2ecc71;
   --error:#e74c3c;
   --primary:#27ae60;
-  --primary-dark:#1e8449; /* Ajouté pour cohérence */
+  --primary-dark:#1e8449;
   --accent:#2ecc71;
   --soft:#eafaf1;
-  --text:#2c3e50; /* Ajouté pour cohérence */
+  --text:#2c3e50;
 }
 
 body {
@@ -58,7 +58,7 @@ body {
 }
 .q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
 
-input, select {
+input {
   width:100%;
   padding:14px;
   border:2px solid #e2e8f0;
@@ -68,7 +68,7 @@ input, select {
   background-color: white;
   margin-top: 5px;
 }
-input:focus, select:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
+input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
 
 .btn-nav {
   width:100%;
@@ -84,8 +84,8 @@ input:focus, select:focus { outline:none; border-color: var(--primary); box-shad
 }
 .btn-nav:hover { background:var(--primary-dark); transform:scale(1.02); }
 
-/* --- NOUVEAUX STYLES POUR QCM --- */
-.option-btn { 
+/* --- STYLES POUR QCM ET BOUTONS NIVEAUX --- */
+.option-btn, .level-btn { 
   display:block; 
   width:100%; 
   padding:12px; 
@@ -99,8 +99,19 @@ input:focus, select:focus { outline:none; border-color: var(--primary); box-shad
   font-size:15px;
   color: var(--text);
 }
-.option-btn:hover { background:var(--soft); border-color:var(--primary); }
-.option-btn.selected { background:var(--primary); color:white; border-color:var(--primary-dark); }
+.option-btn:hover, .level-btn:hover { background:var(--soft); border-color:var(--primary); }
+.option-btn.selected, .level-btn.selected { background:var(--primary); color:white; border-color:var(--primary-dark); }
+
+/* Conteneur pour les boutons de niveau côte à côte */
+.level-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+.level-btn {
+    text-align: center;
+    font-weight: bold;
+}
 /* --------------------------------- */
 
 #timer {
@@ -188,11 +199,12 @@ input:focus, select:focus { outline:none; border-color: var(--primary); box-shad
         <label>Prénom</label><input type="text" id="prenom" required><br><br>
         <label>Nom</label><input type="text" id="nom" required><br><br>
         <label>Email</label><input type="email" id="email" required><br><br>
-        <label>Niveau</label>
-        <select id="niveau">
-            <option value="Intermédiaire">Intermédiaire (QCM) 🟢</option>
-            <option value="Difficile">Difficile (Texte) 🔴</option>
-        </select>
+        
+        <label>Choisissez votre niveau :</label>
+        <div class="level-container">
+            <button type="button" class="level-btn" onclick="setLevel('Intermédiaire', this)">Intermédiaire<br>🟢 QCM</button>
+            <button type="button" class="level-btn" onclick="setLevel('Difficile', this)">Difficile<br>🔴 Texte</button>
+        </div>
       </div>
       <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
     </div>
@@ -257,11 +269,16 @@ let timerInterval;
 let currentStep = 0;
 let selectedNiveau = "";
 
+// FONCTION POUR GÉRER LA SÉLECTION DU NIVEAU
+function setLevel(niveau, btn) {
+    selectedNiveau = niveau;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
 function startQuiz() {
   const p = document.getElementById('prenom').value;
-  if(!p) return alert("Veuillez remplir vos informations !");
-  
-  selectedNiveau = document.getElementById('niveau').value;
+  if(!p || !selectedNiveau) return alert("Veuillez remplir vos informations et choisir un niveau !");
   
   // MODIFICATION : Afficher les options QCM ou garder les inputs texte
   if(selectedNiveau === "Intermédiaire"){
@@ -387,7 +404,7 @@ await _supabase.from('reponses').upsert({
     prenom:p, 
     nom:n, 
     score:score,
-    niveau: selectedNiveau // AJOUTÉ
+    niveau: selectedNiveau
 },{onConflict:'email'});
 
 document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
