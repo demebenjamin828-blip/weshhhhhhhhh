@@ -11,8 +11,10 @@
   --success:#2ecc71;
   --error:#e74c3c;
   --primary:#27ae60;
+  --primary-dark:#1e8449; /* Ajouté pour cohérence */
   --accent:#2ecc71;
   --soft:#eafaf1;
+  --text:#2c3e50; /* Ajouté pour cohérence */
 }
 
 body {
@@ -23,6 +25,7 @@ body {
   align-items:center;
   min-height:100vh;
   margin:0;
+  color: var(--text);
 }
 
 .quiz-card {
@@ -55,15 +58,17 @@ body {
 }
 .q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
 
-input {
+input, select {
   width:100%;
   padding:14px;
   border:2px solid #e2e8f0;
   border-radius:10px;
   box-sizing:border-box;
   font-size:16px;
+  background-color: white;
+  margin-top: 5px;
 }
-input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
+input:focus, select:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
 
 .btn-nav {
   width:100%;
@@ -75,8 +80,28 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
   cursor:pointer;
   font-weight:bold;
   transition:0.3s;
+  margin-top: 10px;
 }
-.btn-nav:hover { background:#1e8449; transform:scale(1.02); }
+.btn-nav:hover { background:var(--primary-dark); transform:scale(1.02); }
+
+/* --- NOUVEAUX STYLES POUR QCM --- */
+.option-btn { 
+  display:block; 
+  width:100%; 
+  padding:12px; 
+  margin:8px 0; 
+  background:#f8f9fa; 
+  border:2px solid #e2e8f0; 
+  border-radius:10px; 
+  text-align:left; 
+  cursor:pointer; 
+  transition:0.3s; 
+  font-size:15px;
+  color: var(--text);
+}
+.option-btn:hover { background:var(--soft); border-color:var(--primary); }
+.option-btn.selected { background:var(--primary); color:white; border-color:var(--primary-dark); }
+/* --------------------------------- */
 
 #timer {
   font-weight: bold;
@@ -162,7 +187,12 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
       <div class="q-block">
         <label>Prénom</label><input type="text" id="prenom" required><br><br>
         <label>Nom</label><input type="text" id="nom" required><br><br>
-        <label>Email</label><input type="email" id="email" required>
+        <label>Email</label><input type="email" id="email" required><br><br>
+        <label>Niveau</label>
+        <select id="niveau">
+            <option value="Intermédiaire">Intermédiaire (QCM) 🟢</option>
+            <option value="Difficile">Difficile (Texte) 🔴</option>
+        </select>
       </div>
       <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
     </div>
@@ -204,37 +234,65 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 </div>
 
 <script>
+// CONFIGURATION SUPABASE
 const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co','sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
 emailjs.init("ulU_NSZFdTj6ZZV8T");
 
+// BASE DE QUESTIONS AVEC OPTIONS QCM
 const ANSWERS = {
-q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée."},
-q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois."},
-q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"Dernier livre de la Bible."},
-q4:{opt:["jean baptiste","jean-baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus."},
-q5:{opt:["4","quatre"], ref:"Matthieu, Marc, Luc, Jean", desc:"Il y a quatre évangiles."},
-q6:{opt:["galilée","galilee"], ref:"Jean 6:19", desc:"Jésus a marché sur la mer de Galilée."},
-q7:{opt:["paul"], ref:"Actes et Épîtres", desc:"Paul a écrit la majorité des épîtres."},
-q8:{opt:["vin","eau en vin"], ref:"Jean 2:1-11", desc:"Le premier miracle fut Cana."},
-q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était collecteur d'impôts."},
-q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent."}
+q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée.", options: ["Jérusalem", "Bethléem", "Nazareth", "Capernaüm"]},
+q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois.", options: ["Jean", "Pierre", "Judas", "Paul"]},
+q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"Dernier livre de la Bible.", options: ["Genèse", "Actes", "Apocalypse", "Romains"]},
+q4:{opt:["jean baptiste","jean-baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus.", options: ["Jean-Baptiste", "Pierre", "Paul", "Moïse"]},
+q5:{opt:["4","quatre"], ref:"Matthieu, Marc, Luc, Jean", desc:"Il y a quatre évangiles.", options: ["3", "4", "5", "12"]},
+q6:{opt:["galilée","galilee"], ref:"Jean 6:19", desc:"Jésus a marché sur la mer de Galilée.", options: ["Morte", "Rouge", "Galilée", "Méditerranée"]},
+q7:{opt:["paul"], ref:"Actes et Épîtres", desc:"Paul a écrit la majorité des épîtres.", options: ["Pierre", "Paul", "Jean", "Luc"]},
+q8:{opt:["vin","eau en vin"], ref:"Jean 2:1-11", desc:"Le premier miracle fut Cana.", options: ["Eau en vin", "Guérison", "Multiplication", "Marche sur l'eau"]},
+q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était collecteur d'impôts.", options: ["Pierre", "Matthieu", "Judas", "André"]},
+q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent.", options: ["Pierre", "Judas", "Jean", "Thomas"]}
 };
 
 let timeLeft = 120;
 let timerInterval;
 let currentStep = 0;
+let selectedNiveau = "";
 
 function startQuiz() {
   const p = document.getElementById('prenom').value;
   if(!p) return alert("Veuillez remplir vos informations !");
   
+  selectedNiveau = document.getElementById('niveau').value;
+  
+  // MODIFICATION : Afficher les options QCM ou garder les inputs texte
+  if(selectedNiveau === "Intermédiaire"){
+    for(let i=1; i<=10; i++){
+      const input = document.getElementById('q'+i);
+      input.style.display = "none";
+      const container = input.parentElement;
+      let optionsHTML = "";
+      ANSWERS['q'+i].options.forEach(opt => {
+        optionsHTML += `<button type="button" class="option-btn" onclick="selectOption(this, ${i})">${opt}</button>`;
+      });
+      container.insertAdjacentHTML('beforeend', optionsHTML);
+    }
+  }
+  
   document.getElementById('timer').style.display = 'block';
   nextStep(0);
 }
 
+// FONCTION POUR GÉRER LA SÉLECTION QCM
+function selectOption(btn, qIndex) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    // On met la valeur dans l'input caché
+    document.getElementById('q'+qIndex).value = btn.innerText;
+}
+
 function resetTimer() {
   clearInterval(timerInterval);
-  timeLeft = 120; // 2 minutes par étape
+  timeLeft = 120;
   updateTimerDisplay();
   
   timerInterval = setInterval(() => {
@@ -323,10 +381,17 @@ emailjs.send('service_raxr77e','template_244yyoi',{
     commentaires_html:commentairesHTML
 });
 
-await _supabase.from('reponses').upsert({email:em, prenom:p, nom:n, score:score},{onConflict:'email'});
+// ENVOI VERS SUPABASE AVEC LE NIVEAU
+await _supabase.from('reponses').upsert({
+    email:em, 
+    prenom:p, 
+    nom:n, 
+    score:score,
+    niveau: selectedNiveau // AJOUTÉ
+},{onConflict:'email'});
 
 document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
-document.getElementById('res-summary').innerHTML=`<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Résultat envoyé par mail.</p></div>`;
+document.getElementById('res-summary').innerHTML=`<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Niveau: ${selectedNiveau}</p></div>`;
 document.getElementById('recap-table').style.display = "block";
 document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
 <table class="tableau-result"><thead><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
