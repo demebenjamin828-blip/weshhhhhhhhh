@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <style>
-/* ... mêmes styles que précédemment ... */
+/* --- STYLE CSS --- */
 :root {
   --success:#2ecc71;
   --error:#e74c3c;
@@ -16,72 +16,186 @@
   --soft:#eafaf1;
   --text:#2c3e50;
 }
+
 body {
   font-family:'Segoe UI', sans-serif;
   background: linear-gradient(135deg,#f3fbf6,#d4efdf);
-  display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0;
-  color: var(--text); padding: 10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
+  color: var(--text);
+  padding: 10px;
 }
-#welcome-page { position:fixed; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, #1e8449, #2ecc71); color:white; display:flex; justify-content:center; align-items:center; z-index:1000; transition: opacity 0.5s ease, visibility 0.5s; }
-.welcome-content { text-align:center; padding:20px; }
-.bible-icon { font-size:80px; margin:20px 0; animation: float 3s ease-in-out infinite; }
-.start-btn { background:white; color:#27ae60; border:none; padding:15px 30px; font-size:18px; border-radius:30px; cursor:pointer; font-weight:bold; transition:0.2s; margin-top:20px; }
-.start-btn:hover { transform:scale(1.05); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
-@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-.fade-in-down { animation: fadeInDown 1s ease; }
-.fade-in-up { animation: fadeInUp 1s ease; }
-@keyframes fadeInDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
-@keyframes fadeInUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
-.quiz-card { background:white; padding:40px; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,0.15); width:95%; max-width:600px; animation:slideIn 0.8s ease; position:relative; }
-@keyframes slideIn { 0%{opacity:0;transform:translateY(30px);} 100%{opacity:1;transform:translateY(0);} }
+
+.quiz-card {
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.15);
+  width:95%;
+  max-width:600px;
+  animation:slideIn 0.8s ease;
+  position:relative;
+}
+
+@keyframes slideIn {
+  0% {opacity:0; transform:translateY(30px);}
+  100% {opacity:1; transform:translateY(0);}
+}
+
 .step { display:none; }
 .step.active { display:block; animation:fadeInRight 0.5s ease; }
-@keyframes fadeInRight {0%{opacity:0;transform:translateX(20px);}100%{opacity:1;transform:translateX(0);} }
-.q-block { margin-bottom:20px; padding:20px; border-radius:12px; border:1px solid #d4efdf; background:#ffffff; transition:0.3s; }
+@keyframes fadeInRight {0% {opacity:0; transform:translateX(20px);} 100% {opacity:1; transform:translateX(0);} }
+
+.q-block {
+  margin-bottom:20px;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #d4efdf;
+  background:#ffffff;
+  transition:0.3s;
+}
 .q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
-input { width:100%; padding:14px; border:2px solid #e2e8f0; border-radius:10px; box-sizing:border-box; font-size:16px; background-color: white; margin-top:5px; }
-input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
-.btn-nav, .btn-back, .level-btn, .option-btn { width:100%; padding:16px; border:none; border-radius:12px; cursor:pointer; font-weight:bold; transition:0.3s; margin-top:10px; font-size:16px; box-sizing:border-box; }
+
+input {
+  width:100%;
+  padding:14px;
+  border:2px solid #e2e8f0;
+  border-radius:10px;
+  box-sizing:border-box;
+  font-size:16px;
+  background-color: white;
+  margin-top: 5px;
+}
+input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
+
+.btn-nav, .btn-back, .level-btn, .option-btn {
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
+  margin-top: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
 .btn-nav { background:var(--primary); color:white; }
 .btn-nav:hover { background:var(--primary-dark); transform:scale(1.02); }
-.btn-back { background:#7f8c8d; color:white; margin-top:10px; }
+
+.btn-back { background:#7f8c8d; color:white; margin-top: 10px; }
 .btn-back:hover { background:#95a5a6; transform:scale(1.02); }
-.option-btn, .level-btn { display:block; width:100%; padding:15px; margin:8px 0; background:#f8f9fa; border:2px solid #e2e8f0; border-radius:10px; text-align:left; cursor:pointer; transition:0.3s; font-size:15px; color:var(--text); box-sizing:border-box; }
+
+/* --- STYLES QCM ET NIVEAUX --- */
+.option-btn, .level-btn {  
+  display:block;  
+  width:100%;  
+  padding:15px;  
+  margin:8px 0;  
+  background:#f8f9fa;  
+  border:2px solid #e2e8f0;  
+  border-radius:10px;  
+  text-align:left;  
+  cursor:pointer;  
+  transition:0.3s;  
+  font-size:15px;
+  color: var(--text);
+  box-sizing: border-box;
+}
 .option-btn:hover, .level-btn:hover { background:var(--soft); border-color:var(--primary); }
 .option-btn.selected, .level-btn.selected { background:var(--primary); color:white; border-color:var(--primary-dark); }
-.level-container { display: flex; gap: 10px; margin-top:5px; }
-.level-btn { text-align:center; font-weight:bold; flex:1; }
-#timer { font-weight:bold; font-size:18px; text-align:center; margin-top:10px; color:var(--primary); background:var(--soft); padding:10px; border-radius:8px; display:none; }
-.timer-danger { color:var(--error)!important; animation: shake 0.5s infinite; }
-@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(5px);} 75%{transform:translateX(-5px);} }
+
+.level-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+.level-btn {
+    text-align: center;
+    font-weight: bold;
+    flex: 1;
+}
+/* --------------------------------- */
+
+#timer {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+  color: var(--primary);
+  background: var(--soft);
+  padding: 10px;
+  border-radius: 8px;
+  display: none;
+}
+
+.timer-danger {
+  color: var(--error) !important;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
 .feedback { display:none; font-size:14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease; }
-@keyframes popIn { 0%{transform:scale(0.9);}100%{transform:scale(1);} }
+@keyframes popIn { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
+
 .is-correct { border-color:var(--success)!important; background:#f0fff4; }
 .is-wrong { border-color:var(--error)!important; background:#fff5f5; }
-.score-anim { font-size:48px; color:var(--success); text-align:center; animation: bounce 1s infinite alternate; }
-@keyframes bounce { from{transform:scale(1);} to{transform:scale(1.1);} }
-.progress-container { width:100%; background:#d4efdf; border-radius:12px; overflow:hidden; height:12px; margin-bottom:10px; }
-.progress-bar { height:100%; width:0%; background:var(--primary); transition: width 0.5s ease; border-radius:12px; }
-.step-indicator { text-align:center; font-size:14px; color:var(--primary-dark); margin-top:5px; font-weight:bold; }
-.tableau-result { width:100%; border-collapse: collapse; margin-top:25px; font-size:14px; }
-.tableau-result th, .tableau-result td { border:1px solid #ddd; padding:8px; text-align:left; }
+
+.score-anim { font-size: 48px; color: var(--success); text-align: center; animation: bounce 1s infinite alternate; }
+@keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+.progress-container {
+  width:100%;
+  background:#d4efdf;
+  border-radius:12px;
+  overflow:hidden;
+  height:12px;
+  margin-bottom:10px;
+}
+.progress-bar {
+  height:100%;
+  width:0%;
+  background:var(--primary);
+  transition: width 0.5s ease;
+  border-radius:12px;
+}
+
+.tableau-result {
+  width:100%;
+  border-collapse: collapse;
+  margin-top:25px;
+  font-size: 14px;
+}
+.tableau-result th, .tableau-result td {
+  border:1px solid #ddd;
+  padding: 8px;
+  text-align:left;
+}
 .tableau-result th { background:var(--primary); color:white; }
+
 .commentaires { margin-top:25px; padding:18px; background:#f9fbfd; border-left:4px solid var(--primary); border-radius:8px; line-height:1.6; }
+
 .verse { margin-top:30px; text-align:center; font-style:italic; color:#555; background:#f7f7f7; padding:15px; border-radius:10px; }
-#error-message { color: var(--error); text-align: center; font-weight: bold; margin-top: 10px; }
-@media (max-width:500px) { .quiz-card { padding:20px; } h2 { font-size:22px; } .level-container { flex-direction:column; gap:5px; } .option-btn, .level-btn { padding:12px; font-size:14px; } }
+
+/* --- ADAPTATION RESPONSIVE --- */
+@media (max-width: 500px) {
+    .quiz-card { padding: 20px; }
+    h2 { font-size: 22px; }
+    .level-container { flex-direction: column; gap: 5px; }
+    .option-btn, .level-btn { padding: 12px; font-size: 14px; }
+}
 </style>
 </head>
 <body>
-
-<div id="welcome-page">
-    <div class="welcome-content">
-        <h1 class="fade-in-down">Bienvenue 🕊️</h1>
-        <p class="fade-in-up">Testez vos connaissances sur le Nouveau Testament.</p>
-        <div class="bible-icon">📖</div>
-        <button class="start-btn" onclick="hideWelcome()">Découvrir le Quiz</button>
-    </div>
-</div>
 
 <audio id="beepSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 <audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
@@ -92,10 +206,8 @@ input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rg
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
   </div>
-  <div id="stepIndicator" class="step-indicator">Étape 1/5</div>
   
   <div id="timer">⏱️ Temps restant : 02:00</div>
-  <div id="error-message"></div>
 
   <form id="quizForm">
     <div class="step active" id="step0">
@@ -155,22 +267,10 @@ input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rg
 
 <script>
 // ==========================
-// CONFIGURATION (À MODIFIER !)
+// CONFIGURATION SUPABASE ET EMAILJS
 // ==========================
-const CONFIG = {
-  supabaseUrl: 'https://inrcrtyvbgjrrccpzxlk.supabase.co',
-  supabaseKey: 'sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK', // Remplacez par VOTRE clé publique
-  emailjsPublicKey: 'ulU_NSZFdTj6ZZV8T', // Remplacez par VOTRE clé publique EmailJS
-  emailjsServiceId: 'service_raxr77e', // Vérifiez que ce service existe
-  emailjsTemplateAdmin: 'template_uh8xoa6', // Vérifiez que ce template existe
-  emailjsTemplateUser: 'template_632ld9j', // Vérifiez que ce template existe
-  timerPerStep: 120, // secondes par étape
-  demoMode: false // Mettre à true pour désactiver les envois externes (test local)
-};
-
-// Initialisation des services
-const _supabase = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
-emailjs.init(CONFIG.emailjsPublicKey);
+const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co','sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
+emailjs.init("ulU_NSZFdTj6ZZV8T");
 
 // ==========================
 // BASE DE QUESTIONS
@@ -188,22 +288,13 @@ const ANSWERS = {
   q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent.", options: ["Pierre", "Judas", "Jean", "Thomas"]}
 };
 
-let timeLeft = CONFIG.timerPerStep;
+let timeLeft = 120;
 let timerInterval;
 let currentStep = 0;
 let selectedNiveau = "";
-let submitting = false;
 
 // ==========================
-// GESTION PAGE ACCUEIL
-// ==========================
-function hideWelcome() {
-    document.getElementById('welcome-page').style.opacity = '0';
-    document.getElementById('welcome-page').style.visibility = 'hidden';
-}
-
-// ==========================
-// SÉLECTION NIVEAU
+// FONCTION SÉLECTION NIVEAU
 // ==========================
 function setLevel(niveau, btn) {
     selectedNiveau = niveau;
@@ -212,39 +303,27 @@ function setLevel(niveau, btn) {
 }
 
 // ==========================
-// DÉMARRAGE
+// FONCTION DÉMARRAGE
 // ==========================
 function startQuiz() {
-  const prenom = document.getElementById('prenom').value.trim();
-  const nom = document.getElementById('nom').value.trim();
-  const email = document.getElementById('email').value.trim();
+  const p = document.getElementById('prenom').value;
+  if(!p || !selectedNiveau) return alert("Veuillez remplir votre prénom et choisir un niveau !");
   
-  if (!prenom || !nom || !email) {
-    return showError("Veuillez remplir tous les champs : prénom, nom et email.");
-  }
-  if (!selectedNiveau) {
-    return showError("Veuillez choisir un niveau.");
-  }
-  
-  // Mode Intermédiaire : remplacer les inputs par des boutons
   if(selectedNiveau === "Intermédiaire"){
     for(let i=1; i<=10; i++){
       const input = document.getElementById('q'+i);
       input.style.display = "none";
       const container = input.parentElement;
-      // Supprime les anciens boutons s'ils existent (pour éviter les doublons)
-      container.querySelectorAll('.option-btn').forEach(btn => btn.remove());
       let optionsHTML = "";
       ANSWERS['q'+i].options.forEach(opt => {
-        optionsHTML += `<button type="button" class="option-btn" data-value="${opt}" onclick="selectOption(this, ${i})">${opt}</button>`;
+        optionsHTML += `<button type="button" class="option-btn" onclick="selectOption(this, ${i})">${opt}</button>`;
       });
       container.insertAdjacentHTML('beforeend', optionsHTML);
     }
   }
   
   document.getElementById('timer').style.display = 'block';
-  clearError();
-  nextStep(0); // passe de step0 à step1
+  nextStep(0);
 }
 
 // ==========================
@@ -254,17 +333,7 @@ function selectOption(btn, qIndex) {
     const parent = btn.parentElement;
     parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    document.getElementById('q'+qIndex).value = btn.getAttribute('data-value');
-}
-
-// ==========================
-// GESTION ERREURS
-// ==========================
-function showError(msg) {
-  document.getElementById('error-message').innerText = msg;
-}
-function clearError() {
-  document.getElementById('error-message').innerText = '';
+    document.getElementById('q'+qIndex).value = btn.innerText;
 }
 
 // ==========================
@@ -272,7 +341,7 @@ function clearError() {
 // ==========================
 function resetTimer() {
   clearInterval(timerInterval);
-  timeLeft = CONFIG.timerPerStep;
+  timeLeft = 120;
   updateTimerDisplay();
   
   timerInterval = setInterval(() => {
@@ -280,14 +349,14 @@ function resetTimer() {
     updateTimerDisplay();
 
     if (timeLeft <= 10 && timeLeft > 0) {
-      playSound('beepSound');
+      document.getElementById('beepSound').play().catch(()=>{});
     }
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      playSound('finishSound');
+      document.getElementById('finishSound').play().catch(()=>{});
       if(currentStep < 5) {
-        alert("Temps écoulé pour ces questions ! Passage à l'étape suivante.");
+        alert("Temps écoulé pour ces questions !");
         nextStep(currentStep);
       } else {
         alert("Temps final écoulé ! Validation automatique.");
@@ -297,47 +366,26 @@ function resetTimer() {
   }, 1000);
 }
 
-function playSound(audioId) {
-  const audio = document.getElementById(audioId);
-  audio.play().catch(e => console.log("Lecture audio impossible :", e));
-}
-
 function updateTimerDisplay() {
   const min = Math.floor(timeLeft / 60);
   const sec = timeLeft % 60;
   const timerElem = document.getElementById('timer');
-  timerElem.innerText = `⏱️ Temps restant : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+  timerElem.innerText = `⏱️ Temps étape : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+  
   if(timeLeft <= 10) timerElem.classList.add('timer-danger');
   else timerElem.classList.remove('timer-danger');
 }
 
 // ==========================
-// NAVIGATION (corrigée)
+// NAVIGATION ET SOUMISSION
 // ==========================
-function nextStep(n){
-  // Vérifier si au moins une réponse a été donnée dans l'étape courante (en ignorant les inputs masqués)
-  const stepDiv = document.getElementById('step'+n);
-  const inputs = stepDiv.querySelectorAll('input[type=text]');
-  let anyAnswered = false;
-  inputs.forEach(input => {
-    if (input.value.trim() !== '') anyAnswered = true;
-  });
-  // Si aucun input visible n'a de réponse, mais que des boutons sont peut-être sélectionnés (mode QCM)
-  if (!anyAnswered && selectedNiveau === 'Intermédiaire') {
-    // Compter les boutons sélectionnés dans cette étape
-    const selectedBtns = stepDiv.querySelectorAll('.option-btn.selected');
-    if (selectedBtns.length > 0) anyAnswered = true;
-  }
-  
-  if (!anyAnswered && !confirm("Vous n'avez répondu à aucune question de cette étape. Voulez-vous vraiment continuer ?")) {
-    return;
-  }
+function normalizeText(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
 
+function nextStep(n){
   document.getElementById('step'+n).classList.remove('active');
   currentStep = n + 1;
   document.getElementById('step'+currentStep).classList.add('active');
   document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
-  document.getElementById('stepIndicator').innerText = `Étape ${currentStep}/5`;
   
   if(currentStep <= 5) resetTimer();
 }
@@ -347,118 +395,84 @@ function prevStep(n){
   currentStep = n - 1;
   document.getElementById('step'+currentStep).classList.add('active');
   document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
-  document.getElementById('stepIndicator').innerText = `Étape ${currentStep}/5`;
   resetTimer();
 }
 
-// ==========================
-// NORMALISATION
-// ==========================
-function normalizeText(t) {
-  let str = t.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
-  // Supprime les articles simples au début ou à la fin (optionnel)
-  str = str.replace(/^(le|la|les|un|une|des)/, '').replace(/(le|la|les|un|une|des)$/, '');
-  return str.trim();
-}
+document.getElementById('quizForm').addEventListener('submit', async e=>{
+e.preventDefault();
+clearInterval(timerInterval);
+document.getElementById('timer').style.display = 'none';
 
-// ==========================
-// SOUMISSION FINALE
-// ==========================
-document.getElementById('quizForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  if (submitting) return;
-  submitting = true;
-  clearError();
+let score=0, tableauHTML="", commentairesHTML="<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
 
-  clearInterval(timerInterval);
-  document.getElementById('timer').style.display = 'none';
-
-  let score = 0;
-  let tableauHTML = "";
-  let commentairesHTML = "<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
-
-  for(let i=1; i<=10; i++){
-    const val = document.getElementById('q'+i).value.trim() || "-";
-    const config = ANSWERS['q'+i];
-    const isCorrect = config.opt.map(a => normalizeText(a)).includes(normalizeText(val));
-    const feedback = document.getElementById('f'+i);
-    feedback.style.display = "block";
+for(let i=1;i<=10;i++){
+    const val=document.getElementById('q'+i).value.trim()||"-";
+    const config=ANSWERS['q'+i];
+    const isCorrect=config.opt.map(a=>normalizeText(a)).includes(normalizeText(val));
+    const feedback=document.getElementById('f'+i);
+    feedback.style.display="block";
     if(isCorrect){
         score++;
         document.getElementById('block'+i).classList.add('is-correct');
-        feedback.innerHTML = `✅ ${config.ref}`;
-        feedback.style.color = "var(--success)";
+        feedback.innerHTML=`✅ ${config.ref}`;
+        feedback.style.color="var(--success)";
     } else {
         document.getElementById('block'+i).classList.add('is-wrong');
-        feedback.innerHTML = `❌ ${config.ref}`;
-        feedback.style.color = "var(--error)";
+        feedback.innerHTML=`❌ ${config.ref}`;
+        feedback.style.color="var(--error)";
     }
 
-    tableauHTML += `<tr><td>Q${i}</td><td>${val}</td><td style="text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
-    commentairesHTML += `<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
+    tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
+    commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
     <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
     <p style="margin:5px 0 0 0;font-style:italic;color:#555;">📖 Référence : ${config.ref}</p>
     </div>`;
-  }
+}
 
-  const prenom = document.getElementById('prenom').value.trim();
-  const nom = document.getElementById('nom').value.trim();
-  const email = document.getElementById('email').value.trim();
+const p=document.getElementById('prenom').value;
+const n=document.getElementById('nom').value;
+const em=document.getElementById('email').value;
 
-  // Mode démo : on saute les envois externes
-  if (!CONFIG.demoMode) {
-    try {
-      // Envoi à l'admin
-      await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, {
-          prenom, nom, email, score,
-          tableau_html: tableauHTML,
-          commentaires_html: commentairesHTML,
-          niveau: selectedNiveau
-      });
+// 1. Envoi à TOI (le récapitulatif complet)
+emailjs.send('service_raxr77e','template_uh8xoa6',{
+    prenom:p, nom:n, email:em, score:score,
+    tableau_html:tableauHTML,
+    commentaires_html:commentairesHTML,
+    niveau: selectedNiveau
+});
 
-      // Envoi à l'utilisateur
-      await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateUser, {
-          prenom, email, score,
-          tableau_html: tableauHTML,
-          niveau: selectedNiveau
-      });
+// 2. ENVOI À L'UTILISATEUR (le résultat simple)
+emailjs.send('service_raxr77e','template_632ld9j',{
+    prenom:p, 
+    email:em,
+    score:score,
+    tableau_html:tableauHTML,
+    niveau: selectedNiveau
+});
 
-      // Insertion Supabase
-      await _supabase.from('reponses').upsert({
-          email, prenom, nom, score, niveau: selectedNiveau,
-          q1: document.getElementById('q1').value,
-          q2: document.getElementById('q2').value,
-          q3: document.getElementById('q3').value,
-          q4: document.getElementById('q4').value,
-          q5: document.getElementById('q5').value,
-          q6: document.getElementById('q6').value,
-          q7: document.getElementById('q7').value,
-          q8: document.getElementById('q8').value,
-          q9: document.getElementById('q9').value,
-          q10: document.getElementById('q10').value
-      }, { onConflict: 'email' });
+// ENVOI VERS SUPABASE
+await _supabase.from('reponses').upsert({
+    email:em, prenom:p, nom:n, score:score, niveau: selectedNiveau,
+    q1: document.getElementById('q1').value,
+    q2: document.getElementById('q2').value,
+    q3: document.getElementById('q3').value,
+    q4: document.getElementById('q4').value,
+    q5: document.getElementById('q5').value,
+    q6: document.getElementById('q6').value,
+    q7: document.getElementById('q7').value,
+    q8: document.getElementById('q8').value,
+    q9: document.getElementById('q9').value,
+    q10: document.getElementById('q10').value
+},{onConflict:'email'});
 
-    } catch (error) {
-      console.error("Erreur d'envoi :", error);
-      showError("Erreur lors de l'envoi des résultats. Veuillez réessayer ou contacter l'administrateur.");
-      submitting = false;
-      return;
-    }
-  } else {
-    console.log("Mode démo : aucun envoi externe effectué.");
-  }
-
-  // Désactiver l'interface
-  document.querySelectorAll('#quizForm input, #quizForm button, #quizForm .option-btn').forEach(el => el.disabled = true);
-  
-  // Afficher le résumé
-  document.getElementById('res-summary').innerHTML = `<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${prenom} ! Niveau: ${selectedNiveau}</p></div>`;
-  document.getElementById('recap-table').style.display = "block";
-  document.getElementById('recap-table').innerHTML = `<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
-  <table class="tableau-result"><thead><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
-  <div class="commentaires">${commentairesHTML}</div>
-  <div class="verse">"Ta parole est une lampe à mes pieds..." - Psaume 119:105</div>`;
-  document.getElementById('btnReset').style.display = "block";
+document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
+document.getElementById('res-summary').innerHTML=`<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Niveau: ${selectedNiveau}</p></div>`;
+document.getElementById('recap-table').style.display = "block";
+document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
+<table class="tableau-result"><thead><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
+<div class="commentaires">${commentairesHTML}</div>
+<div class="verse">"Ta parole est une lampe à mes pieds..." - Psaume 119:105</div>`;
+document.getElementById('btnReset').style.display="block";
 });
 </script>
 </body>
