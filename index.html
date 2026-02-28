@@ -498,127 +498,168 @@ document.getElementById('btnReset').style.display="block";
 </div>
 
 <style>
+<div id="premium-welcome">
+    <div class="welcome-overlay"></div>
+    <div class="welcome-content">
+        <div class="bible-frame">
+            <span class="bible-emoji">📖</span>
+        </div>
+        <h1 class="welcome-title">SACRA SCRIPTURA</h1>
+        <p class="welcome-subtitle">Examen du Nouveau Testament : Testez votre connaissance des Écritures.</p>
+        
+        <div class="welcome-stats">
+            <div class="stat-item"><span>10</span><br><small>Questions</small></div>
+            <div class="stat-item"><span>2</span><br><small>Niveaux</small></div>
+            <div class="stat-item"><span>120s</span><br><small>Chrono</small></div>
+        </div>
+
+        <button class="welcome-cta" onclick="launchQuiz()">
+            COMMENCER L'EXAMEN 🚀
+        </button>
+    </div>
+</div>
+
+<style>
+/* Importation d'une police plus prestigieuse */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap');
+
 #premium-welcome {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1b3d1a 0%, #27ae60 100%);
-    z-index: 9999;
+    inset: 0; /* Remplace top/left/width/height pour plus de robustesse */
+    background: radial-gradient(circle at center, #27ae60 0%, #1b3d1a 100%);
+    z-index: 10000;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.8s;
     color: white;
     overflow: hidden;
+    font-family: 'Poppins', sans-serif;
 }
 
 .welcome-overlay {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-    opacity: 0.2;
+    inset: 0;
+    background: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+    opacity: 0.15;
+    pointer-events: none;
 }
 
 .welcome-content {
     text-align: center;
     z-index: 2;
-    padding: 20px;
-    max-width: 500px;
+    padding: 30px;
+    max-width: 600px;
+    animation: fadeInWelcome 1.2s ease-out;
+}
+
+@keyframes fadeInWelcome {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .bible-frame {
-    width: 120px;
-    height: 120px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid #d4af37;
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 3px solid #d4af37;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 30px;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-    animation: pulseGold 2s infinite;
+    margin: 0 auto 35px;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+    animation: pulseGold 2.5s infinite ease-in-out;
 }
 
 .bible-emoji {
-    font-size: 60px;
-    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+    font-size: 70px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
 }
 
 .welcome-title {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    font-family: 'Cinzel', serif; /* Police type manuscrit ancien / romain */
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    color: #f1c40f; /* Or brillant */
 }
 
 .welcome-subtitle {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    line-height: 1.5;
-    margin-bottom: 40px;
+    font-size: 1.2rem;
+    opacity: 0.85;
+    line-height: 1.6;
+    margin-bottom: 45px;
+    font-weight: 300;
 }
 
 .welcome-stats {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 40px;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 50px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    backdrop-filter: blur(5px);
 }
 
 .stat-item {
-    font-weight: bold;
-    font-size: 1.2rem;
+    font-weight: 600;
+    font-size: 1.4rem;
 }
 
 .stat-item small {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.7;
+    letter-spacing: 2px;
+    color: #d4af37;
 }
 
 .welcome-cta {
     background: #ffffff;
-    color: #27ae60;
+    color: #1b3d1a;
     border: none;
-    padding: 18px 40px;
+    padding: 20px 50px;
     font-size: 1.1rem;
-    font-weight: 800;
-    border-radius: 50px;
+    font-weight: 700;
+    font-family: 'Cinzel', serif;
+    border-radius: 4px; /* Carré plus sérieux que le bouton rond */
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 1px;
 }
 
 .welcome-cta:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-    background: #f8fafc;
+    transform: scale(1.05);
+    background: #f1c40f;
+    box-shadow: 0 15px 40px rgba(241, 196, 15, 0.4);
 }
 
 @keyframes pulseGold {
-    0% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-    50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); }
-    100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(212, 175, 55, 0.6); }
 }
 
-/* Classe pour cacher l'accueil */
+/* Sortie fluide vers le haut */
 .hide-welcome {
-    transform: translateY(-100%);
+    transform: translateY(-100%) scale(1.1);
+    opacity: 0;
+    pointer-events: none;
 }
 </style>
 
 <script>
 function launchQuiz() {
-    document.getElementById('premium-welcome').classList.add('hide-welcome');
+    const welcome = document.getElementById('premium-welcome');
+    welcome.classList.add('hide-welcome');
+    // Supprime du DOM après l'animation pour libérer de la mémoire
+    setTimeout(() => {
+        welcome.style.display = 'none';
+    }, 1000);
 }
 </script>
 </html>
