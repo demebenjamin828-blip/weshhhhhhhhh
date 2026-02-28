@@ -9,40 +9,40 @@
 <style>
 /* --- STYLE CSS --- */
 :root {
-  --success:#2ecc71;
-  --error:#e74c3c;
-  --primary:#27ae60;
-  --primary-dark:#1e8449;
-  --soft:#eafaf1;
-  --text:#2c3e50;
+  --success:#2ecc71;
+  --error:#e74c3c;
+  --primary:#27ae60;
+  --primary-dark:#1e8449;
+  --soft:#eafaf1;
+  --text:#2c3e50;
 }
 
 body {
-  font-family:'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#f3fbf6,#d4efdf);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  margin:0;
-  color: var(--text);
-  padding: 10px;
+  font-family:'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#f3fbf6,#d4efdf);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
+  color: var(--text);
+  padding: 10px;
 }
 
 .quiz-card {
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.15);
-  width:95%;
-  max-width:600px;
-  animation:slideIn 0.8s ease;
-  position:relative;
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.15);
+  width:95%;
+  max-width:600px;
+  animation:slideIn 0.8s ease;
+  position:relative;
 }
 
 @keyframes slideIn {
-  0% {opacity:0; transform:translateY(30px);}
-  100% {opacity:1; transform:translateY(0);}
+  0% {opacity:0; transform:translateY(30px);}
+  100% {opacity:1; transform:translateY(0);}
 }
 
 .step { display:none; }
@@ -50,38 +50,38 @@ body {
 @keyframes fadeInRight {0% {opacity:0; transform:translateX(20px);} 100% {opacity:1; transform:translateX(0);} }
 
 .q-block {
-  margin-bottom:20px;
-  padding:20px;
-  border-radius:12px;
-  border:1px solid #d4efdf;
-  background:#ffffff;
-  transition:0.3s;
+  margin-bottom:20px;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #d4efdf;
+  background:#ffffff;
+  transition:0.3s;
 }
 .q-block:hover { border-color: var(--primary); background: var(--soft); transform: translateY(-2px); }
 
 input {
-  width:100%;
-  padding:14px;
-  border:2px solid #e2e8f0;
-  border-radius:10px;
-  box-sizing:border-box;
-  font-size:16px;
-  background-color: white;
-  margin-top: 5px;
+  width:100%;
+  padding:14px;
+  border:2px solid #e2e8f0;
+  border-radius:10px;
+  box-sizing:border-box;
+  font-size:16px;
+  background-color: white;
+  margin-top: 5px;
 }
 input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(39,174,96,0.2); }
 
 .btn-nav, .btn-back, .level-btn, .option-btn {
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:bold;
-  transition:0.3s;
-  margin-top: 10px;
-  font-size: 16px;
-  box-sizing: border-box;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
+  margin-top: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .btn-nav { background:var(--primary); color:white; }
@@ -91,57 +91,57 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 .btn-back:hover { background:#95a5a6; transform:scale(1.02); }
 
 /* --- STYLES QCM ET NIVEAUX --- */
-.option-btn, .level-btn {  
-  display:block;  
-  width:100%;  
-  padding:15px;  
-  margin:8px 0;  
-  background:#f8f9fa;  
-  border:2px solid #e2e8f0;  
-  border-radius:10px;  
-  text-align:left;  
-  cursor:pointer;  
-  transition:0.3s;  
-  font-size:15px;
-  color: var(--text);
-  box-sizing: border-box;
+.option-btn, .level-btn {  
+  display:block;  
+  width:100%;  
+  padding:15px;  
+  margin:8px 0;  
+  background:#f8f9fa;  
+  border:2px solid #e2e8f0;  
+  border-radius:10px;  
+  text-align:left;  
+  cursor:pointer;  
+  transition:0.3s;  
+  font-size:15px;
+  color: var(--text);
+  box-sizing: border-box;
 }
 .option-btn:hover, .level-btn:hover { background:var(--soft); border-color:var(--primary); }
 .option-btn.selected, .level-btn.selected { background:var(--primary); color:white; border-color:var(--primary-dark); }
 
 .level-container {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
 }
 .level-btn {
-    text-align: center;
-    font-weight: bold;
-    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    flex: 1;
 }
 /* --------------------------------- */
 
 #timer {
-  font-weight: bold;
-  font-size: 18px;
-  text-align: center;
-  margin-top: 10px;
-  color: var(--primary);
-  background: var(--soft);
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+  color: var(--primary);
+  background: var(--soft);
+  padding: 10px;
+  border-radius: 8px;
+  display: none;
 }
 
 .timer-danger {
-  color: var(--error) !important;
-  animation: shake 0.5s infinite;
+  color: var(--error) !important;
+  animation: shake 0.5s infinite;
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
 }
 
 .feedback { display:none; font-size:14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease; }
@@ -154,31 +154,31 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
 
 .progress-container {
-  width:100%;
-  background:#d4efdf;
-  border-radius:12px;
-  overflow:hidden;
-  height:12px;
-  margin-bottom:10px;
+  width:100%;
+  background:#d4efdf;
+  border-radius:12px;
+  overflow:hidden;
+  height:12px;
+  margin-bottom:10px;
 }
 .progress-bar {
-  height:100%;
-  width:0%;
-  background:var(--primary);
-  transition: width 0.5s ease;
-  border-radius:12px;
+  height:100%;
+  width:0%;
+  background:var(--primary);
+  transition: width 0.5s ease;
+  border-radius:12px;
 }
 
 .tableau-result {
-  width:100%;
-  border-collapse: collapse;
-  margin-top:25px;
-  font-size: 14px;
+  width:100%;
+  border-collapse: collapse;
+  margin-top:25px;
+  font-size: 14px;
 }
 .tableau-result th, .tableau-result td {
-  border:1px solid #ddd;
-  padding: 8px;
-  text-align:left;
+  border:1px solid #ddd;
+  padding: 8px;
+  text-align:left;
 }
 .tableau-result th { background:var(--primary); color:white; }
 
@@ -188,48 +188,10 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 
 /* --- ADAPTATION RESPONSIVE --- */
 @media (max-width: 500px) {
-    .quiz-card { padding: 20px; }
-    h2 { font-size: 22px; }
-    .level-container { flex-direction: column; gap: 5px; }
-    .option-btn, .level-btn { padding: 12px; font-size: 14px; }
-}
-
-/* --- AJOUTS : PAGE ACCUEIL / VERSETS / ANIMATIONS --- */
-.page-accueil {
-    text-align: center;
-    opacity: 0;
-    animation: fadeIn 1s forwards;
-}
-.verset-box-accueil {
-    margin: 20px 0;
-    padding: 20px;
-    background-color: var(--soft);
-    border-radius: 10px;
-    border-left: 4px solid var(--primary);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 1s forwards 0.5s;
-}
-.verset-texte {
-    font-size: 1.2rem;
-    font-style: italic;
-    color: var(--text);
-    margin-bottom: 10px;
-}
-.verset-ref {
-    font-weight: bold;
-    color: var(--primary);
-}
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+    .quiz-card { padding: 20px; }
+    h2 { font-size: 22px; }
+    .level-container { flex-direction: column; gap: 5px; }
+    .option-btn, .level-btn { padding: 12px; font-size: 14px; }
 }
 </style>
 </head>
@@ -239,72 +201,68 @@ input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px r
 <audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
 
 <div class="quiz-card">
-  <h2 style="text-align:center; color:var(--primary);">Quiz Biblique 🕊️</h2>
+  <h2 style="text-align:center; color:var(--primary);">Quiz Biblique 🕊️</h2>
 
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
-  
-  <div id="timer">⏱️ Temps restant : 02:00</div>
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  
+  <div id="timer">⏱️ Temps restant : 02:00</div>
 
-  <form id="quizForm">
-        <div class="step active page-accueil" id="step0">
-        <div class="verset-box-accueil">
-            <p class="verset-texte">"Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance."</p>
-            <p class="verset-ref">- Jérémie 29:11</p>
-        </div>
+  <form id="quizForm">
+    <div class="step active" id="step0">
+      <div class="q-block">
+        <label>Prénom</label><input type="text" id="prenom" required><br><br>
+        <label>Nom</label><input type="text" id="nom" required><br><br>
+        <label>Email</label><input type="email" id="email" required><br><br>
         
-        <div class="q-block">
-        <label>Prénom</label><input type="text" id="prenom" required><br><br>
-        <label>Nom</label><input type="text" id="nom" required><br><br>
-        <label>Email</label><input type="email" id="email" required><br><br>
-        
-        <label>Choisissez votre niveau :</label>
-        <div class="level-container">
-            <button type="button" class="level-btn" onclick="setLevel('Intermédiaire', this)">Intermédiaire<br>🟢 QCM</button>
-            <button type="button" class="level-btn" onclick="setLevel('Difficile', this)">Difficile<br>🔴 Texte</button>
-        </div>
-      </div>
-      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
-    </div>
-        <div class="step" id="step1">
-      <div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
-      <div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
-      <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant →</button>
-    </div>
+        <label>Choisissez votre niveau :</label>
+        <div class="level-container">
+            <button type="button" class="level-btn" onclick="setLevel('Intermédiaire', this)">Intermédiaire<br>🟢 QCM</button>
+            <button type="button" class="level-btn" onclick="setLevel('Difficile', this)">Difficile<br>🔴 Texte</button>
+        </div>
+      </div>
+      <button type="button" class="btn-nav" onclick="startQuiz()">Commencer 🚀</button>
+    </div>
 
-    <div class="step" id="step2">
-      <div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
-      <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
-      <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant →</button>
-      <button type="button" class="btn-back" onclick="prevStep(2)">← Retour</button>
-    </div>
+    <div class="step" id="step1">
+      <div class="q-block" id="block1"><label>1. Ville de naissance de Jésus ?</label><input id="q1"><div class="feedback" id="f1"></div></div>
+      <div class="q-block" id="block2"><label>2. Qui a renié Jésus ?</label><input id="q2"><div class="feedback" id="f2"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(1)">Suivant →</button>
+    </div>
 
-    <div class="step" id="step3">
-      <div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
-      <div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
-      <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant →</button>
-      <button type="button" class="btn-back" onclick="prevStep(3)">← Retour</button>
-    </div>
+    <div class="step" id="step2">
+      <div class="q-block" id="block3"><label>3. Dernier livre de la Bible ?</label><input id="q3"><div class="feedback" id="f3"></div></div>
+      <div class="q-block" id="block4"><label>4. Qui a baptisé Jésus ?</label><input id="q4"><div class="feedback" id="f4"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(2)">Suivant →</button>
+      <button type="button" class="btn-back" onclick="prevStep(2)">← Retour</button>
+    </div>
 
-    <div class="step" id="step4">
-      <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
-      <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
-      <button type="button" class="btn-nav" onclick="nextStep(4)">Dernière étape →</button>
-      <button type="button" class="btn-back" onclick="prevStep(4)">← Retour</button>
-    </div>
+    <div class="step" id="step3">
+      <div class="q-block" id="block5"><label>5. Nombre d'Évangiles ?</label><input id="q5"><div class="feedback" id="f5"></div></div>
+      <div class="q-block" id="block6"><label>6. Mer où Jésus a marché ?</label><input id="q6"><div class="feedback" id="f6"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(3)">Suivant →</button>
+      <button type="button" class="btn-back" onclick="prevStep(3)">← Retour</button>
+    </div>
 
-    <div class="step" id="step5">
-      <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
-      <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
-      <button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
-      <button type="button" class="btn-back" onclick="prevStep(5)">← Retour</button>
-    </div>
-  </form>
+    <div class="step" id="step4">
+      <div class="q-block" id="block7"><label>7. Auteur principal des Épîtres ?</label><input id="q7"><div class="feedback" id="f7"></div></div>
+      <div class="q-block" id="block8"><label>8. Miracle de Cana ?</label><input id="q8"><div class="feedback" id="f8"></div></div>
+      <button type="button" class="btn-nav" onclick="nextStep(4)">Dernière étape →</button>
+      <button type="button" class="btn-back" onclick="prevStep(4)">← Retour</button>
+    </div>
 
-  <div id="res-summary"></div>
-  <div id="recap-table" style="display:none;"></div>
-  <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
+    <div class="step" id="step5">
+      <div class="q-block" id="block9"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"><div class="feedback" id="f9"></div></div>
+      <div class="q-block" id="block10"><label>10. Qui a trahi Jésus ?</label><input id="q10"><div class="feedback" id="f10"></div></div>
+      <button type="submit" class="btn-nav" style="background:var(--success);">Valider ✅</button>
+      <button type="button" class="btn-back" onclick="prevStep(5)">← Retour</button>
+    </div>
+  </form>
+
+  <div id="res-summary"></div>
+  <div id="recap-table" style="display:none;"></div>
+  <button onclick="location.reload()" id="btnReset" class="btn-nav" style="display:none; background:#7f8c8d; margin-top:20px;">Recommencer</button>
 </div>
 
 <script>
@@ -318,16 +276,16 @@ emailjs.init("ulU_NSZFdTj6ZZV8T");
 // BASE DE QUESTIONS
 // ==========================
 const ANSWERS = {
-  q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée.", options: ["Jérusalem", "Bethléem", "Nazareth", "Capernaüm"]},
-  q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois.", options: ["Jean", "Pierre", "Judas", "Paul"]},
-  q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"Dernier livre de la Bible.", options: ["Genèse", "Actes", "Apocalypse", "Romains"]},
-  q4:{opt:["jean baptiste","jean-baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus.", options: ["Jean-Baptiste", "Pierre", "Paul", "Moïse"]},
-  q5:{opt:["4","quatre"], ref:"Matthieu, Marc, Luc, Jean", desc:"Il y a quatre évangiles.", options: ["3", "4", "5", "12"]},
-  q6:{opt:["galilée","galilee"], ref:"Jean 6:19", desc:"Jésus a marché sur la mer de Galilée.", options: ["Morte", "Rouge", "Galilée", "Méditerranée"]},
-  q7:{opt:["paul"], ref:"Actes et Épîtres", desc:"Paul a écrit la majorité des épîtres.", options: ["Pierre", "Paul", "Jean", "Luc"]},
-  q8:{opt:["vin","eau en vin"], ref:"Jean 2:1-11", desc:"Le premier miracle fut Cana.", options: ["Eau en vin", "Guérison", "Multiplication", "Marche sur l'eau"]},
-  q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était collecteur d'impôts.", options: ["Pierre", "Matthieu", "Judas", "André"]},
-  q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent.", options: ["Pierre", "Judas", "Jean", "Thomas"]}
+  q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée.", options: ["Jérusalem", "Bethléem", "Nazareth", "Capernaüm"]},
+  q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois.", options: ["Jean", "Pierre", "Judas", "Paul"]},
+  q3:{opt:["apocalypse"], ref:"Apocalypse 22:21", desc:"Dernier livre de la Bible.", options: ["Genèse", "Actes", "Apocalypse", "Romains"]},
+  q4:{opt:["jean baptiste","jean-baptiste"], ref:"Matthieu 3:13", desc:"Jean-Baptiste a baptisé Jésus.", options: ["Jean-Baptiste", "Pierre", "Paul", "Moïse"]},
+  q5:{opt:["4","quatre"], ref:"Matthieu, Marc, Luc, Jean", desc:"Il y a quatre évangiles.", options: ["3", "4", "5", "12"]},
+  q6:{opt:["galilée","galilee"], ref:"Jean 6:19", desc:"Jésus a marché sur la mer de Galilée.", options: ["Morte", "Rouge", "Galilée", "Méditerranée"]},
+  q7:{opt:["paul"], ref:"Actes et Épîtres", desc:"Paul a écrit la majorité des épîtres.", options: ["Pierre", "Paul", "Jean", "Luc"]},
+  q8:{opt:["vin","eau en vin"], ref:"Jean 2:1-11", desc:"Le premier miracle fut Cana.", options: ["Eau en vin", "Guérison", "Multiplication", "Marche sur l'eau"]},
+  q9:{opt:["matthieu"], ref:"Matthieu 9:9", desc:"Matthieu était collecteur d'impôts.", options: ["Pierre", "Matthieu", "Judas", "André"]},
+  q10:{opt:["judas"], ref:"Luc 22:47-48", desc:"Judas a trahi Jésus pour de l'argent.", options: ["Pierre", "Judas", "Jean", "Thomas"]}
 };
 
 let timeLeft = 120;
@@ -339,83 +297,83 @@ let selectedNiveau = "";
 // FONCTION SÉLECTION NIVEAU
 // ==========================
 function setLevel(niveau, btn) {
-    selectedNiveau = niveau;
-    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+    selectedNiveau = niveau;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
 }
 
 // ==========================
 // FONCTION DÉMARRAGE
 // ==========================
 function startQuiz() {
-  const p = document.getElementById('prenom').value;
-  if(!p || !selectedNiveau) return alert("Veuillez remplir votre prénom et choisir un niveau !");
-  
-  if(selectedNiveau === "Intermédiaire"){
-    for(let i=1; i<=10; i++){
-      const input = document.getElementById('q'+i);
-      input.style.display = "none";
-      const container = input.parentElement;
-      let optionsHTML = "";
-      ANSWERS['q'+i].options.forEach(opt => {
-        optionsHTML += `<button type="button" class="option-btn" onclick="selectOption(this, ${i})">${opt}</button>`;
-      });
-      container.insertAdjacentHTML('beforeend', optionsHTML);
-    }
-  }
-  
-  document.getElementById('timer').style.display = 'block';
-  nextStep(0);
+  const p = document.getElementById('prenom').value;
+  if(!p || !selectedNiveau) return alert("Veuillez remplir votre prénom et choisir un niveau !");
+  
+  if(selectedNiveau === "Intermédiaire"){
+    for(let i=1; i<=10; i++){
+      const input = document.getElementById('q'+i);
+      input.style.display = "none";
+      const container = input.parentElement;
+      let optionsHTML = "";
+      ANSWERS['q'+i].options.forEach(opt => {
+        optionsHTML += `<button type="button" class="option-btn" onclick="selectOption(this, ${i})">${opt}</button>`;
+      });
+      container.insertAdjacentHTML('beforeend', optionsHTML);
+    }
+  }
+  
+  document.getElementById('timer').style.display = 'block';
+  nextStep(0);
 }
 
 // ==========================
 // SÉLECTION QCM
 // ==========================
 function selectOption(btn, qIndex) {
-    const parent = btn.parentElement;
-    parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    document.getElementById('q'+qIndex).value = btn.innerText;
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('q'+qIndex).value = btn.innerText;
 }
 
 // ==========================
 // CHRONOMÈTRE
 // ==========================
 function resetTimer() {
-  clearInterval(timerInterval);
-  timeLeft = 120;
-  updateTimerDisplay();
-  
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerDisplay();
+  clearInterval(timerInterval);
+  timeLeft = 120;
+  updateTimerDisplay();
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
 
-    if (timeLeft <= 10 && timeLeft > 0) {
-      document.getElementById('beepSound').play().catch(()=>{});
-    }
+    if (timeLeft <= 10 && timeLeft > 0) {
+      document.getElementById('beepSound').play().catch(()=>{});
+    }
 
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      document.getElementById('finishSound').play().catch(()=>{});
-      if(currentStep < 5) {
-        alert("Temps écoulé pour ces questions !");
-        nextStep(currentStep);
-      } else {
-        alert("Temps final écoulé ! Validation automatique.");
-        document.getElementById('quizForm').requestSubmit();
-      }
-    }
-  }, 1000);
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('finishSound').play().catch(()=>{});
+      if(currentStep < 5) {
+        alert("Temps écoulé pour ces questions !");
+        nextStep(currentStep);
+      } else {
+        alert("Temps final écoulé ! Validation automatique.");
+        document.getElementById('quizForm').requestSubmit();
+      }
+    }
+  }, 1000);
 }
 
 function updateTimerDisplay() {
-  const min = Math.floor(timeLeft / 60);
-  const sec = timeLeft % 60;
-  const timerElem = document.getElementById('timer');
-  timerElem.innerText = `⏱️ Temps étape : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-  
-  if(timeLeft <= 10) timerElem.classList.add('timer-danger');
-  else timerElem.classList.remove('timer-danger');
+  const min = Math.floor(timeLeft / 60);
+  const sec = timeLeft % 60;
+  const timerElem = document.getElementById('timer');
+  timerElem.innerText = `⏱️ Temps étape : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+  
+  if(timeLeft <= 10) timerElem.classList.add('timer-danger');
+  else timerElem.classList.remove('timer-danger');
 }
 
 // ==========================
@@ -424,20 +382,20 @@ function updateTimerDisplay() {
 function normalizeText(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
 
 function nextStep(n){
-  document.getElementById('step'+n).classList.remove('active');
-  currentStep = n + 1;
-  document.getElementById('step'+currentStep).classList.add('active');
-  document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
-  
-  if(currentStep <= 5) resetTimer();
+  document.getElementById('step'+n).classList.remove('active');
+  currentStep = n + 1;
+  document.getElementById('step'+currentStep).classList.add('active');
+  document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
+  
+  if(currentStep <= 5) resetTimer();
 }
 
 function prevStep(n){
-  document.getElementById('step'+n).classList.remove('active');
-  currentStep = n - 1;
-  document.getElementById('step'+currentStep).classList.add('active');
-  document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
-  resetTimer();
+  document.getElementById('step'+n).classList.remove('active');
+  currentStep = n - 1;
+  document.getElementById('step'+currentStep).classList.add('active');
+  document.getElementById('progressBar').style.width = (currentStep/5*100) + "%";
+  resetTimer();
 }
 
 document.getElementById('quizForm').addEventListener('submit', async e=>{
@@ -448,27 +406,27 @@ document.getElementById('timer').style.display = 'none';
 let score=0, tableauHTML="", commentairesHTML="<hr><h2 style='color:#2c3e50;'>Explications Bibliques</h2>";
 
 for(let i=1;i<=10;i++){
-    const val=document.getElementById('q'+i).value.trim()||"-";
-    const config=ANSWERS['q'+i];
-    const isCorrect=config.opt.map(a=>normalizeText(a)).includes(normalizeText(val));
-    const feedback=document.getElementById('f'+i);
-    feedback.style.display="block";
-    if(isCorrect){
-        score++;
-        document.getElementById('block'+i).classList.add('is-correct');
-        feedback.innerHTML=`✅ ${config.ref}`;
-        feedback.style.color="var(--success)";
-    } else {
-        document.getElementById('block'+i).classList.add('is-wrong');
-        feedback.innerHTML=`❌ ${config.ref}`;
-        feedback.style.color="var(--error)";
-    }
+    const val=document.getElementById('q'+i).value.trim()||"-";
+    const config=ANSWERS['q'+i];
+    const isCorrect=config.opt.map(a=>normalizeText(a)).includes(normalizeText(val));
+    const feedback=document.getElementById('f'+i);
+    feedback.style.display="block";
+    if(isCorrect){
+        score++;
+        document.getElementById('block'+i).classList.add('is-correct');
+        feedback.innerHTML=`✅ ${config.ref}`;
+        feedback.style.color="var(--success)";
+    } else {
+        document.getElementById('block'+i).classList.add('is-wrong');
+        feedback.innerHTML=`❌ ${config.ref}`;
+        feedback.style.color="var(--error)";
+    }
 
-    tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
-    commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
-    <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
-    <p style="margin:5px 0 0 0;font-style:italic;color:#555;">📖 Référence : ${config.ref}</p>
-    </div>`;
+    tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
+    commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
+    <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
+    <p style="margin:5px 0 0 0;font-style:italic;color:#555;">📖 Référence : ${config.ref}</p>
+    </div>`;
 }
 
 const p=document.getElementById('prenom').value;
@@ -477,34 +435,34 @@ const em=document.getElementById('email').value;
 
 // 1. Envoi à TOI (le récapitulatif complet)
 emailjs.send('service_raxr77e','template_uh8xoa6',{
-    prenom:p, nom:n, email:em, score:score,
-    tableau_html:tableauHTML,
-    commentaires_html:commentairesHTML,
-    niveau: selectedNiveau
+    prenom:p, nom:n, email:em, score:score,
+    tableau_html:tableauHTML,
+    commentaires_html:commentairesHTML,
+    niveau: selectedNiveau
 });
 
 // 2. ENVOI À L'UTILISATEUR (le résultat simple)
 emailjs.send('service_raxr77e','template_632ld9j',{
-    prenom:p, 
-    email:em,
-    score:score,
-    tableau_html:tableauHTML,
-    niveau: selectedNiveau
+    prenom:p, 
+    email:em,
+    score:score,
+    tableau_html:tableauHTML,
+    niveau: selectedNiveau
 });
 
 // ENVOI VERS SUPABASE
 await _supabase.from('reponses').upsert({
-    email:em, prenom:p, nom:n, score:score, niveau: selectedNiveau,
-    q1: document.getElementById('q1').value,
-    q2: document.getElementById('q2').value,
-    q3: document.getElementById('q3').value,
-    q4: document.getElementById('q4').value,
-    q5: document.getElementById('q5').value,
-    q6: document.getElementById('q6').value,
-    q7: document.getElementById('q7').value,
-    q8: document.getElementById('q8').value,
-    q9: document.getElementById('q9').value,
-    q10: document.getElementById('q10').value
+    email:em, prenom:p, nom:n, score:score, niveau: selectedNiveau,
+    q1: document.getElementById('q1').value,
+    q2: document.getElementById('q2').value,
+    q3: document.getElementById('q3').value,
+    q4: document.getElementById('q4').value,
+    q5: document.getElementById('q5').value,
+    q6: document.getElementById('q6').value,
+    q7: document.getElementById('q7').value,
+    q8: document.getElementById('q8').value,
+    q9: document.getElementById('q9').value,
+    q10: document.getElementById('q10').value
 },{onConflict:'email'});
 
 document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
