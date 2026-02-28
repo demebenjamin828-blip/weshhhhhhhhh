@@ -520,133 +520,188 @@ document.getElementById('btnReset').style.display="block";
 </div>
 
 <style>
-/* Importation d'une police plus prestigieuse */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap');
+  <div id="premium-welcome">
+    <div class="divine-light"></div>
+    <div class="welcome-content">
+        <div class="seal-container">
+            <div class="outer-seal"></div>
+            <div class="inner-seal">
+                <span class="cross-symbol">✝</span>
+            </div>
+        </div>
+        
+        <h1 class="royal-title">Novum Testamentum</h1>
+        <div class="title-separator"></div>
+        <p class="royal-subtitle">ENTREZ DANS LE SANCTUAIRE DE LA CONNAISSANCE</p>
+        
+        <div class="quest-brief">
+            <div class="quest-card">
+                <span class="icon">📜</span>
+                <p>10 ÉPREUVES</p>
+            </div>
+            <div class="quest-card">
+                <span class="icon">⏳</span>
+                <p>120 SECONDES</p>
+            </div>
+            <div class="quest-card">
+                <span class="icon">🛡️</span>
+                <p>2 NIVEAUX</p>
+            </div>
+        </div>
+
+        <button class="royal-cta" onclick="launchQuiz()">
+            COMMENCER L'ASCENSION
+        </button>
+    </div>
+</div>
+
+<style>
+/* Importation de polices "Grands Classiques" */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&family=EB+Garamond:ital,wght@0,400;1,600&display=swap');
 
 #premium-welcome {
     position: fixed;
-    inset: 0; /* Remplace top/left/width/height pour plus de robustesse */
-    background: radial-gradient(circle at center, #27ae60 0%, #1b3d1a 100%);
+    inset: 0;
+    background: #0a0f0a; /* Noir très profond */
     z-index: 10000;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.8s;
-    color: white;
+    color: #e0d0b0;
     overflow: hidden;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'EB Garamond', serif;
+    transition: all 1.2s cubic-bezier(0.9, 0, 0.1, 1);
 }
 
-.welcome-overlay {
+/* Effet de lumière divine au centre */
+.divine-light {
     position: absolute;
-    inset: 0;
-    background: url('https://www.transparenttextures.com/patterns/natural-paper.png');
-    opacity: 0.15;
-    pointer-events: none;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle at center, rgba(46, 204, 113, 0.15) 0%, transparent 50%);
+    animation: pulseLight 6s infinite alternate;
 }
 
 .welcome-content {
+    position: relative;
+    z-index: 5;
     text-align: center;
-    z-index: 2;
-    padding: 30px;
-    max-width: 600px;
-    animation: fadeInWelcome 1.2s ease-out;
+    padding: 20px;
 }
 
-@keyframes fadeInWelcome {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Le Sceau Sacré */
+.seal-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 40px;
 }
 
-.bible-frame {
-    width: 140px;
-    height: 140px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 3px solid #d4af37;
+.outer-seal {
+    position: absolute;
+    inset: 0;
+    border: 2px solid #d4af37;
+    border-radius: 50%;
+    animation: rotateSeal 15s linear infinite;
+    border-style: double;
+}
+
+.inner-seal {
+    position: absolute;
+    inset: 15px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid #d4af37;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 35px;
-    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
-    animation: pulseGold 2.5s infinite ease-in-out;
 }
 
-.bible-emoji {
-    font-size: 70px;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
-}
-
-.welcome-title {
-    font-family: 'Cinzel', serif; /* Police type manuscrit ancien / romain */
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: 3px;
-    text-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    color: #f1c40f; /* Or brillant */
-}
-
-.welcome-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.85;
-    line-height: 1.6;
-    margin-bottom: 45px;
-    font-weight: 300;
-}
-
-.welcome-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 50px;
-    background: rgba(0, 0, 0, 0.25);
-    padding: 25px;
-    border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    backdrop-filter: blur(5px);
-}
-
-.stat-item {
-    font-weight: 600;
-    font-size: 1.4rem;
-}
-
-.stat-item small {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.cross-symbol {
+    font-size: 40px;
     color: #d4af37;
+    text-shadow: 0 0 15px #d4af37;
 }
 
-.welcome-cta {
-    background: #ffffff;
-    color: #1b3d1a;
-    border: none;
-    padding: 20px 50px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    font-family: 'Cinzel', serif;
-    border-radius: 4px; /* Carré plus sérieux que le bouton rond */
+/* Titre Majestueux */
+.royal-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 3.5rem;
+    color: #d4af37;
+    margin: 0;
+    letter-spacing: 8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.title-separator {
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    margin: 15px auto;
+}
+
+.royal-subtitle {
+    font-family: 'MedievalSharp', cursive;
+    letter-spacing: 3px;
+    font-size: 1rem;
+    opacity: 0.7;
+    margin-bottom: 50px;
+}
+
+/* Cartes de pré-quiz */
+.quest-brief {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+.quest-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 15px;
+    width: 100px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.quest-card:hover {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.quest-card .icon { font-size: 24px; display: block; margin-bottom: 5px; }
+.quest-card p { font-size: 0.7rem; font-weight: bold; margin: 0; color: #d4af37; }
+
+/* Bouton Royal */
+.royal-cta {
+    background: transparent;
+    color: #d4af37;
+    border: 2px solid #d4af37;
+    padding: 20px 45px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    letter-spacing: 1px;
+    transition: 0.5s;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 10;
 }
 
-.welcome-cta:hover {
-    transform: scale(1.05);
-    background: #f1c40f;
-    box-shadow: 0 15px 40px rgba(241, 196, 15, 0.4);
+.royal-cta:hover {
+    background: #d4af37;
+    color: #0a0f0a;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+    letter-spacing: 4px;
 }
 
-@keyframes pulseGold {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
-    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(212, 175, 55, 0.6); }
-}
+/* Animations */
+@keyframes rotateSeal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes pulseLight { from { opacity: 0.5; } to { opacity: 1; } }
 
-/* Sortie fluide vers le haut */
+/* Sortie de scène */
 .hide-welcome {
-    transform: translateY(-100%) scale(1.1);
+    transform: scale(1.5);
     opacity: 0;
     pointer-events: none;
 }
@@ -656,10 +711,10 @@ document.getElementById('btnReset').style.display="block";
 function launchQuiz() {
     const welcome = document.getElementById('premium-welcome');
     welcome.classList.add('hide-welcome');
-    // Supprime du DOM après l'animation pour libérer de la mémoire
     setTimeout(() => {
         welcome.style.display = 'none';
-    }, 1000);
+    }, 1200);
 }
+</script>
 </script>
 </html>
