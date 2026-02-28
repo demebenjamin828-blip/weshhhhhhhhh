@@ -1,24 +1,27 @@
 /* =========================
-   THEME GENERAL (PRO DESIGN)
+   THEME MAJESTUEUX (PREMIUM UPGRADE)
 ========================= */
 :root {
-  --primary: #27ae60;
-  --primary-dark: #1e8449;
-  --success: #2ecc71;
+  --primary: #1b3d1a;      /* Vert profond (Sérieux/Sacré) */
+  --gold: #d4af37;         /* Or véritable */
+  --gold-light: #f1c40f;   /* Or brillant pour les survols */
+  --success: #27ae60;
   --error: #e74c3c;
-  --soft: #eafaf1;
-  --bg: #f3fbf6;
-  --text: #2c3e50;
+  --soft: #f4f7f2;
+  --text: #1a252f;
+  --glass: rgba(255, 255, 255, 0.95);
 }
 
-* {
-  box-sizing: border-box;
-}
+/* Importation d'une police "Royale" pour les titres */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap');
+
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #f3fbf6, #d4efdf);
+  font-family: 'Poppins', sans-serif;
+  /* Fond texturé papier ancien / émeraude */
+  background: radial-gradient(circle at center, #27ae60 0%, #0a1a0a 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,256 +31,146 @@ body {
 }
 
 /* =========================
-   CARTE PRINCIPALE
+   CARTE PRINCIPALE (STYLE PARCHEMIN MODERNE)
 ========================= */
 .quiz-card {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+  background: var(--glass);
+  padding: 45px;
+  border-radius: 15px; /* Moins arrondi pour faire plus "livre" */
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
   width: 95%;
   max-width: 700px;
-  animation: fadeIn 0.8s ease;
+  animation: fadeIn 1s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
-}
-
-@keyframes fadeIn {
-  from { opacity:0; transform: translateY(25px);}
-  to { opacity:1; transform: translateY(0);}
+  border-top: 6px solid var(--gold); /* Barre d'or au sommet */
 }
 
 h2 {
+  font-family: 'Cinzel', serif;
   text-align: center;
   color: var(--primary);
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* =========================
-   ETAPES DU QUIZ
-========================= */
-.step { display: none; }
-.step.active {
-  display: block;
-  animation: slide 0.5s ease;
-}
-@keyframes slide {
-  from {opacity:0; transform:translateX(30px);}
-  to {opacity:1; transform:translateX(0);}
-}
-
-/* =========================
-   BLOCS QUESTIONS
+   BLOCS QUESTIONS (PREMIUM HOVER)
 ========================= */
 .q-block {
   margin-bottom: 18px;
-  padding: 20px;
-  border-radius: 14px;
-  border: 1px solid #d4efdf;
-  background: #fff;
-  transition: 0.3s;
-}
-.q-block:hover {
-  background: var(--soft);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-/* =========================
-   INPUTS ET SELECT
-========================= */
-input, select {
-  width: 100%;
-  padding: 14px;
+  padding: 22px;
   border-radius: 10px;
-  border: 2px solid #e2e8f0;
-  font-size: 15px;
-  transition: 0.3s;
-  background-color: white;
+  border: 1px solid #e0e6e3;
+  background: #fff;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(39,174,96,0.2);
+
+.q-block:hover {
+  background: #fff;
+  border-color: var(--gold);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+  transform: translateY(-4px);
 }
 
 /* =========================
-   BOUTONS NAVIGATION ET QCM
+   BOUTONS (EFFET OR ET PROFONDEUR)
 ========================= */
 .btn-nav, .btn-back, .option-btn, .level-btn {
   width: 100%;
-  padding: 15px;
-  border-radius: 12px;
-  font-weight: bold;
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
   border: none;
-  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-nav {
   background: var(--primary);
   color: white;
-  margin-top: 10px;
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(27, 61, 26, 0.3);
 }
+
 .btn-nav:hover {
-  background: var(--primary-dark);
-  transform: scale(1.03);
+  background: var(--gold);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
 }
 
-/* STYLE BOUTON RETOUR */
-.btn-back {
-  background: #7f8c8d;
-  color: white;
-  margin-top: 10px;
-}
-.btn-back:hover {
-  background: #95a5a6;
-  transform: scale(1.03);
-}
-
-/* Boutons QCM */
-.option-btn {
-  background: #f8f9fa;
-  border: 2px solid #e2e8f0;
-  text-align: left;
+/* Boutons QCM & Niveaux */
+.option-btn, .level-btn {
+  background: #ffffff;
+  border: 2px solid #edf2f0;
   color: var(--text);
-  margin-top: 10px;
-}
-.option-btn:hover {
-  background: var(--soft);
-  border-color: var(--primary);
-}
-.option-btn.selected {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary-dark);
+  margin-top: 12px;
+  text-align: center;
 }
 
-/* Boutons niveau */
-.level-container {
-  display: flex;
-  gap: 10px;
-  margin-top: 5px;
-}
-.level-btn {
-  flex: 1;
-  text-align: center;
-  font-weight: bold;
-  background: #f8f9fa;
-  border: 2px solid #e2e8f0;
-}
-.level-btn:hover {
+.option-btn:hover, .level-btn:hover {
+  border-color: var(--gold);
   background: var(--soft);
-  border-color: var(--primary);
 }
-.level-btn.selected {
+
+.option-btn.selected, .level-btn.selected {
   background: var(--primary);
   color: white;
-  border-color: var(--primary-dark);
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
 }
 
 /* =========================
-   BARRE DE PROGRESSION
+   PROGRESSION DORÉE
 ========================= */
 .progress-container {
-  width: 100%;
-  height: 14px;
-  background: #d4efdf;
-  border-radius: 20px;
-  overflow: hidden;
-  margin-bottom: 20px;
+  height: 8px;
+  background: #eef2ef;
+  border-radius: 10px;
+  margin-bottom: 25px;
 }
+
 .progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,#27ae60,#2ecc71);
-  transition: width 0.4s ease;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 /* =========================
-   CHRONOMETRE
+   CHRONOMETRE ET VERSET
 ========================= */
 #timer {
-  text-align: center;
-  font-weight: bold;
-  color: #555;
-  margin-bottom: 20px;
-  background: #f7f7f7;
-  padding: 10px;
-  border-radius: 10px;
-  display: none;
-}
-.timer-danger {
-  color: var(--error) !important;
-  animation: shake 0.5s infinite;
-}
-@keyframes shake {
-  0%,100%{ transform: translateX(0);}
-  25%{ transform: translateX(5px);}
-  75%{ transform: translateX(-5px);}
-}
-
-/* =========================
-   FEEDBACK ET SCORE
-========================= */
-.is-correct { border-color: var(--success) !important; background:#f0fff4;}
-.is-wrong { border-color: var(--error) !important; background:#fff5f5;}
-.feedback { display:none; font-size: 14px; margin-top:12px; font-weight:600; animation:popIn 0.4s ease;}
-@keyframes popIn {0%{transform:scale(0.9);} 100%{transform:scale(1);}}
-.score-anim { font-size:48px; color:var(--success); text-align:center; animation:bounce 1s infinite alternate;}
-@keyframes bounce {from{transform:scale(1);} to{transform:scale(1.1);}}
-
-/* =========================
-   TABLEAU RESULTATS
-========================= */
-.tableau-result {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 30px;
-}
-.tableau-result th {
+  font-family: 'Cinzel', serif;
   background: var(--primary);
-  color: white;
+  color: var(--gold);
   padding: 12px;
-  text-align: left;
-}
-.tableau-result td {
-  border: 1px solid #eee;
-  padding: 12px;
-}
-.tableau-result tr:nth-child(even) { background: #fafafa; }
-
-/* =========================
-   COMMENTAIRES BIBLIQUES
-========================= */
-.commentaires {
-  margin-top: 25px;
-  padding: 18px;
-  background: #f9fbfd;
-  border-left: 5px solid var(--primary);
-  border-radius: 8px;
-  line-height: 1.6;
+  border-radius: 5px;
+  border-bottom: 2px solid var(--gold);
 }
 
-/* =========================
-   VERSET FINAL
-========================= */
 .verse {
-  margin-top: 25px;
-  text-align: center;
-  font-style: italic;
-  color: #666;
-  background: #f4f6f7;
-  padding: 15px;
-  border-radius: 10px;
+  font-family: 'Cinzel', serif;
+  color: var(--primary);
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 20px;
+  border-radius: 8px;
+  font-weight: 600;
 }
 
 /* =========================
-   RESPONSIVE (TELEPHONE)
+   ANIMATIONS
 ========================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 @media(max-width:600px){
-  .quiz-card { padding: 25px; }
-  .level-container { flex-direction: column; gap:5px; }
-  .option-btn, .level-btn, .btn-nav, .btn-back { font-size:14px; padding:12px; }
+  .quiz-card { padding: 25px; border-radius: 0; }
+  h2 { font-size: 1.5rem; }
 }
