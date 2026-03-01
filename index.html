@@ -6,13 +6,15 @@
   <title>Examen Nouveau Testament 📖</title>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons (optionnel) -->
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Google Fonts pour une typographie premium -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <!-- Scripts externes -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
-    /* --- STYLES PERSONNALISÉS (conservés pour les animations et couleurs spécifiques) --- */
+    /* Styles personnalisés pour compléter Bootstrap */
     :root {
       --success: #2ecc71;
       --error: #e74c3c;
@@ -24,68 +26,71 @@
 
     body {
       background: linear-gradient(135deg, #f3fbf6, #d4efdf);
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
 
-    /* Carte principale du quiz */
+    /* Carte principale avec effet glassmorphisme */
     .quiz-card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-      animation: slideIn 0.8s ease;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.5);
       max-width: 700px;
-      margin: 20px auto;
+      width: 100%;
+      animation: slideIn 0.6s ease-out;
     }
 
     @keyframes slideIn {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Étapes */
     .step { display: none; }
-    .step.active { display: block; animation: fadeInRight 0.5s ease; }
-    @keyframes fadeInRight {
-      0% { opacity: 0; transform: translateX(20px); }
-      100% { opacity: 1; transform: translateX(0); }
+    .step.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    /* Bloc question */
+    /* Blocs questions avec effet de carte */
     .q-block {
-      margin-bottom: 20px;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid #d4efdf;
-      background: #ffffff;
-      transition: 0.3s;
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     .q-block:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
       border-color: var(--primary);
-      background: var(--soft);
-      transform: translateY(-2px);
     }
 
     /* Boutons de niveau et options QCM */
     .level-btn, .option-btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      margin: 8px 0;
-      background: #f8f9fa;
+      background: #f8fafc;
       border: 2px solid #e2e8f0;
-      border-radius: 10px;
+      border-radius: 1rem;
+      padding: 1rem;
+      font-weight: 600;
+      transition: all 0.2s;
       text-align: left;
-      cursor: pointer;
-      transition: 0.3s;
-      font-size: 15px;
-      color: var(--text);
-      box-sizing: border-box;
+      width: 100%;
+      margin-bottom: 0.5rem;
     }
     .level-btn:hover, .option-btn:hover {
       background: var(--soft);
       border-color: var(--primary);
+      transform: scale(1.02);
     }
     .level-btn.selected, .option-btn.selected {
       background: var(--primary);
@@ -93,25 +98,24 @@
       border-color: var(--primary-dark);
     }
 
+    /* Feedback correct/incorrect */
     .is-correct { border-color: var(--success) !important; background: #f0fff4; }
     .is-wrong { border-color: var(--error) !important; background: #fff5f5; }
 
     .feedback {
-      display: none;
-      font-size: 14px;
-      margin-top: 12px;
+      font-size: 0.9rem;
       font-weight: 600;
-      animation: popIn 0.4s ease;
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.9); }
-      100% { transform: scale(1); }
+      margin-top: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      background: #f1f5f9;
     }
 
+    /* Animation du score */
     .score-anim {
-      font-size: 48px;
+      font-size: 4rem;
+      font-weight: 800;
       color: var(--success);
-      text-align: center;
       animation: bounce 1s infinite alternate;
     }
     @keyframes bounce {
@@ -119,217 +123,239 @@
       to { transform: scale(1.1); }
     }
 
+    /* Timer en danger */
     .timer-danger {
-      color: var(--error) !important;
-      animation: shake 0.5s infinite;
+      background-color: #fee2e2 !important;
+      color: #b91c1c !important;
+      animation: pulse 1s infinite;
     }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-    }
-
-    .verse {
-      margin-top: 30px;
-      text-align: center;
-      font-style: italic;
-      color: #555;
-      background: #f7f7f7;
-      padding: 15px;
-      border-radius: 10px;
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
     }
 
-    /* Personnalisation de la page d'accueil (conservée avec ajustements) */
+    /* Page d'accueil premium */
     #premium-welcome {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #1b3d1a 0%, #27ae60 100%);
+      background: linear-gradient(135deg, #0b3b2c 0%, #1e7e4a 100%);
       z-index: 9999;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
       color: white;
-      overflow: hidden;
     }
-
-    .welcome-overlay {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-      opacity: 0.2;
-    }
-
     .welcome-content {
-      text-align: center;
-      z-index: 2;
-      padding: 20px;
       max-width: 500px;
+      text-align: center;
+      padding: 2rem;
     }
-
     .bible-frame {
-      width: 120px;
-      height: 120px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #d4af37;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.2);
+      border: 3px solid #fbbf24;
       border-radius: 50%;
       display: flex;
-      justify-content: center;
       align-items: center;
-      margin: 0 auto 30px;
-      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-      animation: pulseGold 2s infinite;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      box-shadow: 0 0 40px rgba(251, 191, 36, 0.4);
+      animation: glow 3s infinite;
     }
-
-    .bible-emoji { font-size: 60px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
-
-    @keyframes pulseGold {
-      0% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-      50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); }
-      100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    @keyframes glow {
+      0% { box-shadow: 0 0 20px rgba(251,191,36,0.3); }
+      50% { box-shadow: 0 0 50px rgba(251,191,36,0.6); }
+      100% { box-shadow: 0 0 20px rgba(251,191,36,0.3); }
     }
-
+    .bible-emoji { font-size: 4rem; }
+    .welcome-title { font-weight: 800; font-size: 2.5rem; }
+    .welcome-subtitle { font-size: 1.2rem; opacity: 0.9; }
+    .stat-item { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 1rem; backdrop-filter: blur(5px); }
     .hide-welcome { transform: translateY(-100%); }
-
-    /* Ajustements responsives */
-    @media (max-width: 576px) {
-      .quiz-card { padding: 20px; }
-      .welcome-title { font-size: 1.8rem; }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Audio éléments -->
+  <!-- Audio -->
   <audio id="beepSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
   <audio id="finishSound" src="https://assets.mixkit.co/active_storage/sfx/2866/2866-preview.mp3"></audio>
 
-  <!-- PAGE D'ACCUEIL BOOTSTRAPÉE (mais gardant le style original) -->
+  <!-- PAGE D'ACCUEIL PREMIUM -->
   <div id="premium-welcome">
-    <div class="welcome-overlay"></div>
     <div class="welcome-content">
       <div class="bible-frame">
         <span class="bible-emoji">📖</span>
       </div>
-      <h1 class="welcome-title display-4 fw-bold">Examen du Nouveau Testament</h1>
-      <p class="welcome-subtitle lead">Plongez dans les Écritures et testez vos connaissances spirituelles.</p>
+      <h1 class="welcome-title display-3 fw-bold">Examen du Nouveau Testament</h1>
+      <p class="welcome-subtitle lead mb-5">Plongez dans les Écritures et testez vos connaissances spirituelles.</p>
 
-      <div class="welcome-stats d-flex justify-content-around bg-dark bg-opacity-25 p-3 rounded-4 mb-4 border border-light border-opacity-10">
-        <div class="stat-item text-center"><span class="fw-bold fs-4">10</span><br><small class="text-uppercase opacity-75">Questions</small></div>
-        <div class="stat-item text-center"><span class="fw-bold fs-4">2</span><br><small class="text-uppercase opacity-75">Niveaux</small></div>
-        <div class="stat-item text-center"><span class="fw-bold fs-4">120s</span><br><small class="text-uppercase opacity-75">Chrono</small></div>
+      <div class="d-flex justify-content-around gap-3 mb-5">
+        <div class="stat-item flex-fill">
+          <div class="fs-2 fw-bold">10</div>
+          <small>Questions</small>
+        </div>
+        <div class="stat-item flex-fill">
+          <div class="fs-2 fw-bold">2</div>
+          <small>Niveaux</small>
+        </div>
+        <div class="stat-item flex-fill">
+          <div class="fs-2 fw-bold">120s</div>
+          <small>Chrono</small>
+        </div>
       </div>
 
-      <button class="welcome-cta btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg" onclick="launchQuiz()">
-        Commencer le Voyage 🚀
+      <button class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg" onclick="launchQuiz()">
+        Commencer le Voyage <i class="bi bi-rocket-takeoff"></i>
       </button>
     </div>
   </div>
 
-  <!-- CARTE PRINCIPALE DU QUIZ (avec classes Bootstrap) -->
-  <div class="container py-4">
-    <div class="quiz-card p-4 p-md-5">
-      <h2 class="text-center mb-4" style="color: var(--primary);">Quiz Biblique 🕊️</h2>
+  <!-- CARTE PRINCIPALE DU QUIZ -->
+  <div class="quiz-card p-4 p-md-5">
+    <h2 class="text-center mb-4" style="color: var(--primary);">
+      <i class="bi bi-journal-bookmark-fill me-2"></i>Quiz Biblique
+    </h2>
 
-      <!-- Barre de progression Bootstrap -->
-      <div class="progress mb-3" style="height: 12px;">
-        <div class="progress-bar bg-success" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-
-      <!-- Timer -->
-      <div id="timer" class="alert alert-success text-center fw-bold d-none" role="alert">
-        ⏱️ Temps restant : 02:00
-      </div>
-
-      <form id="quizForm">
-        <!-- Étape 0 : informations personnelles -->
-        <div class="step active" id="step0">
-          <div class="q-block">
-            <div class="mb-3">
-              <label for="prenom" class="form-label fw-semibold">Prénom</label>
-              <input type="text" class="form-control" id="prenom" required>
-            </div>
-            <div class="mb-3">
-              <label for="nom" class="form-label fw-semibold">Nom</label>
-              <input type="text" class="form-control" id="nom" required>
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label fw-semibold">Email</label>
-              <input type="email" class="form-control" id="email" required>
-            </div>
-            <label class="fw-semibold mb-2">Choisissez votre niveau :</label>
-            <div class="level-container d-flex gap-2 flex-column flex-sm-row">
-              <button type="button" class="level-btn flex-fill" onclick="setLevel('Intermédiaire', this)">Intermédiaire<br>🟢 QCM</button>
-              <button type="button" class="level-btn flex-fill" onclick="setLevel('Difficile', this)">Difficile<br>🔴 Texte</button>
-            </div>
-          </div>
-          <button type="button" class="btn btn-success w-100 py-3 fw-bold" onclick="startQuiz()">Commencer 🚀</button>
-        </div>
-
-        <!-- Étape 1 -->
-        <div class="step" id="step1">
-          <div class="q-block" id="block1"><label class="fw-semibold">1. Ville de naissance de Jésus ?</label><input id="q1" class="form-control mt-2"><div class="feedback" id="f1"></div></div>
-          <div class="q-block" id="block2"><label class="fw-semibold">2. Qui a renié Jésus ?</label><input id="q2" class="form-control mt-2"><div class="feedback" id="f2"></div></div>
-          <button type="button" class="btn btn-success w-100 py-3 fw-bold" onclick="nextStep(1)">Suivant →</button>
-        </div>
-
-        <!-- Étape 2 -->
-        <div class="step" id="step2">
-          <div class="q-block" id="block3"><label class="fw-semibold">3. Dernier livre de la Bible ?</label><input id="q3" class="form-control mt-2"><div class="feedback" id="f3"></div></div>
-          <div class="q-block" id="block4"><label class="fw-semibold">4. Qui a baptisé Jésus ?</label><input id="q4" class="form-control mt-2"><div class="feedback" id="f4"></div></div>
-          <button type="button" class="btn btn-success w-100 py-3 fw-bold" onclick="nextStep(2)">Suivant →</button>
-          <button type="button" class="btn btn-secondary w-100 py-3 fw-bold mt-2" onclick="prevStep(2)">← Retour</button>
-        </div>
-
-        <!-- Étape 3 -->
-        <div class="step" id="step3">
-          <div class="q-block" id="block5"><label class="fw-semibold">5. Nombre d'Évangiles ?</label><input id="q5" class="form-control mt-2"><div class="feedback" id="f5"></div></div>
-          <div class="q-block" id="block6"><label class="fw-semibold">6. Mer où Jésus a marché ?</label><input id="q6" class="form-control mt-2"><div class="feedback" id="f6"></div></div>
-          <button type="button" class="btn btn-success w-100 py-3 fw-bold" onclick="nextStep(3)">Suivant →</button>
-          <button type="button" class="btn btn-secondary w-100 py-3 fw-bold mt-2" onclick="prevStep(3)">← Retour</button>
-        </div>
-
-        <!-- Étape 4 -->
-        <div class="step" id="step4">
-          <div class="q-block" id="block7"><label class="fw-semibold">7. Auteur principal des Épîtres ?</label><input id="q7" class="form-control mt-2"><div class="feedback" id="f7"></div></div>
-          <div class="q-block" id="block8"><label class="fw-semibold">8. Miracle de Cana ?</label><input id="q8" class="form-control mt-2"><div class="feedback" id="f8"></div></div>
-          <button type="button" class="btn btn-success w-100 py-3 fw-bold" onclick="nextStep(4)">Dernière étape →</button>
-          <button type="button" class="btn btn-secondary w-100 py-3 fw-bold mt-2" onclick="prevStep(4)">← Retour</button>
-        </div>
-
-        <!-- Étape 5 -->
-        <div class="step" id="step5">
-          <div class="q-block" id="block9"><label class="fw-semibold">9. Apôtre collecteur d'impôts ?</label><input id="q9" class="form-control mt-2"><div class="feedback" id="f9"></div></div>
-          <div class="q-block" id="block10"><label class="fw-semibold">10. Qui a trahi Jésus ?</label><input id="q10" class="form-control mt-2"><div class="feedback" id="f10"></div></div>
-          <button type="submit" class="btn btn-success w-100 py-3 fw-bold" style="background:var(--success);">Valider ✅</button>
-          <button type="button" class="btn btn-secondary w-100 py-3 fw-bold mt-2" onclick="prevStep(5)">← Retour</button>
-        </div>
-      </form>
-
-      <!-- Résumé et tableau récapitulatif -->
-      <div id="res-summary" class="mt-4"></div>
-      <div id="recap-table" style="display:none;"></div>
-      <button onclick="location.reload()" id="btnReset" class="btn btn-secondary w-100 py-3 fw-bold mt-4" style="display:none;">Recommencer</button>
+    <!-- Barre de progression -->
+    <div class="progress mb-4" style="height: 12px; border-radius: 6px;">
+      <div class="progress-bar bg-success" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
+
+    <!-- Timer avec alerte Bootstrap -->
+    <div id="timer" class="alert alert-success text-center fw-bold d-none" role="alert">
+      <i class="bi bi-clock-history me-2"></i>Temps restant : 02:00
+    </div>
+
+    <form id="quizForm">
+      <!-- Étape 0 : informations -->
+      <div class="step active" id="step0">
+        <div class="q-block">
+          <div class="mb-3">
+            <label for="prenom" class="form-label fw-semibold"><i class="bi bi-person-circle me-2"></i>Prénom</label>
+            <input type="text" class="form-control form-control-lg rounded-pill" id="prenom" required>
+          </div>
+          <div class="mb-3">
+            <label for="nom" class="form-label fw-semibold"><i class="bi bi-person-badge me-2"></i>Nom</label>
+            <input type="text" class="form-control form-control-lg rounded-pill" id="nom" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold"><i class="bi bi-envelope me-2"></i>Email</label>
+            <input type="email" class="form-control form-control-lg rounded-pill" id="email" required>
+          </div>
+          <label class="fw-semibold mb-2"><i class="bi bi-bar-chart-steps me-2"></i>Choisissez votre niveau :</label>
+          <div class="d-flex gap-2 flex-column flex-md-row">
+            <button type="button" class="level-btn" onclick="setLevel('Intermédiaire', this)">Intermédiaire 🟢 <small class="d-block">QCM</small></button>
+            <button type="button" class="level-btn" onclick="setLevel('Difficile', this)">Difficile 🔴 <small class="d-block">Texte</small></button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-success btn-lg w-100 rounded-pill py-3 fw-bold" onclick="startQuiz()">
+          Commencer <i class="bi bi-arrow-right-circle ms-2"></i>
+        </button>
+      </div>
+
+      <!-- Étape 1 à 5 (identiques mais avec icônes) -->
+      <!-- Étape 1 -->
+      <div class="step" id="step1">
+        <div class="q-block" id="block1">
+          <label class="fw-semibold"><i class="bi bi-question-circle me-2"></i>1. Ville de naissance de Jésus ?</label>
+          <input id="q1" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f1"></div>
+        </div>
+        <div class="q-block" id="block2">
+          <label class="fw-semibold"><i class="bi bi-question-circle me-2"></i>2. Qui a renié Jésus ?</label>
+          <input id="q2" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f2"></div>
+        </div>
+        <button type="button" class="btn btn-success w-100 py-3 fw-bold rounded-pill" onclick="nextStep(1)">Suivant →</button>
+      </div>
+
+      <!-- Étape 2 -->
+      <div class="step" id="step2">
+        <div class="q-block" id="block3">
+          <label class="fw-semibold">3. Dernier livre de la Bible ?</label>
+          <input id="q3" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f3"></div>
+        </div>
+        <div class="q-block" id="block4">
+          <label class="fw-semibold">4. Qui a baptisé Jésus ?</label>
+          <input id="q4" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f4"></div>
+        </div>
+        <button type="button" class="btn btn-success w-100 py-3 fw-bold rounded-pill" onclick="nextStep(2)">Suivant →</button>
+        <button type="button" class="btn btn-outline-secondary w-100 py-3 fw-bold rounded-pill mt-2" onclick="prevStep(2)">← Retour</button>
+      </div>
+
+      <!-- Étape 3 -->
+      <div class="step" id="step3">
+        <div class="q-block" id="block5">
+          <label class="fw-semibold">5. Nombre d'Évangiles ?</label>
+          <input id="q5" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f5"></div>
+        </div>
+        <div class="q-block" id="block6">
+          <label class="fw-semibold">6. Mer où Jésus a marché ?</label>
+          <input id="q6" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f6"></div>
+        </div>
+        <button type="button" class="btn btn-success w-100 py-3 fw-bold rounded-pill" onclick="nextStep(3)">Suivant →</button>
+        <button type="button" class="btn btn-outline-secondary w-100 py-3 fw-bold rounded-pill mt-2" onclick="prevStep(3)">← Retour</button>
+      </div>
+
+      <!-- Étape 4 -->
+      <div class="step" id="step4">
+        <div class="q-block" id="block7">
+          <label class="fw-semibold">7. Auteur principal des Épîtres ?</label>
+          <input id="q7" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f7"></div>
+        </div>
+        <div class="q-block" id="block8">
+          <label class="fw-semibold">8. Miracle de Cana ?</label>
+          <input id="q8" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f8"></div>
+        </div>
+        <button type="button" class="btn btn-success w-100 py-3 fw-bold rounded-pill" onclick="nextStep(4)">Dernière étape →</button>
+        <button type="button" class="btn btn-outline-secondary w-100 py-3 fw-bold rounded-pill mt-2" onclick="prevStep(4)">← Retour</button>
+      </div>
+
+      <!-- Étape 5 -->
+      <div class="step" id="step5">
+        <div class="q-block" id="block9">
+          <label class="fw-semibold">9. Apôtre collecteur d'impôts ?</label>
+          <input id="q9" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f9"></div>
+        </div>
+        <div class="q-block" id="block10">
+          <label class="fw-semibold">10. Qui a trahi Jésus ?</label>
+          <input id="q10" class="form-control mt-2 rounded-pill">
+          <div class="feedback" id="f10"></div>
+        </div>
+        <button type="submit" class="btn btn-success w-100 py-3 fw-bold rounded-pill" style="background:var(--success);">Valider <i class="bi bi-check2-circle ms-2"></i></button>
+        <button type="button" class="btn btn-outline-secondary w-100 py-3 fw-bold rounded-pill mt-2" onclick="prevStep(5)">← Retour</button>
+      </div>
+    </form>
+
+    <!-- Résultats -->
+    <div id="res-summary" class="mt-4"></div>
+    <div id="recap-table" style="display:none;"></div>
+    <button onclick="location.reload()" id="btnReset" class="btn btn-secondary w-100 py-3 fw-bold rounded-pill mt-4" style="display:none;">
+      <i class="bi bi-arrow-repeat me-2"></i>Recommencer
+    </button>
   </div>
 
-  <!-- Bootstrap JS (avec Popper) -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ==========================
-    // CONFIGURATION SUPABASE ET EMAILJS
-    // ==========================
+    // === IDENTIQUE AU CODE ORIGINAL, mais j'ajuste quelques petites choses ===
     const _supabase = supabase.createClient('https://inrcrtyvbgjrrccpzxlk.supabase.co','sb_publishable_tEVOnHljw_fz5UC_cEG9pA_9xglC1VK');
     emailjs.init("ulU_NSZFdTj6ZZV8T");
 
-    // ==========================
-    // BASE DE QUESTIONS
-    // ==========================
     const ANSWERS = {
       q1:{opt:["bethléem","bethleem"], ref:"Matthieu 2:1", desc:"Jésus est né à Bethléem en Judée.", options: ["Jérusalem", "Bethléem", "Nazareth", "Capernaüm"]},
       q2:{opt:["pierre"], ref:"Matthieu 26:75", desc:"Pierre a renié Jésus trois fois.", options: ["Jean", "Pierre", "Judas", "Paul"]},
@@ -348,18 +374,12 @@
     let currentStep = 0;
     let selectedNiveau = "";
 
-    // ==========================
-    // FONCTION SÉLECTION NIVEAU
-    // ==========================
     function setLevel(niveau, btn) {
       selectedNiveau = niveau;
       document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
     }
 
-    // ==========================
-    // FONCTION DÉMARRAGE
-    // ==========================
     function startQuiz() {
       const p = document.getElementById('prenom').value;
       if(!p || !selectedNiveau) return alert("Veuillez remplir votre prénom et choisir un niveau !");
@@ -381,9 +401,6 @@
       nextStep(0);
     }
 
-    // ==========================
-    // SÉLECTION QCM
-    // ==========================
     function selectOption(btn, qIndex) {
       const parent = btn.parentElement;
       parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
@@ -391,9 +408,6 @@
       document.getElementById('q'+qIndex).value = btn.innerText;
     }
 
-    // ==========================
-    // CHRONOMÈTRE
-    // ==========================
     function resetTimer() {
       clearInterval(timerInterval);
       timeLeft = 120;
@@ -425,15 +439,16 @@
       const min = Math.floor(timeLeft / 60);
       const sec = timeLeft % 60;
       const timerElem = document.getElementById('timer');
-      timerElem.innerHTML = `⏱️ Temps restant : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-
-      if(timeLeft <= 10) timerElem.classList.add('timer-danger');
-      else timerElem.classList.remove('timer-danger');
+      timerElem.innerHTML = `<i class="bi bi-clock-history me-2"></i>Temps restant : ${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+      if(timeLeft <= 10) {
+        timerElem.classList.add('timer-danger');
+        timerElem.classList.remove('alert-success');
+      } else {
+        timerElem.classList.remove('timer-danger');
+        timerElem.classList.add('alert-success');
+      }
     }
 
-    // ==========================
-    // NAVIGATION
-    // ==========================
     function normalizeText(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
 
     function nextStep(n){
@@ -452,9 +467,6 @@
       resetTimer();
     }
 
-    // ==========================
-    // SOUMISSION DU FORMULAIRE
-    // ==========================
     document.getElementById('quizForm').addEventListener('submit', async e=>{
       e.preventDefault();
       clearInterval(timerInterval);
@@ -479,7 +491,7 @@
           feedback.style.color="var(--error)";
         }
 
-        tableauHTML+=`<tr><td style="padding:8px;border:1px solid #ddd;">Q${i}</td><td style="padding:8px;border:1px solid #ddd;">${val}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;">${isCorrect?'✅':'❌'}</td></tr>`;
+        tableauHTML+=`<tr><td>Q${i}</td><td>${val}</td><td class="text-center">${isCorrect?'✅':'❌'}</td></tr>`;
         commentairesHTML+=`<div style="margin-bottom:15px;padding:10px;background:#f9f9f9;border-left:4px solid ${isCorrect?'#2ecc71':'#e74c3c'};">
         <p style="margin:0;"><strong>Question ${i} :</strong> ${config.desc}</p>
         <p style="margin:5px 0 0 0;font-style:italic;color:#555;">📖 Référence : ${config.ref}</p>
@@ -490,7 +502,7 @@
       const n=document.getElementById('nom').value;
       const em=document.getElementById('email').value;
 
-      // Envoi à TOI (récapitulatif complet)
+      // Envoi à TOI
       emailjs.send('service_raxr77e','template_uh8xoa6',{
         prenom:p, nom:n, email:em, score:score,
         tableau_html:tableauHTML,
@@ -498,7 +510,7 @@
         niveau: selectedNiveau
       });
 
-      // ENVOI À L'UTILISATEUR (résultat simple)
+      // Envoi à l'utilisateur
       emailjs.send('service_raxr77e','template_632ld9j',{
         prenom:p, 
         email:em,
@@ -507,7 +519,7 @@
         niveau: selectedNiveau
       });
 
-      // ENVOI VERS SUPABASE
+      // Supabase
       await _supabase.from('reponses').upsert({
         email:em, prenom:p, nom:n, score:score, niveau: selectedNiveau,
         q1: document.getElementById('q1').value,
@@ -522,20 +534,23 @@
         q10: document.getElementById('q10').value
       },{onConflict:'email'});
 
-      // Désactivation des champs
       document.querySelectorAll('#quizForm input, #quizForm button').forEach(el=>el.disabled=true);
-      document.getElementById('res-summary').innerHTML=`<div style="text-align:center;"><div class="score-anim">${score}/10</div><p>Bravo ${p} ! Niveau: ${selectedNiveau}</p></div>`;
+      document.getElementById('res-summary').innerHTML=`<div class="text-center"><div class="score-anim">${score}/10</div><p class="fs-4">Bravo ${p} ! Niveau: ${selectedNiveau}</p></div>`;
       document.getElementById('recap-table').style.display = "block";
-      document.getElementById('recap-table').innerHTML=`<h3 style="color:var(--primary);text-align:center;">Résumé des réponses</h3>
-      <table class="table table-bordered"><thead><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead><tbody>${tableauHTML}</tbody></table>
-      <div class="commentaires p-3 bg-light border-start border-4" style="border-left-color:var(--primary);">${commentairesHTML}</div>
-      <div class="verse">"Ta parole est une lampe à mes pieds..." - Psaume 119:105</div>`;
+      document.getElementById('recap-table').innerHTML=`
+        <h3 class="text-center mb-3" style="color:var(--primary);">Résumé des réponses</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="table-success"><tr><th>Q°</th><th>Ta réponse</th><th>Résultat</th></tr></thead>
+            <tbody>${tableauHTML}</tbody>
+          </table>
+        </div>
+        <div class="commentaires p-3 bg-light border-start border-4 mt-3" style="border-left-color:var(--primary);">${commentairesHTML}</div>
+        <div class="verse mt-3 p-3 bg-white rounded-3 text-muted fst-italic">"Ta parole est une lampe à mes pieds..." - Psaume 119:105</div>
+      `;
       document.getElementById('btnReset').style.display="block";
     });
 
-    // ==========================
-    // LANCEMENT DU QUIZ (page d'accueil)
-    // ==========================
     function launchQuiz() {
       document.getElementById('premium-welcome').classList.add('hide-welcome');
     }
