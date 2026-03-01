@@ -1,176 +1,120 @@
-/* =========================
-   THEME MAJESTUEUX (PREMIUM UPGRADE)
-========================= */
+/* Utilisation de variables PostCSS pour une maintenance facile */
 :root {
-  --primary: #1b3d1a;      /* Vert profond (Sérieux/Sacré) */
-  --gold: #d4af37;         /* Or véritable */
-  --gold-light: #f1c40f;   /* Or brillant pour les survols */
+  --primary: #1b3d1a;
+  --gold: #d4af37;
+  --gold-light: #f1c40f;
   --success: #27ae60;
   --error: #e74c3c;
   --soft: #f4f7f2;
   --text: #1a252f;
-  --glass: rgba(255, 255, 255, 0.95);
+  --glass: rgba(255, 255, 255, 0.92);
+  --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
-/* Importation d'une police "Royale" pour les titres */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap');
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased; /* PostCSS Autoprefixer s'occupera du reste */
+}
 
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  /* Fond texturé papier ancien / émeraude */
-  background: radial-gradient(circle at center, #27ae60 0%, #0a1a0a 100%);
+  background: 
+    linear-gradient(rgba(27, 61, 26, 0.8), rgba(5, 10, 5, 0.9)),
+    url('https://www.transparenttextures.com/patterns/dark-matter.png'),
+    radial-gradient(circle at center, #27ae60 0%, #0a1a0a 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  color: var(--text);
-  padding: 10px;
+  padding: 20px;
 }
 
-/* =========================
-   CARTE PRINCIPALE (STYLE PARCHEMIN MODERNE)
-========================= */
+/* PostCSS Nesting : On imbrique les styles pour plus de clarté */
 .quiz-card {
   background: var(--glass);
-  padding: 45px;
-  border-radius: 15px; /* Moins arrondi pour faire plus "livre" */
-  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-  width: 95%;
-  max-width: 700px;
-  animation: fadeIn 1s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  border-top: 6px solid var(--gold); /* Barre d'or au sommet */
-}
-
-h2 {
-  font-family: 'Cinzel', serif;
-  text-align: center;
-  color: var(--primary);
-  margin-bottom: 30px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* =========================
-   BLOCS QUESTIONS (PREMIUM HOVER)
-========================= */
-.q-block {
-  margin-bottom: 18px;
-  padding: 22px;
-  border-radius: 10px;
-  border: 1px solid #e0e6e3;
-  background: #fff;
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.q-block:hover {
-  background: #fff;
-  border-color: var(--gold);
-  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
-  transform: translateY(-4px);
-}
-
-/* =========================
-   BOUTONS (EFFET OR ET PROFONDEUR)
-========================= */
-.btn-nav, .btn-back, .option-btn, .level-btn {
+  backdrop-filter: blur(10px); /* Effet de verre dépoli */
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-premium);
   width: 100%;
-  padding: 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  font-family: 'Poppins', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  max-width: 680px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--primary);
+    font-size: 2rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+  }
+
+  /* Gestion des questions */
+  .q-block {
+    margin-bottom: 20px;
+    padding: 25px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.4s ease;
+
+    &:hover {
+      background: #fff;
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      border-color: var(--gold);
+    }
+  }
+
+  /* Boutons stylisés */
+  .btn-nav, .option-btn, .level-btn {
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &.selected {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--gold);
+      box-shadow: 0 5px 15px rgba(27, 61, 26, 0.3);
+    }
+  }
+
+  /* Barre de progression animée */
+  .progress-container {
+    background: rgba(0,0,0,0.05);
+    height: 10px;
+    border-radius: 20px;
+    
+    .progress-bar {
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+  }
 }
 
-.btn-nav {
-  background: var(--primary);
-  color: white;
-  margin-top: 15px;
-  box-shadow: 0 4px 15px rgba(27, 61, 26, 0.3);
-}
-
-.btn-nav:hover {
-  background: var(--gold);
-  color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-}
-
-/* Boutons QCM & Niveaux */
-.option-btn, .level-btn {
-  background: #ffffff;
-  border: 2px solid #edf2f0;
-  color: var(--text);
-  margin-top: 12px;
-  text-align: center;
-}
-
-.option-btn:hover, .level-btn:hover {
-  border-color: var(--gold);
-  background: var(--soft);
-}
-
-.option-btn.selected, .level-btn.selected {
-  background: var(--primary);
-  color: white;
-  border-color: var(--gold);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-}
-
-/* =========================
-   PROGRESSION DORÉE
-========================= */
-.progress-container {
-  height: 8px;
-  background: #eef2ef;
-  border-radius: 10px;
-  margin-bottom: 25px;
-}
-
-.progress-bar {
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-}
-
-/* =========================
-   CHRONOMETRE ET VERSET
-========================= */
-#timer {
-  font-family: 'Cinzel', serif;
-  background: var(--primary);
-  color: var(--gold);
-  padding: 12px;
-  border-radius: 5px;
-  border-bottom: 2px solid var(--gold);
-}
-
-.verse {
-  font-family: 'Cinzel', serif;
-  color: var(--primary);
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  padding: 20px;
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-/* =========================
-   ANIMATIONS
-========================= */
+/* Animations PostCSS */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@media(max-width:600px){
-  .quiz-card { padding: 25px; border-radius: 0; }
-  h2 { font-size: 1.5rem; }
+@media (max-width: 600px) {
+  .quiz-card {
+    padding: 20px;
+    border-radius: 0;
+    h2 { font-size: 1.5rem; }
+  }
 }
