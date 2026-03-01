@@ -1,14 +1,304 @@
-function launchQuiz() {
-    const welcome = document.getElementById('premium-welcome');
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacra Scriptura | Examen Nouveau Testament 📖</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    // Lance l'animation de sortie
-    welcome.classList.add('hide-welcome');
+    <style>
+        /* =========================
+           SYSTÈME DE DESIGN ROYAL
+        ========================= */
+        :root {
+            --primary: #1b3d1a;      /* Vert Sanctuaire */
+            --gold: #d4af37;         /* Or Antique */
+            --gold-bright: #f1c40f;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --text: #1a252f;
+            --bg-dark: #0a0f0a;
+        }
 
-    // Après l'animation, on supprime l'écran
-    setTimeout(() => {
-        welcome.remove();
+        * { box-sizing: border-box; }
 
-        // 👉 Ici tu lances ton quiz
-        startQuiz(); // fonction principale de ton quiz
-    }, 800);
-}
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #1b3d1a 0%, #050a05 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           ACCUEIL MAJESTUEUX
+        ========================= */
+        #premium-welcome {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 1s cubic-bezier(0.9, 0, 0.1, 1);
+            color: var(--gold);
+        }
+
+        .welcome-content { text-align: center; z-index: 2; padding: 20px; }
+
+        .seal-container {
+            width: 140px; height: 140px;
+            margin: 0 auto 30px;
+            border: 2px double var(--gold);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            animation: pulseGold 3s infinite;
+        }
+
+        .royal-title {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 5px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .royal-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            opacity: 0.8;
+            margin: 20px 0 40px;
+        }
+
+        .royal-cta {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            padding: 18px 45px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.4s;
+            letter-spacing: 2px;
+        }
+
+        .royal-cta:hover {
+            background: var(--gold);
+            color: var(--bg-dark);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+        }
+
+        /* =========================
+           CARTE DU QUIZ (L'EXAMEN)
+        ========================= */
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            width: 95%;
+            max-width: 650px;
+            border-top: 6px solid var(--gold);
+            display: none; /* Révélé par JS */
+            animation: slideIn 0.8s ease forwards;
+        }
+
+        h2 { font-family: 'Cinzel', serif; color: var(--primary); text-align: center; margin-bottom: 25px; }
+
+        .progress-container { height: 6px; background: #eee; border-radius: 10px; margin-bottom: 20px; }
+        .progress-bar { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
+
+        #timer {
+            text-align: center; font-family: 'Cinzel', serif;
+            color: var(--gold); background: var(--primary);
+            padding: 10px; border-radius: 5px; margin-bottom: 15px; font-weight: bold;
+        }
+
+        .q-block {
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #eef2f0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .q-block:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+        /* Inputs & Boutons */
+        input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 8px; margin-top: 8px; }
+        
+        .btn-nav {
+            width: 100%; padding: 18px; border: none; border-radius: 8px;
+            background: var(--primary); color: white;
+            font-family: 'Cinzel', serif; font-size: 1rem; cursor: pointer; transition: 0.3s;
+        }
+        .btn-nav:hover { background: var(--gold); color: var(--primary); }
+
+        .option-btn, .level-btn {
+            width: 100%; padding: 14px; margin-top: 10px; border: 1px solid #ddd;
+            background: #fff; cursor: pointer; transition: 0.2s; border-radius: 8px;
+            text-align: left; font-weight: 600;
+        }
+        .option-btn.selected, .level-btn.selected { background: var(--primary); color: white; border-color: var(--gold); }
+
+        /* Animations */
+        @keyframes pulseGold { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .hide-welcome { transform: scale(1.5); opacity: 0; pointer-events: none; }
+
+        .step { display: none; }
+        .step.active { display: block; animation: slideIn 0.5s ease; }
+    </style>
+</head>
+<body>
+
+    <div id="premium-welcome">
+        <div class="welcome-content">
+            <div class="seal-container">📜</div>
+            <h1 class="royal-title">Novum Testamentum</h1>
+            <p class="royal-subtitle">L'EXAMEN DES ÉCRITURES</p>
+            <button class="royal-cta" onclick="launchQuiz()">COMMENCER LE VOYAGE</button>
+        </div>
+    </div>
+
+    <div class="quiz-card" id="quizCard">
+        <h2>Examen Sacré</h2>
+        <div id="timer" style="display:none;">⏱️ Temps : 02:00</div>
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+
+        <form id="quizForm">
+            <div class="step active" id="step0">
+                <div class="q-block">
+                    <label>Prénom</label><input type="text" id="prenom" required>
+                    <br><br>
+                    <label>Email</label><input type="email" id="email" required>
+                    <br><br>
+                    <label>Niveau de l'épreuve :</label>
+                    <div style="display:flex; gap:10px;">
+                        <button type="button" class="level-btn" onclick="setLevel('Intermédiaire', this)">QCM</button>
+                        <button type="button" class="level-btn" onclick="setLevel('Difficile', this)">TEXTE</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-nav" onclick="startQuiz()">Lancer l'Épreuve</button>
+            </div>
+
+            <div class="step" id="step1">
+                <div class="q-block"><label>1. Ville de naissance de Jésus ?</label><input id="q1"></div>
+                <div class="q-block"><label>2. Qui a renié Jésus ?</label><input id="q2"></div>
+                <button type="button" class="btn-nav" onclick="nextStep(1)">Continuer →</button>
+            </div>
+
+            <div class="step" id="step2">
+                <div class="q-block"><label>3. Dernier livre de la Bible ?</label><input id="q3"></div>
+                <div class="q-block"><label>4. Qui a baptisé Jésus ?</label><input id="q4"></div>
+                <button type="button" class="btn-nav" onclick="nextStep(2)">Continuer →</button>
+            </div>
+
+            <div class="step" id="step3">
+                <div class="q-block"><label>5. Nombre d'Évangiles ?</label><input id="q5"></div>
+                <div class="q-block"><label>6. Mer où Jésus a marché ?</label><input id="q6"></div>
+                <button type="button" class="btn-nav" onclick="nextStep(3)">Continuer →</button>
+            </div>
+
+            <div class="step" id="step4">
+                <div class="q-block"><label>7. Auteur principal des Épîtres ?</label><input id="q7"></div>
+                <div class="q-block"><label>8. Miracle de Cana ?</label><input id="q8"></div>
+                <button type="button" class="btn-nav" onclick="nextStep(4)">Continuer →</button>
+            </div>
+
+            <div class="step" id="step5">
+                <div class="q-block"><label>9. Apôtre collecteur d'impôts ?</label><input id="q9"></div>
+                <div class="q-block"><label>10. Qui a trahi Jésus ?</label><input id="q10"></div>
+                <button type="submit" class="btn-nav" style="background:var(--gold); color:black;">VALIDER L'EXAMEN</button>
+            </div>
+        </form>
+
+        <div id="res-summary"></div>
+    </div>
+
+    <script>
+        // CONFIGURATION
+        const _supabase = supabase.createClient('https://votre-url.supabase.co','votre-cle-api');
+        emailjs.init("votre-id-emailjs");
+
+        const ANSWERS = {
+            q1:{opt:["bethleem"], options:["Nazareth", "Bethléem", "Cana"]},
+            q2:{opt:["pierre"], options:["Jean", "Pierre", "Judas"]},
+            q3:{opt:["apocalypse"], options:["Genèse", "Actes", "Apocalypse"]},
+            q4:{opt:["jean baptiste"], options:["Jean-Baptiste", "Élie", "Moïse"]},
+            q5:{opt:["4"], options:["3", "4", "12"]},
+            q6:{opt:["galilee"], options:["Rouge", "Morte", "Galilée"]},
+            q7:{opt:["paul"], options:["Pierre", "Paul", "Jean"]},
+            q8:{opt:["vin"], options:["Pain", "Vin", "Guérison"]},
+            q9:{opt:["matthieu"], options:["Matthieu", "Luc", "Jean"]},
+            q10:{opt:["judas"], options:["Pierre", "Hérode", "Judas"]}
+        };
+
+        let selectedNiveau = "";
+        let currentStep = 0;
+        let timeLeft = 120;
+
+        function launchQuiz() {
+            document.getElementById('premium-welcome').classList.add('hide-welcome');
+            setTimeout(() => {
+                document.getElementById('premium-welcome').style.display = 'none';
+                document.getElementById('quizCard').style.display = 'block';
+            }, 1000);
+        }
+
+        function setLevel(niv, btn) {
+            selectedNiveau = niv;
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function startQuiz() {
+            if(!document.getElementById('prenom').value || !selectedNiveau) return alert("Complétez les infos !");
+            if(selectedNiveau === "Intermédiaire") prepareQCM();
+            document.getElementById('timer').style.display = 'block';
+            nextStep(0);
+        }
+
+        function prepareQCM() {
+            for(let i=1; i<=10; i++) {
+                let input = document.getElementById('q'+i);
+                input.style.display = "none";
+                ANSWERS['q'+i].options.forEach(opt => {
+                    let b = document.createElement('button');
+                    b.type = "button"; b.className = "option-btn"; b.innerText = opt;
+                    b.onclick = () => {
+                        input.value = opt;
+                        b.parentElement.querySelectorAll('.option-btn').forEach(x => x.classList.remove('selected'));
+                        b.classList.add('selected');
+                    };
+                    input.parentElement.appendChild(b);
+                });
+            }
+        }
+
+        function nextStep(n) {
+            document.getElementById('step'+n).classList.remove('active');
+            currentStep = n + 1;
+            document.getElementById('step'+currentStep).classList.add('active');
+            document.getElementById('progressBar').style.width = (currentStep * 20) + "%";
+        }
+
+        document.getElementById('quizForm').onsubmit = async (e) => {
+            e.preventDefault();
+            alert("Examen terminé ! Calcul du score...");
+            // Logique de score et envoi Supabase ici...
+        };
+    </script>
+</body>
+</html>
