@@ -476,4 +476,149 @@ document.getElementById('btnReset').style.display="block";
 });
 </script>
 </body>
+  <div id="premium-welcome">
+    <div class="welcome-overlay"></div>
+    <div class="welcome-content">
+        <div class="bible-frame">
+            <span class="bible-emoji">📖</span>
+        </div>
+        <h1 class="welcome-title">Examen du Nouveau Testament</h1>
+        <p class="welcome-subtitle">Plongez dans les Écritures et testez vos connaissances spirituelles.</p>
+        
+        <div class="welcome-stats">
+            <div class="stat-item"><span>10</span><br><small>Questions</small></div>
+            <div class="stat-item"><span>2</span><br><small>Niveaux</small></div>
+            <div class="stat-item"><span>120s</span><br><small>Chrono</small></div>
+        </div>
+
+        <button class="welcome-cta" onclick="launchQuiz()">
+            Commencer le Voyage 🚀
+        </button>
+    </div>
+</div>
+
+<style>
+#premium-welcome {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1b3d1a 0%, #27ae60 100%);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    color: white;
+    overflow: hidden;
+}
+
+.welcome-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    opacity: 0.2;
+}
+
+.welcome-content {
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+    max-width: 500px;
+}
+
+.bible-frame {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #d4af37;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 30px;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    animation: pulseGold 2s infinite;
+}
+
+.bible-emoji {
+    font-size: 60px;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+.welcome-title {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.welcome-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.5;
+    margin-bottom: 40px;
+}
+
+.welcome-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.stat-item small {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+}
+
+.welcome-cta {
+    background: #ffffff;
+    color: #27ae60;
+    border: none;
+    padding: 18px 40px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.welcome-cta:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    background: #f8fafc;
+}
+
+@keyframes pulseGold {
+    0% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); }
+    100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+}
+
+/* Classe pour cacher l'accueil */
+.hide-welcome {
+    transform: translateY(-100%);
+}
+</style>
+
+<script>
+function launchQuiz() {
+    document.getElementById('premium-welcome').classList.add('hide-welcome');
+}
+</script>
 </html>
